@@ -1,0 +1,74 @@
+version: '3.4'
+
+x-director: &app_base
+  image: director
+  build:
+    context: .
+  environment:
+    - DOCKER_DIRECTOR_BROKER_URI=redis://redis:6379/0
+    - DOCKER_DIRECTOR_RESULT_BACKEND_URI=redis://redis:6379/1
+    - DOCKER_DIRECTOR_CELERY_ONCE_URI=redis://redis:6379/2
+    - DOCKER_DIRECTOR_REDIS_BACKEND_URI=redis://redis:6379/3
+    - DOCKER_DIRECTOR_API_URL=http://127.0.0.1:5000/api
+    - DOCKER_DIRECTOR_DATABASE_URI=postgresql://${POSTGRES_USER:-director}:${POSTGRES_PASSWORD:-director}@db:5432/${POSTGRES_DB:-director}
+    - DOCKER_DIRECTOR_FLOWER_URL=http://flower:5555
+    - DIRECTOR_ENABLE_DARK_THEME=false
+    - DIRECTOR_DATABASE_POOL_RECYCLE=120
+    - DIRECTOR_HOME=/app/workflows
+    #- DIRECTOR_GIT_WORKFLOWS=https://github.com/your/repo.git
+  networks:
+    - director
+  depends_on:
+    - db
+    - redis
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-director}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-director}
+      - POSTGRES_DB=${POSTGRES_DB:-director}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - director
+
+  redis:
+    image: redis
+    networks:
+      - director
+
+  web:
+    <<: *app_base
+    ports:
+      - 8000:8000
+      - 5000:5000
+    command: webserver -b 0.0.0.0
+    volumes:
+      - ./director_home/:/app/workflows
+
+  worker:
+    <<: *app_base
+    command: celery worker
+    volumes:
+      - ./director_home/:/app/workflows
+
+  beat:
+    <<: *app_base
+    command: celery beat
+
+  flower:
+    <<: *app_base
+    command: celery flower
+
+networks:
+  director:
+    external: false
+    attachable: true
+
+volumes:
+  director:
+    external: false
+  postgres_data:
+    external: false
