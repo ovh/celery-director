@@ -89,7 +89,7 @@ def show_workflow(ctx, name):
 
 @workflow.command(name="run")
 @click.argument("fullname")
-@click.argument("payload")
+@click.argument("payload", required=False, default="{}")
 @pass_ctx
 def run_workflow(ctx, fullname, payload):
     """Execute a workflow"""
@@ -98,10 +98,10 @@ def run_workflow(ctx, fullname, payload):
         payload = json.loads(payload)
     except WorkflowNotFound as e:
         click.echo(f"Error: {e}")
-        return
+        raise click.Abort()
     except JSONDecodeError as e:
         click.echo(f"Error parsing the JSON payload : {e}")
-        return
+        raise click.Abort()
 
     # Create the workflow object
     project, name = fullname.split(".")
@@ -109,5 +109,5 @@ def run_workflow(ctx, fullname, payload):
     obj.save()
 
     # Build the canvas and execute it
-    workflow = WorkflowBuilder(obj.id)
-    workflow.run()
+    _workflow = WorkflowBuilder(obj.id)
+    _workflow.run()

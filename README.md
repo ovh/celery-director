@@ -92,7 +92,7 @@ Each workflow can be manually executed in different ways.
 **Using the CLI**
 
 ```
-$ director workflow run ovh.SIMPLE_ETL '{}'
+$ director workflow run ovh.SIMPLE_ETL
 ```
 
 **Using the API**
