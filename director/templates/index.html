@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <title>Celery Director</title>
+  {% if config.ENABLE_CDN %}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" integrity="sha256-0imIb8Y+32uVhlrWqekLWJynWF0iA7xhtp9z9h90aDA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.2.1/dist/vuetify.min.css" integrity="sha256-Ch5FMlNCdr6sBrwjHdGoTnAbAcKzE+UWiCXZHDT1HYk=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@4.7.95/css/materialdesignicons.min.css" integrity="sha256-KZNFoTq+/jQUu3YY1OnjLn605i80dhdUJKO3WHGiM6E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@6.5.0/styles/vis-network.min.css" integrity="sha256-PY/tQsgegfjjzBoVuzXY7f2vT9ZxM2VJ0Tws4kOUFj4=" crossorigin="anonymous">
+  {% else %}
+  <style type="text/css">
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      src: local('Roboto'), local('Roboto-Regular'), url(%% url_for('user.static', filename='fonts/KFOkCnqEu92Fr1MmgVxFIzIXKMnyrYk.woff2') %%) format('woff2');
+    }
+  </style>
+  <link rel="stylesheet" href="%% url_for('user.static', filename='vuetify.min.css') %%">
+  <link rel="stylesheet" href="%% url_for('user.static', filename='vis-network.min.css') %%">
+  <link rel="stylesheet" href="%% url_for('user.static', filename='mdi/materialdesignicons.min.css') %%">
+  {% endif %}
+  <link rel="stylesheet" href="%% url_for('static', filename='style.css') %%">
+</head>
+<body>
+  <div id="app" v-cloak>
+      <v-app id="inspire">
+          <v-app-bar app color="director" dark>
+            <v-toolbar-title>Celery Director</v-toolbar-title>
+          </v-app-bar>
+      
+          <v-content>
+            <v-container fluid>
+              <v-row class="mt-5">
+                <v-col cols="12" md="4">
+                    <v-card outlined>
+                      <v-card-title>
+                        Workflows
+                        <v-spacer></v-spacer>
+                        <v-text-field
+                          v-model="search"
+                          label="Search"
+                          single-line
+                          hide-details
+                        ></v-text-field>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-data-table
+                          :loading="loading"
+                          loading-text="Loading... Please wait"
+                          :headers="headers"
+                          :items="workflows"
+                          :items-per-page="10"
+                          :sort-by="['created']"
+                          :sort-desc="[true]"
+                          :search="search"
+                        >
+                          <template v-slot:item="{ item }">
+                            <tr class="pointer" @click="selectRow(item)" :class="{'active': item.isSelected}">
+                              <td>{{ item.fullname }}</td>
+                              <td><v-ship>{{ item.created | formatDate }}</v-ship></td>
+                              <td><v-chip label :color="getColor(item.status)" class="pointer" dark>{{ item.status }}</v-chip></td>
+                            </tr>
+                          </template>
+                        </v-data-table>
+                      </v-card-text>
+                    </v-card>
+                </v-col>
+
+                <v-col cols="12" md="8">
+                    <v-alert v-if="!selectedWorkflow" color="#3c4652" dark icon="mdi-alert-circle-outline" border="left" outlined>
+                      Select a workflow to visualize its tasks.
+                    </v-alert>
+                    <v-card v-show="selectedWorkflow" class="mx-auto" outlined height="600">
+                      <div v-if="selectedWorkflow">
+                        <v-list-item three-line no-gutters>
+                          <v-list-item-content>
+                            <div class="overline mb-3">{{ selectedWorkflow.fullname }}</div>
+                            <v-list-item-title class="headline mb-1">
+                                {{ selectedWorkflow.created | formatDate }}
+                                <v-chip v-if="selectedWorkflow.periodic" class="ma-2" small>periodic</v-chip>
+                                <v-chip small :color="getColor(selectedWorkflow.status)" dark>{{ selectedWorkflow.status }}</v-chip>
+                            </v-list-item-title>
+                            <v-list-item-subtitle class="mb-4">
+                              <u>Tasks :</u> Total <strong>{{ selectedWorkflow.tasks.length }}</strong> / Success <strong>{{ selectedWorkflow.tasks | countTasksByStatus('success') }}</strong> / Error <strong>{{ selectedWorkflow.tasks | countTasksByStatus('error') }}</strong>
+                            </v-list-item-subtitle>
+                          </v-list-item-content>
+                          <v-dialog
+                            v-model="dialog"
+                            width="500"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-btn class="ma-2" tile outlined color="director" disabled>
+                                <v-icon left>mdi-refresh</v-icon> Relaunch
+                              </v-btn>
+                              <v-btn tile outlined color="director" v-on="on">
+                                <v-icon left>mdi-format-list-bulleted</v-icon> Payload
+                              </v-btn>
+                            </template>
+
+                            <v-card>
+                              <v-card-title>Workflow's Payload</v-card-title>
+                              <v-divider></v-divider>
+                              <v-card-text class="mt-5">
+                                <pre>{{ selectedWorkflow.payload }}</pre>
+                              </v-card-text>
+                            </v-card>
+                          </v-dialog>
+                        </v-list-item>
+                        <v-divider ></v-divider>
+                      </div>
+                      <v-row no-gutters>
+                          <v-col cols="12" md="7">
+                              <div id="network"></div>
+                          </v-col>
+                          <v-col cols="12" md="5" v-if="selectedWorkflow">
+                            <v-list two-line class="overflow-y-auto" max-height="468">
+                              <v-list-item-group v-model="taskIndex">
+                                <template v-for="(task, index) in selectedWorkflow.tasks">
+                                  <v-list-item :key="task.id">
+                                    <template v-slot:default="{ active }">
+                                      <v-list-item-content @click.stop="displayTask(task)">
+                                        <v-list-item-title v-text="task.key"></v-list-item-title>
+                                        <v-list-item-subtitle class="text--primary">{{task.updated | formatDate }}</v-list-item-subtitle>
+                                        <v-list-item-subtitle v-text="task.id"></v-list-item-subtitle>
+                                      </v-list-item-content>
+                        
+                                      <v-list-item-action>
+                                          <v-avatar size=12 left :color="task.status | statusColor"></v-avatar>
+                                      </v-list-item-action>
+                                    </template>
+                                  </v-list-item>
+                        
+                                  <v-divider
+                                    v-if="index + 1 < selectedWorkflow.tasks.length"
+                                    :key="index"
+                                  ></v-divider>
+                                </template>
+                              </v-list-item-group>
+                            </v-list>
+                          </v-col>
+                      </v-row>
+                      
+                    </v-card>
+                </v-col>
+              </v-row>
+            </v-container>
+            <v-dialog v-model="dialogTask" max-width="600">
+                <v-card v-if="selectedTask">
+                  <v-card-title>
+                    Task
+                    <v-spacer></v-spacer>
+                    <v-btn tile :href="getFlowerTaskUrl()" target="_blank" outlined color="director" right>
+                      <v-icon left>mdi-launch</v-icon> View in Flower
+                    </v-btn>
+                  </v-card-title>
+                  <v-divider></v-divider>
+                  <v-card-text class="mt-5">
+                    <pre>{{ selectedTask }}</pre>
+                  </v-card-text>
+                </v-card>
+            </v-dialog>
+      
+          </v-content>
+      </v-app>
+  </div>
+
+  <script type="text/javascript">
+    const DARK_THEME=%% config.ENABLE_DARK_THEME | int %%;
+    const API_URL="%% config.API_URL %%";
+    const FLOWER_URL="%% config.FLOWER_URL %%";
+  </script>
+  {% if config.ENABLE_CDN %}
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js" integrity="sha256-ngFW3UnAN0Tnm76mDuu7uUtYEcG3G5H1+zioJw3t+68=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuex@3.1.2/dist/vuex.min.js" integrity="sha256-LfE9mPMjeOg3dTn1sESY2Xvdbq7gAhONtkxacnr7FSA=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.1/dist/vuetify.min.js" integrity="sha256-Wksm4daF3JKKD97f/NHSJkxqQCk9XwujIEBTX0VLzTw=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.19.0/dist/axios.min.js" integrity="sha256-S1J4GVHHDMiirir9qsXWc8ZWw74PHHafpsHp5PXtjTs=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vis-network@6.5.0/dist/vis-network.min.js" integrity="sha256-/205cYeu7g6jIOcLtaBIGbAWyGBNg6UUyxWTw1YIFHA=" crossorigin="anonymous"></script>
+  {% else %}
+  <script src="%% url_for('user.static', filename='vue.min.js') %%"></script>
+  <script src="%% url_for('user.static', filename='vuex.min.js') %%"></script>
+  <script src="%% url_for('user.static', filename='vuetify.min.js') %%"></script>
+  <script src="%% url_for('user.static', filename='moment.min.js') %%"></script>
+  <script src="%% url_for('user.static', filename='axios.min.js') %%"></script>
+  <script src="%% url_for('user.static', filename='vis-network.min.js') %%"></script>
+  {% endif %}
+  <script src="%% url_for('static', filename='script.js') %%"></script>
+</body>
+</html>

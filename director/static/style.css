@@ -1,0 +1,22 @@
+[v-cloak] > * {
+    display: none;
+}
+
+[v-cloak]::before {
+    content: "Loading…";
+}
+
+.v-application .director {
+    background-color: #3c4652 !important;
+    border-color: #3c4652 !important;
+}
+
+#network {
+    width: 100%;
+    height: 470px;
+    border-right: 1px solid rgba(0,0,0,.12);
+}
+
+.pointer {
+    cursor: pointer;
+}

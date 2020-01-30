@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+venv/
+*.pyc
+
+# Build
+build/
+director.egg-info/
+dist/
+
+# Celery
+celerybeat-schedule.bak
+celerybeat-schedule.dat
+celerybeat-schedule.dir
+celerybeat-schedule.db
+
+# IDE
+.vscode/
+.idea/
+
+# Misc
+.DS_Store
+
+# Tests
+.coverage

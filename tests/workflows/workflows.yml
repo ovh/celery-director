@@ -1,0 +1,31 @@
+---
+example.WORKFLOW:
+  tasks:
+    - TASK_EXAMPLE
+
+example.SIMPLE_CHAIN:
+  tasks:
+    - TASK_A
+    - TASK_B
+    - TASK_C
+
+example.SIMPLE_GROUP:
+  tasks:
+    - TASK_A
+    - [TASK_B, TASK_C]
+
+example.ERROR:
+  tasks:
+    - TASK_ERROR
+
+example.SIMPLE_CHAIN_ERROR:
+  tasks:
+    - TASK_A
+    - TASK_B
+    - TASK_ERROR
+
+example.SIMPLE_GROUP_ERROR:
+  tasks:
+    - TASK_A
+    - [TASK_ERROR, TASK_C]
+  

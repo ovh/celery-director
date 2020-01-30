@@ -1,0 +1,5 @@
+include requirements.txt
+include director/VERSION
+graft director
+graft migrations
+global-exclude *.pyc

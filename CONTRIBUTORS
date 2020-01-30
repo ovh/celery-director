@@ -1,0 +1,17 @@
+# This is the official list of people who can contribute
+# (and typically have contributed) code to the Celery Director repository.
+#
+# Names should be added to this file only after verifying that
+# the individual or the individual's organization has agreed to
+# the appropriate CONTRIBUTING.md file.
+#
+# Names should be added to this file like so:
+# Individual's name <submission email address>
+# Individual's name <submission email address>
+#
+# Please keep the list sorted.
+#
+
+Anthony Olea <anthony.olea@corp.ovh.com>
+Benjamin Sans <benjamin.sans@corp.ovh.com>
+Nicolas Crocfer <nicolas.crocfer@corp.ovh.com>

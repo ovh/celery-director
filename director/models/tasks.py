@@ -1,0 +1,33 @@
+from sqlalchemy_utils import JSONType, UUIDType
+
+from director.extensions import db
+from director.models import BaseModel, StatusType
+
+
+class Task(BaseModel):
+    __tablename__ = "tasks"
+
+    key = db.Column(db.String(), nullable=False)
+    status = db.Column(db.Enum(StatusType), default=StatusType.pending, nullable=False)
+    previous = db.Column(JSONType, default=[])
+
+    # Relationship
+    workflow_id = db.Column(
+        UUIDType(binary=False), db.ForeignKey("workflows.id"), nullable=False
+    )
+    workflow = db.relationship("Workflow", backref=db.backref("tasks", lazy=True))
+
+    def __repr__(self):
+        return f"<Task {self.key}>"
+
+    def to_dict(self):
+        d = super().to_dict()
+        d.update(
+            {
+                "key": self.key,
+                "status": self.status.value,
+                "task": self.id,
+                "previous": self.previous,
+            }
+        )
+        return d
