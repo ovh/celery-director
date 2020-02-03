@@ -12,7 +12,11 @@ example.SIMPLE_CHAIN:
 example.SIMPLE_GROUP:
   tasks:
     - TASK_A
-    - [TASK_B, TASK_C]
+    - EXAMPLE_GROUP:
+        type: group
+        tasks:
+          - TASK_B
+          - TASK_C
 
 example.ERROR:
   tasks:
@@ -27,5 +31,8 @@ example.SIMPLE_CHAIN_ERROR:
 example.SIMPLE_GROUP_ERROR:
   tasks:
     - TASK_A
-    - [TASK_ERROR, TASK_C]
-  
+    - EXAMPLE_GROUP:
+        type: group
+        tasks:
+          - TASK_ERROR
+          - TASK_C
