@@ -1,15 +1,10 @@
 import time
-from unittest.mock import patch
 
 import pytest
-from celery.result import EagerResult, AsyncResult, GroupResult
+from celery.result import GroupResult
 
-from director.extensions import cel
 from director.models.tasks import Task
 from director.models.workflows import Workflow
-
-from tests.conftest import _remove_keys
-
 
 KEYS = ["id", "created", "updated", "task"]
 
@@ -34,8 +29,8 @@ def test_execute_one_task_success(app, create_builder):
 
     # Tasks executed in Celery
     result = builder.run()
-    assert result.get() == None
-    assert result.parent.parent.get() == None
+    assert result.get() is None
+    assert result.parent.parent.get() is None
     assert result.parent.get() == "task_example"
     assert result.parent.state == "SUCCESS"
 
@@ -102,8 +97,8 @@ def test_execute_chain_success(app, create_builder):
 
     # Tasks executed in Celery
     result = builder.run()
-    assert result.get() == None
-    assert result.parent.parent.parent.parent.get() == None
+    assert result.get() is None
+    assert result.parent.parent.parent.parent.get() is None
     assert result.parent.get() == "task_c"
     assert result.parent.state == "SUCCESS"
     assert result.parent.parent.get() == "task_b"
@@ -188,7 +183,7 @@ def test_execute_group_success(app, create_builder):
 
     # Tasks executed in Celery
     result = builder.run()
-    assert result.get() == None
+    assert result.get() is None
     assert result.parent.parent.get() == "task_a"
     assert isinstance(result.parent, GroupResult)
     assert result.parent.get() == ["task_b", "task_c"]
