@@ -15,6 +15,9 @@ dev_requirements = [
     "black==19.10b0",
 ]
 
+doc_requirements = ["mkdocs==1.0.4", "mkdocs-material==4.6.0"]
+
+
 setup(
     name="celery-director",
     version="0.0.1",
@@ -27,7 +30,11 @@ setup(
     url="https://github.com/ovh/celery-director",
     packages=find_packages(),
     install_requires=requirements,
-    extras_require={"dev": dev_requirements, "ci": ["pytest", "pytest-cov"]},
+    extras_require={
+        "dev": dev_requirements,
+        "ci": ["pytest", "pytest-cov"],
+        "doc": doc_requirements,
+    },
     include_package_data=True,
     entry_points={"console_scripts": ["director=director.cli:cli"],},
     classifiers=[
