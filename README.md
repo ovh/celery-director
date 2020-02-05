@@ -184,9 +184,7 @@ ovh.GROUPS_ETL:
           - LOAD_IN_FS
 ```
 
-LICENSE
--------
-
 License
+-------
 
 See https://github.com/ovh/celery-director/blob/master/LICENSE
