@@ -7,7 +7,7 @@ from director import create_app
 
 class DirectorContext(click.Context):
     def __init__(self):
-        self.app = create_app(os.getenv("DIRECTOR_HOME"))
+        self.app = create_app()
         self.app.app_context().push()
 
 
