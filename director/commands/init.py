@@ -3,15 +3,26 @@ from pathlib import Path
 import click
 
 
-ENV_TEMPLATE = """# Auto-generated, please adjust
-# Director API endpoint
-DIRECTOR_API_URL="http://127.0.0.1:8000/api"
-
-# Director relational database
+ENV_TEMPLATE = """# Auto-generated, please adjust.
+# ---------- Database ---------- 
 DIRECTOR_DATABASE_URI="sqlite:///{{director_home}}/director.db"
+DIRECTOR_DATABASE_POOL_RECYCLE=-1
 
-# Celery
-DIRECTOR_BROKER_URI="redis://127.0.0.1:6379"
+
+# ---------- Celery ----------
+DIRECTOR_BROKER_URI="redis://127.0.0.1:6379/0"
+DIRECTOR_RESULT_BACKEND_URI="redis://127.0.0.1:6379/1"
+DIRECTOR_FLOWER_URL="http://127.0.0.1:5555"
+
+
+# ---------- Frontend ---------- 
+DIRECTOR_API_URL="http://127.0.0.1:8000/api"
+DIRECTOR_ENABLE_DARK_THEME=false
+
+# These settings are designed to be used with the "director dlassets" command,
+# the DIRECTOR_STATIC_FOLDER will be used if you set DIRECTOR_ENABLE_CDN to false.
+DIRECTOR_ENABLE_CDN=true
+DIRECTOR_STATIC_FOLDER=${DIRECTOR_HOME}/static
 """
 
 
@@ -69,4 +80,5 @@ def init(path):
         f.write(ETL_PY_TEMPLATE)
 
     click.echo(f"[*] Project created in {user_project_path}")
+    click.echo("[*] Do not forget to initialize the database")
     click.echo("You can now export the DIRECTOR_HOME environment variable")
