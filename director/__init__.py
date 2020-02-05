@@ -1,17 +1,17 @@
 import importlib
+import os
 import pkgutil
-from pathlib import Path
 from functools import partial
+from pathlib import Path
 
 from flask import Flask, Blueprint, jsonify
 from flask_json_schema import JsonValidationError
 
 from director.api import api_bp
 from director.extensions import cel, cel_workflows, db, schema, migrate
-from director.views import view_bp
 from director.settings import Config, UserConfig
 from director.tasks.base import BaseTask
-
+from director.views import view_bp
 
 # Proxify the task method
 task = partial(cel.task, base=BaseTask)
@@ -27,7 +27,7 @@ def validation_error(e):
         jsonify(
             {
                 "error": e.message,
-                "errors": [validation_error.message for validation_error in e.errors],
+                "errors": [validation_err.message for validation_err in e.errors],
             }
         ),
         409,
@@ -42,13 +42,14 @@ class DirectorFlask(Flask):
 
 
 # Create the application using a factory
-def create_app(path):
+def create_app(
+    home_path=os.getenv("DIRECTOR_HOME"), config_path=os.getenv("DIRECTOR_CONFIG")
+):
     app = DirectorFlask(__name__)
-    c = Config(path)
-    c.init_vars()
+    c = Config(home_path, config_path)
     app.config.from_object(c)
 
-    # Initialize User's config
+    # Init User's config
     config.init()
 
     # Exception handler

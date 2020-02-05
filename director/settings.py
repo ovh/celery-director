@@ -16,12 +16,20 @@ HIDDEN_CONFIG = [
 
 
 class Config(object):
-    def __init__(self, path):
-        self.DIRECTOR_HOME = path
+    def __init__(self, home_path=None, config_path=None):
+        if not home_path or not Path(home_path).resolve().exists():
+            raise ValueError("environment variable DIRECTOR_HOME is not set correctly")
+        self.DIRECTOR_HOME = env_path = str(home_path)
 
-    def init_vars(self):
+        if config_path:
+            if not Path(config_path).resolve().exists():
+                raise ValueError(
+                    "environment variable DIRECTOR_CONFIG is not set correctly"
+                )
+            env_path = config_path
+
         env = Env()
-        env.read_env(str(Path(self.DIRECTOR_HOME).resolve() / ".env"))
+        env.read_env(env_path)
 
         self.ENABLE_DARK_THEME = env.bool("DIRECTOR_ENABLE_DARK_THEME", False)
         self.ENABLE_CDN = env.bool("DIRECTOR_ENABLE_CDN", True)
