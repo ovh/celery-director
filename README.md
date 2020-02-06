@@ -72,7 +72,7 @@ ovh.SIMPLE_ETL:
 You need to update the `.env` file with your own configuration (database, redis...) and create the director database :
 
 ```
-$ director upgradedb
+$ director db upgrade
 ```
 
 You can now launch a worker and the webserver in 2 different shells :
