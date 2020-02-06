@@ -1,0 +1,587 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+    
+    
+      
+        <title>Write Tasks - Celery Director</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#009688">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.268332fc.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../../css/custom.css">
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#write-tasks" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="Celery Director" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Celery Director
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Write Tasks
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../.." title="Celery Director" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Celery Director
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Introduction" class="md-nav__link">
+      Introduction
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../quickstart/" title="Quickstart" class="md-nav__link">
+      Quickstart
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      User Guides
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        User Guides
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Write Tasks
+      </label>
+    
+    <a href="./" title="Write Tasks" class="md-nav__link md-nav__link--active">
+      Write Tasks
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-task" class="md-nav__link">
+    Create a task
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-signature" class="md-nav__link">
+    Task signature
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bound-tasks" class="md-nav__link">
+    Bound Tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#celery-task-options" class="md-nav__link">
+    Celery Task Options
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../build-workflows/" title="Build Workflows" class="md-nav__link">
+      Build Workflows
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../run-workflows/" title="Run Workflows" class="md-nav__link">
+      Run Workflows
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../use-payload/" title="Use Payload" class="md-nav__link">
+      Use Payload
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../api/" title="API" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-task" class="md-nav__link">
+    Create a task
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-signature" class="md-nav__link">
+    Task signature
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bound-tasks" class="md-nav__link">
+    Bound Tasks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#celery-task-options" class="md-nav__link">
+    Celery Task Options
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="write-tasks">Write Tasks</h1>
+<p>Director is a wrapper around Celery, so creating tasks with it is <em>almost</em> the same
+as creating tasks for pure Celery.</p>
+<h2 id="create-a-task">Create a task</h2>
+<p>In pure Celery you had to create a Celery application object (<code>app = Celery(...)</code>) and use
+the <code>app.task()</code> decorator to transform Python function into Celery tasks.</p>
+<p>This work has already be done for you in Director, so you just have to transform your function
+using the <code>director.task</code> decorator :</p>
+<div class="codehilite"><pre><span></span><span class="c1"># tasks/example.py</span>
+<span class="kn">from</span> <span class="nn">director</span> <span class="kn">import</span> <span class="n">task</span>
+
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;TASK_EXAMPLE&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">my_task</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+
+<div class="admonition warning task naming">
+<p class="admonition-title">Warning</p>
+<p>The <code>name</code> parameter in the task decorator is mandatory. Because it will be used in the YAML
+file to <a href="../build-workflows/">combine tasks into workflows</a>, this name <strong>must be unique</strong>.</p>
+</div>
+<h2 id="task-signature">Task signature</h2>
+<p>To simplify the tasks creation, and to allow multiple workflows to reuse the same task, their
+signature is always the same : <code>(*args, **kwargs)</code>.</p>
+<p>The <strong>kwargs</strong> dictionnary can be used to <a href="../use-payload/#handle-payload">handle the payload</a>
+while <strong>args</strong> contains the results of the task parents (of course args is empty if your task
+is at the beginning of a workflow).</p>
+<div class="admonition info">
+<p class="admonition-title">Technical explanation</p>
+<p>In Celery the developer can decide if a task is able to received the result of its parents or
+not with 2 methods : <strong>s()</strong> and <strong>si()</strong>. The <em>i</em> means <strong>immutability</strong> and
+is intended to ignore the parents results. So normally, as a developer, you
+have to be carefull about the method to used and you also have to create your tasks signatures
+consequently.</p>
+<p>But Director has been created to simplify that ! As we decided to received the results of the
+parents in the <code>args</code> parameter we always use the <code>s()</code> method.</p>
+</div>
+<p>Here is are some concrete examples based on the following tasks :</p>
+<div class="codehilite"><pre><span></span><span class="c1"># tasks/example.py</span>
+<span class="kn">from</span> <span class="nn">director</span> <span class="kn">import</span> <span class="n">task</span>
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="s2">&quot;a_data&quot;</span><span class="p">}</span>
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="s2">&quot;b_data&quot;</span><span class="p">}</span>
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">c</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+
+
+<p>The following workflows present different usecases and the output of the C task (see the
+<a href="../build-workflows/">Build Workflows</a> guide to understand the YAML format) :</p>
+<div class="codehilite"><pre><span></span><span class="nt">example.NO_PARENT</span><span class="p">:</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">C</span>
+<span class="c1"># Result : (None,)</span>
+
+<span class="nt">example.ONE_PARENT</span><span class="p">:</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">A</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">B</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">C</span>
+<span class="c1"># Result : ({&#39;result&#39;: &#39;b_data&#39;},)</span>
+
+<span class="nt">example.MULTIPLE_PARENT</span><span class="p">:</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">GROUP_1</span><span class="p">:</span>
+        <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">group</span>
+        <span class="nt">tasks</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">A</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">B</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">C</span>
+<span class="c1"># Result : ([{&#39;result&#39;: &#39;a_data&#39;}, {&#39;result&#39;: &#39;b_data&#39;}],)</span>
+</pre></div>
+
+
+<h2 id="bound-tasks">Bound Tasks</h2>
+<p>Celery allows use to <a href="https://docs.celeryproject.org/en/latest/userguide/tasks.html#bound-tasks">bind a task</a>,
+providing the task instance itself as the first parameter.</p>
+<p>In this case the signature will must contain a first parameter just before args and kwargs :</p>
+<div class="codehilite"><pre><span></span><span class="c1"># tasks/example.py</span>
+<span class="kn">from</span> <span class="nn">director</span> <span class="kn">import</span> <span class="n">task</span>
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;BOUND_TASK&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">bound_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="celery-task-options">Celery Task Options</h2>
+<p>The <code>task()</code> decorator provided by Director is just a wrapper of the native <code>app.task()</code> decorator
+provided by Celery, so all the <a href="https://docs.celeryproject.org/en/latest/userguide/tasks.html#list-of-options">original options</a> are still available.</p>
+<p>You can for example apply a <em>rate_limit</em> or even configure the max number of retries.</p>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../../quickstart/" title="Quickstart" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Quickstart
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../build-workflows/" title="Build Workflows" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Build Workflows
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.808e90bb.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>
