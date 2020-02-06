@@ -1,5 +1,10 @@
 include requirements.txt
-include director/VERSION
+include AUTHORS
+include LICENCE
+include README.md
+include director.png
+include CONTRIBUTING.md
+include CONTRIBUTORS
 graft director
 graft migrations
 global-exclude *.pyc
