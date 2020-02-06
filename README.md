@@ -26,6 +26,7 @@ Celery Director provides an `init` command used to bootstrap a project :
 ```
 $ director init ~/workflows
 [*] Project created in /Users/ovh/workflows
+[*] Do not forget to initialize the database
 You can now export the DIRECTOR_HOME environment variable
 ```
 
@@ -69,7 +70,7 @@ ovh.SIMPLE_ETL:
     - LOAD
 ```
 
-You need to update the `.env` file with your own configuration (database, redis...) and create the director database :
+You need to update the `.env` file with your own configuration (database, Redis...) and create the director database :
 
 ```
 $ director db upgrade

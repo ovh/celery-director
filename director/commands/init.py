@@ -12,11 +12,11 @@ DIRECTOR_DATABASE_POOL_RECYCLE=-1
 # ---------- Celery ----------
 DIRECTOR_BROKER_URI="redis://127.0.0.1:6379/0"
 DIRECTOR_RESULT_BACKEND_URI="redis://127.0.0.1:6379/1"
-DIRECTOR_FLOWER_URL="http://127.0.0.1:5555"
 
 
 # ---------- Frontend ---------- 
 DIRECTOR_API_URL="http://127.0.0.1:8000/api"
+DIRECTOR_FLOWER_URL="http://127.0.0.1:5555"
 DIRECTOR_ENABLE_DARK_THEME=false
 
 # These settings are designed to be used with the "director dlassets" command,
