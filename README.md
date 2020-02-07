@@ -34,7 +34,7 @@ pip install celery-director
 
 ## Commands
 
-* `director init [name]` - Create a new project.
+* `director init [path]` - Create a new project.
 * `director celery [worker|beat|flower]` - Start Celery daemons.
 * `director webserver` - Start the webserver.
 * `director workflow [list|show|run]` - Manage your project workflows.
