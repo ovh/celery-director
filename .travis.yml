@@ -1,0 +1,21 @@
+dist: bionic
+language: python
+env:
+  global:
+    - DIRECTOR_HOME=${TRAVIS_BUILD_DIR}/tests/workflows/
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+
+services:
+  - redis-server
+
+install:
+  - python setup.py install
+  - pip install pytest
+
+script:
+  - director celery worker -P solo -D
+  - sleep 5
+  - pytest tests/ -v
