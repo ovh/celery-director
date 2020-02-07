@@ -1,12 +1,12 @@
 # Celery Director Documentation
 
-Celery is a simple and rapid framework used to manage tasks and build workflows using Celery.
+Director is a simple and rapid framework used to manage tasks and build workflows using Celery.
 
 ![Celery Director](img/director.png)
 
 ## Features
 
-The objective of Director is to facilitate the usage of Celery, for that the tool provides :
+The objective is to make Celery easier to use by providing :
 
 - a WebUI to track the tasks states,
 - an API and a CLI to manage and execute the workflows,
@@ -34,7 +34,7 @@ pip install celery-director
 
 ## Commands
 
-* `director init [name]` - Create a new project.
+* `director init [path]` - Create a new project.
 * `director celery [worker|beat|flower]` - Start Celery daemons.
 * `director webserver` - Start the webserver.
 * `director workflow [list|show|run]` - Manage your project workflows.

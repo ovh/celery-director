@@ -11,6 +11,7 @@ So the first thing to do is to generate a project using the `director init` comm
 ```text
 $ director init workflows
 [*] Project created in /home/director/workflows
+[*] Do not forget to initialize the database
 You can now export the DIRECTOR_HOME environment variable
 ```
 
@@ -62,7 +63,7 @@ between your tasks.
 Adjust the `DIRECTOR_DATABASE_URI` variable in the `.env` file and generate the database :
 
 ```
-$ director upgradedb
+$ director db upgrade
 INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade  -> 70631f8bcff3, Init database

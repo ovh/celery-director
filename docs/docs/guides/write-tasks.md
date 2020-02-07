@@ -27,7 +27,7 @@ def my_task(*args, **kwargs):
 
 ## Task signature
 
-To simplify the tasks creation, and to allow multiple workflows to reuse the same task, their
+To simplify the tasks creation, and to allow multiple workflows to reuse the same task, the
 signature is always the same : `(*args, **kwargs)`.
 
 The **kwargs** dictionnary can be used to [handle the payload](use-payload.md#handle-payload)
@@ -35,11 +35,10 @@ while **args** contains the results of the task parents (of course args is empty
 is at the beginning of a workflow).
 
 !!! info "Technical explanation"
-    In Celery the developer can decide if a task is able to received the result of its parents or
-    not with 2 methods : **s()** and **si()**. The *i* means **immutability** and
-    is intended to ignore the parents results. So normally, as a developer, you
-    have to be carefull about the method to used and you also have to create your tasks signatures
-    consequently.
+    In Celery the developer can decide if a task is able to receive or not the result of its
+    parents with 2 methods : **s()** and **si()**. The *i* means **immutability** and is intended
+    to ignore the parents results. So normally, as a developer, you have to be carefull about the
+    method to use and you also have to create your tasks signatures consequently.
 
     But Director has been created to simplify that ! As we decided to received the results of the
     parents in the `args` parameter we always use the `s()` method.
@@ -95,7 +94,7 @@ example.MULTIPLE_PARENT:
 Celery allows use to [bind a task](https://docs.celeryproject.org/en/latest/userguide/tasks.html#bound-tasks),
 providing the task instance itself as the first parameter.
 
-In this case the signature will must contain a first parameter just before args and kwargs :
+In this case the signature will must contain a first parameter just before `args` and `kwargs` :
 
 ```python
 # tasks/example.py
