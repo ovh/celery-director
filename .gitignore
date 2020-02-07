@@ -23,3 +23,6 @@ celerybeat-schedule.db
 
 # Tests
 .coverage
+
+# Docs
+docs/site/

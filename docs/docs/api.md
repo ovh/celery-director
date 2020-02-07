@@ -1,0 +1,155 @@
+# API Documentation
+
+## **GET** `/api/workflows`
+
+List the workflows instances.
+
+**Example request:**
+
+```
+GET /api/workflows HTTP/1.1
+Host: example.com
+Accept: application/json
+```
+
+**Example response:**
+
+```
+HTTP/1.1 200 OK
+
+[
+    {
+        "created": "2020-02-06T13:56:51",
+        "fullname": "ovh.SIMPLE_ETL",
+        "id": "29e7ef80-fa1b-4b91-8ccb-ef01a91601db",
+        "name": "SIMPLE_ETL",
+        "payload": {"foo": "bar"},
+        "periodic": false,
+        "project": "ovh",
+        "status": "pending",
+        "updated": "2020-02-06T13:56:51"
+    }
+]
+```
+
+## **GET** `/api/workflows/<id>`
+
+Get the details of a specific workflow instance, including its tasks.
+
+**Example request:**
+
+```
+GET /api/workflows/29e7ef80-fa1b-4b91-8ccb-ef01a91601db HTTP/1.1
+Host: example.com
+Accept: application/json
+```
+
+**Example response:**
+
+```
+HTTP/1.1 200 OK
+
+{
+    "created": "2020-02-06T13:56:51",
+    "fullname": "ovh.SIMPLE_ETL",
+    "id": "29e7ef80-fa1b-4b91-8ccb-ef01a91601db",
+    "name": "SIMPLE_ETL",
+    "payload": {},
+    "periodic": false,
+    "project": "ovh",
+    "status": "pending",
+    "tasks": [
+        {
+            "created": "2020-02-06T13:56:51",
+            "id": "c8606f67-9923-4c84-bc41-69efacb0c7cb",
+            "key": "EXTRACT",
+            "previous": [],
+            "status": "pending",
+            "task": "c8606f67-9923-4c84-bc41-69efacb0c7cb",
+            "updated": "2020-02-06T13:56:51
+        },
+        {
+            "created": "2020-02-06T13:56:51",
+            "id": "35a2d47b-8105-4d03-becb-7eb48f8c062e",
+            "key": "TRANSFORM",
+            "previous": [
+                "c8606f67-9923-4c84-bc41-69efacb0c7cb"
+            ],
+            "status": "pending",
+            "task": "35a2d47b-8105-4d03-becb-7eb48f8c062e",
+            "updated": "2020-02-06T13:56:51"
+        },
+        {
+            "created": "2020-02-06T13:56:51",
+            "id": "e5a8eb49-0a8c-4063-ad08-a5e9e7bd49d2",
+            "key": "LOAD",
+            "previous": [
+                "35a2d47b-8105-4d03-becb-7eb48f8c062e"
+            ],
+            "status": "pending",
+            "task": "e5a8eb49-0a8c-4063-ad08-a5e9e7bd49d2",
+            "updated": "2020-02-06T13:56:51"
+        }
+    ],
+    "updated": "2020-02-06T13:56:51"
+}
+```
+
+
+## **POST** `/api/workflows`
+
+Execute a new workflow.
+
+**Example request:**
+
+```
+POST /api/workflows HTTP/1.1
+Host: example.com
+Accept: application/json
+
+{
+  "project": "ovh",
+  "name": "SIMPLE_ETL",
+  "paylod": {}
+}
+```
+
+**Example response:**
+
+```
+HTTP/1.1 201 CREATED
+
+{
+    "created": "2020-02-06T14:01:02",
+    "fullname": "ovh.SIMPLE_ETL",
+    "id": "43e70707-b661-42e1-a7df-5b98851ae340",
+    "name": "SIMPLE_ETL",
+    "payload": {},
+    "periodic": false,
+    "project": "ovh",
+    "status": "pending",
+    "updated": "2020-02-06T14:01:02"
+}
+```
+
+## **GET** `/api/ping`
+
+Health endpoint used to monitor Director API.
+
+**Example request:**
+
+```
+GET /api/ping HTTP/1.1
+Host: example.com
+Accept: application/json
+```
+
+**Example response:**
+
+```
+HTTP/1.1 200 OK
+
+{
+  "message": "pong"
+}
+```

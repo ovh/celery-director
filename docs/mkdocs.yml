@@ -1,0 +1,20 @@
+site_name: "Celery Director"
+theme:
+  name: 'material'
+  palette:
+    primary: 'teal'
+    accent: 'teal'
+nav:
+  - Introduction: 'index.md'
+  - Quickstart: 'quickstart.md'
+  - User Guides:
+    - 'Write Tasks': 'guides/write-tasks.md'
+    - 'Build Workflows': 'guides/build-workflows.md'
+    - 'Run Workflows': 'guides/run-workflows.md'
+    - 'Use Payload': 'guides/use-payload.md'
+  - API: 'api.md'
+extra_css:
+   - "css/custom.css"
+markdown_extensions:
+  - admonition
+  - codehilite
