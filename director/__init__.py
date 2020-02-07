@@ -17,7 +17,7 @@ with open(
     Path(__file__).parent.resolve() / "VERSION", encoding="utf-8"
 ) as version:
     __version__ = version.readline().rstrip()
-    version_info = tuple(__version__.split("."))  # Major, minor, patch
+
 
 # Proxify the task method
 task = partial(cel.task, base=BaseTask)
