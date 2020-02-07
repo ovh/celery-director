@@ -1,7 +1,8 @@
-from sqlalchemy_utils import JSONType, UUIDType
+from sqlalchemy_utils import UUIDType
 
 from director.extensions import db
 from director.models import BaseModel, StatusType
+from director.models.utils import JSONBType
 
 
 class Task(BaseModel):
@@ -9,7 +10,7 @@ class Task(BaseModel):
 
     key = db.Column(db.String(), nullable=False)
     status = db.Column(db.Enum(StatusType), default=StatusType.pending, nullable=False)
-    previous = db.Column(JSONType, default=[])
+    previous = db.Column(JSONBType, default=[])
 
     # Relationship
     workflow_id = db.Column(
