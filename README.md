@@ -1,191 +1,54 @@
-Celery Director
-===============
+<p align="center">
+  <img alt="Celery Director logo" src="https://raw.githubusercontent.com/ovh/celery-director/master/logo.png">
+</p>
+<p align="center">
+  <a href="https://www.python.org/"><img alt="Python versions" src="https://img.shields.io/badge/python-3.6%2B-blue.svg"></a>
+  <a href="https://github.com/ovh/depc/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-BSD%203--Clause-blue.svg"></a>
+  <a href="https://github.com/python/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+</p>
+<p align="center">
+  <a href="https://raw.githubusercontent.com/ovh/celery-director/master/director.png"><img alt="Celery Director" src="https://raw.githubusercontent.com/ovh/celery-director/master/director.png"></a>
+</p>
 
-Celery Director is a tool used to easily manage workflows with Celery :
+----------------
 
-- workflows written in YAML
-- execution and visualization using API, WebUI and CLI
-- manual and periodic executions
+Director is a simple and rapid framework used to manage tasks and build workflows using Celery.
 
-![Celery Director](director.png)
+The objective is to make Celery easier to use by providing :
 
-Installation
-------------
+- a WebUI to track the tasks states,
+- an API and a CLI to manage and execute the workflows,
+- a YAML syntax used to combine tasks into workflows,
+- the ability to periodically launch a whole workflow,
+- and many others.
 
-Director requires Python 3+ :
+See how to use Director with the quickstart and guides in the [documentation](https://ovh.github.io/celery-director/).
 
-```
-$ pip install celery-director
-```
+## Installation
 
-Usage
------
+Install the latest version of Director with pip (requires `Python 3.6` at least):
 
-Celery Director provides an `init` command used to bootstrap a project :
-
-```
-$ director init ~/workflows
-[*] Project created in /Users/ovh/workflows
-[*] Do not forget to initialize the database
-You can now export the DIRECTOR_HOME environment variable
-```
-
-An example has been generated in the `tasks/etl.py` file :
-
-```
-$ cat tasks/etl.py
-from director import task
-
-
-@task(name="EXTRACT")
-def extract(*args, **kwargs):
-    print("Extracting data")
-
-
-@task(name="TRANSFORM")
-def transform(*args, **kwargs):
-    print("Transforming data")
-
-
-@task(name="LOAD")
-def load(*args, **kwargs):
-    print("Loading data")
+```bash
+pip install celery-director
 ```
 
-The `workflows.yml` contains a simple ETL executing each task one after the other :
+## Commands
 
-```
-$ cat workflows.yml
----
-# Simple ETL example
-#
-# +-----------+      +-------------+      +--------+
-# |  EXTRACT  +----->+  TRANSFORM  +----->+  LOAD  |
-# +-----------+      +-------------+      +--------+
-#
-ovh.SIMPLE_ETL:
-  tasks:
-    - EXTRACT
-    - TRANSFORM
-    - LOAD
-```
+* `director init [path]` - Create a new project.
+* `director celery [worker|beat|flower]` - Start Celery daemons.
+* `director webserver` - Start the webserver.
+* `director workflow [list|show|run]` - Manage your project workflows.
 
-You need to update the `.env` file with your own configuration (database, Redis...) and create the director database :
 
-```
-$ director db upgrade
-```
+## Project layout
 
-You can now launch a worker and the webserver in 2 different shells :
+    .env                # The configuration file.
+    workflows.yml       # The workflows definition.
+    tasks/
+        example.py      # A file containing some tasks.
+        ...             # Other files containing other tasks.
 
-```
-$ director celery worker
-$ director webserver
-```
 
-The webserver is available at http://localhost:8000.
-
-Manually Execution
-------------------
-
-Each workflow can be manually executed in different ways.
-
-**Using the CLI**
-
-```
-$ director workflow run ovh.SIMPLE_ETL
-```
-
-**Using the API**
-
-```
-$ curl --header "Content-Type: application/json" \
-  --request POST \
-  --data '{"project":"ovh", "name": "SIMPLE_ETL", "payload": {}}' \
-  http://localhost:8000/api/workflows
-```
-
-**Using the WebUI**
-
-*TODO*
-
-Periodic Execution
-------------------
-
-Celery Director can also periodically execute your workflow by specifying it in the `workflows.yml`. For example this workflow will be executed every **60 seconds** :
-
-```
-ovh.SIMPLE_ETL:
-  tasks:
-    - EXTRACT
-    - TRANSFORM
-    - LOAD
-  periodic:
-    schedule: 60
-```
-
-Note that the scheduler must be started to handle periodic workflows :
-
-```
-$ director celery beat
-```
-
-Group tasks
------------
-
-You can also group tasks together using the following syntax :
-
-```
-# Group ETL example
-#                                         +--------------+
-#                                     +-->+  LOAD_IN_DB  |
-# +-----------+      +-------------+  |   +--------------+
-# |  EXTRACT  +----->+  TRANSFORM  +--+
-# +-----------+      +-------------+  |   +--------------+
-#                                     +-->+  LOAD_IN_FS  |
-#                                         +--------------+
-ovh.GROUP_ETL:
-  tasks:
-    - EXTRACT
-    - TRANSFORM
-    - LOADS:
-        type: group
-        tasks:
-          - LOAD_IN_DB
-          - LOAD_IN_FS
-```
-
-Here the **LOADS** name can be anything and is just here to group the LOAD_IN_DB and LOAD_IN_FS tasks.
-
-Of course you can have several groups in your workflow :
-
-```
-# Multiple Groups Example
-#
-# +--------------------+                           +--------------+
-# |  EXTRACT_FROM_API  +--+                    +-->+  LOAD_IN_DB  |
-# +--------------------+  |   +-------------+  |   +--------------+
-#                         +-->+  TRANSFORM  +--+
-# +--------------------+  |   +-------------+  |   +--------------+
-# |  EXTRACT_FROM_CSV  +--+                    +-->+  LOAD_IN_FS  |
-# +--------------------+                           +--------------+
-#
-ovh.GROUPS_ETL:
-  tasks:
-    - EXTRACTS:
-        type: group
-        tasks:
-          - EXTRACT_FROM_API
-          - EXTRACT_FROM_CSV
-    - TRANSFORM
-    - LOADS:
-        type: group
-        tasks:
-          - LOAD_IN_DB
-          - LOAD_IN_FS
-```
-
-License
--------
+## License
 
 See https://github.com/ovh/celery-director/blob/master/LICENSE
