@@ -12,11 +12,9 @@
 
 ----------------
 
-Celery Director is a simple and rapid framework used to manage tasks and build
-workflows using Celery.
+Director is a simple and rapid framework used to manage tasks and build workflows using Celery.
 
-The objective of Director is to facilitate the usage of Celery, for that the
-tool provides :
+The objective is to make Celery easier to use by providing :
 
 - a WebUI to track the tasks states,
 - an API and a CLI to manage and execute the workflows,
