@@ -428,6 +428,7 @@ simplify the initialization of a Celery project by removing all the long an bori
 <p>So the first thing to do is to generate a project using the <code>director init</code> command :</p>
 <div class="codehilite"><pre><span></span>$ director init workflows
 [*] Project created in /home/director/workflows
+[*] Do not forget to initialize the database
 You can now export the DIRECTOR_HOME environment variable
 </pre></div>
 
@@ -471,7 +472,7 @@ set your <code>DIRECTOR_HOME</code> environment variable :</p>
 <p>Director needs a connection to a relational database to store the dependencies
 between your tasks.</p>
 <p>Adjust the <code>DIRECTOR_DATABASE_URI</code> variable in the <code>.env</code> file and generate the database :</p>
-<div class="codehilite"><pre><span></span>$ director upgradedb
+<div class="codehilite"><pre><span></span>$ director db upgrade
 INFO  <span class="o">[</span>alembic.runtime.migration<span class="o">]</span> Context impl SQLiteImpl.
 INFO  <span class="o">[</span>alembic.runtime.migration<span class="o">]</span> Will assume non-transactional DDL.
 INFO  <span class="o">[</span>alembic.runtime.migration<span class="o">]</span> Running upgrade  -&gt; 70631f8bcff3, Init database
