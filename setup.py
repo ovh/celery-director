@@ -1,4 +1,11 @@
+from pathlib import Path
+
 from setuptools import find_packages, setup
+
+with open(
+    Path(__file__).parent.resolve() / "director" / "VERSION", encoding="utf-8"
+) as ver:
+    version = ver.readline().rstrip()
 
 with open("requirements.txt", encoding="utf-8") as req:
     requirements = [r.rstrip() for r in req.readlines()]
@@ -17,7 +24,7 @@ dev_requirements = [
 
 setup(
     name="celery-director",
-    version="0.0.1",
+    version=version,
     description="Celery Director",
     long_description=long_description,
     long_description_content_type="text/markdown",

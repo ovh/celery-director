@@ -1,5 +1,6 @@
 import click
 
+from director import __version__
 from director.commands.assets import dlassets
 from director.commands.celery import celery
 from director.commands.db import db
@@ -8,6 +9,7 @@ from director.commands.webserver import webserver
 from director.commands.workflows import workflow
 
 
+@click.version_option(version=__version__)
 @click.group()
 def cli():
     """Celery Director - Command Line Interface"""
