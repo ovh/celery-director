@@ -7,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_json_schema import JsonSchema, JsonValidationError
 from flask_migrate import Migrate
 from pluginbase import PluginBase
+from sqlalchemy.schema import MetaData
 
 from director.exceptions import WorkflowNotFound
 
@@ -70,7 +71,17 @@ class FlaskCelery(Celery):
 
 
 # List of extensions
-db = SQLAlchemy()
+db = SQLAlchemy(
+    metadata=MetaData(
+        naming_convention={
+            "ix": "ix_%(column_0_label)s",
+            "uq": "uq_%(table_name)s_%(column_0_name)s",
+            "ck": "ck_%(table_name)s_%(column_0_name)s",
+            "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+            "pk": "pk_%(table_name)s",
+        }
+    )
+)
 migrate = Migrate()
 schema = JsonSchema()
 cel = FlaskCelery("director")

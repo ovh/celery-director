@@ -1,7 +1,6 @@
-from sqlalchemy_utils import JSONType
-
 from director.extensions import db
 from director.models import BaseModel, StatusType
+from director.models.utils import JSONBType
 
 
 class Workflow(BaseModel):
@@ -10,7 +9,7 @@ class Workflow(BaseModel):
     name = db.Column(db.String(), nullable=False)
     project = db.Column(db.String(), nullable=False)
     status = db.Column(db.Enum(StatusType), default=StatusType.pending, nullable=False)
-    payload = db.Column(JSONType, default={})
+    payload = db.Column(JSONBType, default={})
     periodic = db.Column(db.Boolean, default=False)
 
     def __str__(self):
