@@ -73,6 +73,54 @@ def test_post_workflow_unexpected_properties(client):
     assert "'foo' was unexpected" in resp.json["errors"][0]
 
 
+def test_relaunch_not_existing_workflow(client):
+    resp = client.post(
+        "/api/workflows/280d0c4065d04063a800a3b674562711/relaunch", json={}
+    )
+    assert resp.status_code == 404
+
+
+def test_relaunch_workflow(client):
+    payload = {**DEFAULT_PAYLOAD}
+    payload["payload"] = {"nested": {"foo": "bar"}}
+    resp = client.post("/api/workflows", json=payload)
+    with patch("tests.conftest.DirectorResponse._KEYS_TO_REMOVE", new=[]):
+        workflow_id = resp.json["id"]
+    assert resp.status_code == 201
+
+    resp = client.post(f"/api/workflows/{workflow_id}/relaunch", json={})
+    assert resp.status_code == 201
+    assert resp.json == {
+        "fullname": "example.WORKFLOW",
+        "name": "WORKFLOW",
+        "payload": {"nested": {"foo": "bar"}},
+        "periodic": False,
+        "project": "example",
+        "status": "pending",
+    }
+    
+    # workflows are the same
+    resp = client.get("/api/workflows")
+    assert len(resp.json) == 2
+    del resp.json[0]["status"]
+    del resp.json[1]["status"]
+    assert resp.json[0] == resp.json[1]
+
+    # tasks are the same
+    resp = client.get("/api/workflows")
+    with patch("tests.conftest.DirectorResponse._KEYS_TO_REMOVE", new=[]):
+        workflows = resp.json
+    tasks1 = [
+        t["key"]
+        for t in client.get(f"/api/workflows/{workflows[0]['id']}").json.get("tasks")
+    ]
+    tasks2 = [
+        t["key"]
+        for t in client.get(f"/api/workflows/{workflows[1]['id']}").json.get("tasks")
+    ]
+    assert tasks1 == tasks2
+
+
 def test_not_found_workflows(client, no_worker):
     resp = client.post("/api/workflows", json=DEFAULT_PAYLOAD)
     assert resp.status_code == 201
