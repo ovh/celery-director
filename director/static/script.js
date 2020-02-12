@@ -65,6 +65,12 @@ const store = new Vuex.Store({
     },
     selectTask({commit}, task) {
       commit('updateSelectedTask', task)
+    },
+    relaunchWorkflow({commit, dispatch}, workflow_id) {
+      axios.post(API_URL + "/workflows/" + workflow_id + "/relaunch").then((response) => {
+        dispatch("listWorkflows")
+        dispatch("getWorkflow", response.data.id)
+      });
     }
   },
   mutations: {
@@ -162,8 +168,9 @@ new Vue({
     }),
     data: () => ({
       drawer: null,
-      dialog: false,
-      dialogTask: false,
+      payloadDialog: false,
+      taskDialog: false,
+      relaunchDialog: false,
       search: '',
       headers: [
         {
@@ -192,7 +199,11 @@ new Vue({
       },
       displayTask: function(task) {
         this.$store.dispatch('selectTask', task);
-        this.dialogTask = true;
+        this.taskDialog = true;
+      },
+      relaunchWorkflow: function() {
+        this.$store.dispatch('relaunchWorkflow', this.selectedWorkflow.id);
+        this.relaunchDialog = false;
       },
       getFlowerTaskUrl: function() {
         return FLOWER_URL + "/task/" + this.selectedTask.id;

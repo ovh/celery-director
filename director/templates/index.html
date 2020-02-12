@@ -87,27 +87,12 @@
                               <u>Tasks :</u> Total <strong>{{ selectedWorkflow.tasks.length }}</strong> / Success <strong>{{ selectedWorkflow.tasks | countTasksByStatus('success') }}</strong> / Error <strong>{{ selectedWorkflow.tasks | countTasksByStatus('error') }}</strong>
                             </v-list-item-subtitle>
                           </v-list-item-content>
-                          <v-dialog
-                            v-model="dialog"
-                            width="500"
-                          >
-                            <template v-slot:activator="{ on }">
-                              <v-btn class="ma-2" tile outlined color="director" disabled>
-                                <v-icon left>mdi-refresh</v-icon> Relaunch
-                              </v-btn>
-                              <v-btn tile outlined color="director" v-on="on">
-                                <v-icon left>mdi-format-list-bulleted</v-icon> Payload
-                              </v-btn>
-                            </template>
-
-                            <v-card>
-                              <v-card-title>Workflow's Payload</v-card-title>
-                              <v-divider></v-divider>
-                              <v-card-text class="mt-5">
-                                <pre>{{ selectedWorkflow.payload }}</pre>
-                              </v-card-text>
-                            </v-card>
-                          </v-dialog>
+                          <v-btn class="ma-2" tile outlined color="director" @click.stop="relaunchDialog = true">
+                            <v-icon left>mdi-refresh</v-icon> Relaunch
+                          </v-btn>
+                          <v-btn tile outlined color="director" @click.stop="payloadDialog = true">
+                            <v-icon left>mdi-format-list-bulleted</v-icon> Payload
+                          </v-btn>
                         </v-list-item>
                         <v-divider ></v-divider>
                       </div>
@@ -147,7 +132,7 @@
                 </v-col>
               </v-row>
             </v-container>
-            <v-dialog v-model="dialogTask" max-width="600">
+            <v-dialog v-model="taskDialog" max-width="600">
                 <v-card v-if="selectedTask">
                   <v-card-title>
                     Task
@@ -162,6 +147,37 @@
                   </v-card-text>
                 </v-card>
             </v-dialog>
+            <v-dialog v-model="relaunchDialog" max-width="650">
+              <v-card v-if="selectedWorkflow">
+                <v-card-title>
+                  Relaunch the workflow
+                  <v-spacer></v-spacer>
+                </v-card-title>
+                <v-divider></v-divider>
+                <v-card-text class="mt-5">
+                    <v-alert color="director" dark icon="mdi-alert-circle-outline" dense>
+                      The workflow <strong>{{ selectedWorkflow.fullname }}</strong> will be relaunched with the same payload.
+                    </v-alert>
+                    <i>Note that a new workflow will be created, so the current one (created on {{ selectedWorkflow.created | formatDate }}) will not be changed and will still be available in your history.</i>
+                </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <div class="my-2 ma-2"><v-btn depressed @click.stop="relaunchDialog = false">Cancel</v-btn></div>
+                  <div class="my-2"><v-btn depressed color="primary" @click.stop="relaunchWorkflow()">Confirm</v-btn></div>
+                  </v-card-actions>
+
+              </v-card>
+          </v-dialog>
+          <v-dialog v-model="payloadDialog" width="500">
+            <v-card v-if="selectedWorkflow">
+              <v-card-title>Workflow's Payload</v-card-title>
+              <v-divider></v-divider>
+              <v-card-text class="mt-5">
+                <pre>{{ selectedWorkflow.payload }}</pre>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
       
           </v-content>
       </v-app>
