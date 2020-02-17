@@ -77,7 +77,9 @@ def create_app(
     db.app = app
 
     migrate.init_app(
-        app=app, db=db, directory=str(Path(__file__).resolve().parent / "migrations")
+        app=app,
+        db=db,
+        directory=str(Path(__file__).resolve().parent.parent / "migrations"),
     )
     schema.init_app(app)
     cel.init_app(app)
