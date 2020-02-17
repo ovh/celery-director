@@ -80,7 +80,7 @@ def test_relaunch_not_existing_workflow(client):
     assert resp.status_code == 404
 
 
-def test_relaunch_workflow(client):
+def test_relaunch_workflow(client, no_worker):
     payload = {**DEFAULT_PAYLOAD}
     payload["payload"] = {"nested": {"foo": "bar"}}
     resp = client.post("/api/workflows", json=payload)
