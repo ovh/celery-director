@@ -13,9 +13,7 @@ from director.settings import Config, UserConfig
 from director.tasks.base import BaseTask
 from director.views import view_bp
 
-with open(
-    Path(__file__).parent.resolve() / "VERSION", encoding="utf-8"
-) as version:
+with open(Path(__file__).parent.resolve() / "VERSION", encoding="utf-8") as version:
     __version__ = version.readline().rstrip()
 
 
