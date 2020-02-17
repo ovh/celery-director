@@ -15,6 +15,6 @@ Configuration (database, redis...) can be customized in the `$DIRECTOR_HOME/.env
 You can then launch the tests in another terminal :
 
 ```
-$ pip install pytest
+$ pip install pytest==5.3.5
 $ pytest tests/ -v
 ```

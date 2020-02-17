@@ -11,9 +11,15 @@ python:
 services:
   - redis-server
 
+before_install:
+  - pip install black==19.10b0
+  - pip install pytest==5.3.5
+
 install:
   - python setup.py install
-  - pip install pytest
+
+before_script:
+  - black --check director
 
 script:
   - director celery worker -P solo -D
