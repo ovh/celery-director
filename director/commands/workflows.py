@@ -10,6 +10,25 @@ from director.extensions import cel_workflows
 from director.models.workflows import Workflow
 
 
+def tasks_to_ascii(tasks):
+    tasks_str = ""
+    # Wrap the tasks list
+    for task in tasks:
+        if type(task) == dict:
+            group_name = list(task.keys())[0]
+            tasks_str += f"Group {group_name}:\n"
+            for task_name in task[group_name].get("tasks", []):
+                tasks_str += f" └ {task_name}\n"
+        else:
+            tasks_str += f"{task}\n"
+
+    # Just remove the last newline
+    if tasks_str:
+        tasks_str = tasks_str[:-1]
+
+    return tasks_str
+
+
 @click.group()
 def workflow():
     """Manage the workflows"""
@@ -28,19 +47,8 @@ def list_workflow(ctx):
 
     # Add a row for each workflow
     for name, conf in workflows.items():
-
-        # Periodic info
         periodic = conf.get("periodic", {}).get("schedule", "--")
-
-        # Wrap the tasks list
-        tasks_str = ""
-        for task in conf["tasks"]:
-            tasks_str += f"{task}\n"
-
-        # Just remove the last newline
-        if tasks_str:
-            tasks_str = tasks_str[:-1]
-
+        tasks_str = tasks_to_ascii(conf["tasks"])
         data.append([name, periodic, tasks_str])
 
     table = AsciiTable(data)
@@ -54,34 +62,25 @@ def list_workflow(ctx):
 @pass_ctx
 def show_workflow(ctx, name):
     """Display details of a workflow"""
-    data = []
     try:
-        workflow = cel_workflows.get_by_name(name)
+        _workflow = cel_workflows.get_by_name(name)
     except WorkflowNotFound as e:
         click.echo(f"Error: {e}")
-        return
+        raise click.Abort()
+
+    tasks_str = tasks_to_ascii(_workflow["tasks"])
+    periodic = _workflow.get("periodic", {}).get("schedule", "--")
+    payload = _workflow.get("periodic", {}).get("payload", {})
 
     # Construct the table
-    data.append(["Name", name])
-
-    # Wrap the tasks list
-    tasks_str = ""
-    for task in workflow["tasks"]:
-        tasks_str += f"{task}\n"
-
-    # Just remove the last newline
-    if tasks_str:
-        tasks_str = tasks_str[:-1]
-    data.append(["Tasks", tasks_str])
-
-    # Handle periodic information
-    periodic = workflow.get("periodic", {}).get("schedule", "--")
-    data.append(["Periodic", periodic])
-
-    payload = workflow.get("periodic", {}).get("payload", {})
-    data.append(["Payload", payload])
-
-    table = AsciiTable(data)
+    table = AsciiTable(
+        [
+            ["Name", name],
+            ["Tasks", tasks_str],
+            ["Periodic", periodic],
+            ["Default Payload", payload],
+        ]
+    )
     table.inner_heading_row_border = False
     table.inner_row_border = True
     click.echo(table.table)
