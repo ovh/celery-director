@@ -1,5 +1,7 @@
 import imp
+import json
 from pathlib import Path
+from json.decoder import JSONDecodeError
 
 import yaml
 from celery import Celery
@@ -9,7 +11,7 @@ from flask_migrate import Migrate
 from pluginbase import PluginBase
 from sqlalchemy.schema import MetaData
 
-from director.exceptions import WorkflowNotFound
+from director.exceptions import SchemaNotFound, SchemaNotValid, WorkflowNotFound
 
 
 class CeleryWorkflow:
@@ -22,7 +24,9 @@ class CeleryWorkflow:
         self.path = Path(self.app.config["DIRECTOR_HOME"]).resolve() / "workflows.yml"
         with open(self.path) as f:
             self.workflows = yaml.load(f, Loader=yaml.SafeLoader)
+
         self.import_user_tasks()
+        self.read_schemas()
 
     def get_by_name(self, name):
         workflow = self.workflows.get(name)
@@ -54,6 +58,24 @@ class CeleryWorkflow:
                     {},
                     ["__name__"],
                 )
+
+    def read_schemas(self):
+        folder = Path(self.app.config["DIRECTOR_HOME"]).resolve()
+
+        for name, conf in self.workflows.items():
+            if "schema" in conf:
+                path = Path(folder / "schemas" / f"{conf['schema']}.json")
+
+                try:
+                    schema = json.loads(open(path).read())
+                except FileNotFoundError:
+                    raise SchemaNotFound(
+                        f"Schema '{conf['schema']}' not found ({path})"
+                    )
+                except JSONDecodeError as e:
+                    raise SchemaNotValid(f"Schema '{conf['schema']}' not valid ({e})")
+
+                self.workflows[name]["schema"] = schema
 
 
 # Celery Extension
