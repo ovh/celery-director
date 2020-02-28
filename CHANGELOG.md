@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3 - 2020-02-28
+### Added
+- Add the workflow relaunch
+- Improve the listing of workflows in the CLI
+- Add the jsonSchema support for the workflows payload
+
+### Fixed
+- Fix the roboto font display in WebUI
+- Fix a test 
+
+
 ## 0.0.2 - 2020-02-07
 ### Added
 - Add Travis integration.
