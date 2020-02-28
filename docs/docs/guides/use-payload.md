@@ -61,6 +61,52 @@ def send_mail(*args, **kwargs):
 As you can see the payload is forwarded to **all the tasks** contained in
 your workflow.
 
+## Create the schema
+
+The previous example executes the workflow without validate its payload. Director
+provides a way to validate it using [JsonSchema](https://json-schema.org/understanding-json-schema/).
+
+Your schema needs to be stored in a `schemas` folder inside your `DIRECTOR_HOME` (you have to create
+the folder if it doesn't exist yet):
+
+```
+$ cat schemas/order.json
+{
+    "type" : "object",
+    "properties" : {
+        "user" : {"type" : "integer"},
+        "product" : {"type" : "integer"}
+    },
+    "required": ["user", "product"]
+}
+```
+
+Then you can reference it in your workflow using the `schema` keyword :
+
+```yaml
+product.ORDER:
+  tasks:
+    - ORDER_PRODUCT
+    - SEND_MAIL
+  schema: order
+```
+
+!!! tip
+    You can host your schemas into subfolders (ie `$DIRECTOR_HOME/schemas/foo/bar/baz.json`)
+    and reference it in your YAML file with : `schema: foo/bar/baz`.
+
+From now the execution will be blocked if the payload is not valid :
+
+```text
+$ director workflow run product.ORDER '{"user": "john", "product": 1000}'
+Error: Payload is not valid
+- 'john' is not of type 'integer'
+Aborted!
+```
+
+The API returns a `400 Bad request` error.
+
+
 ## Periodic workflows
 
 Celery Director provides a YAML syntax to [periodically schedule a workflow](build-workflows.md#periodic-workflows).
