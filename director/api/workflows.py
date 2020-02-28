@@ -1,7 +1,8 @@
 from flask import current_app as app
 from flask import abort, jsonify, request
+from jsonschema.exceptions import ValidationError, SchemaError
 
-from director.api import api_bp
+from director.api import api_bp, validate
 from director.builder import WorkflowBuilder
 from director.exceptions import WorkflowNotFound
 from director.extensions import cel_workflows, schema
@@ -20,7 +21,9 @@ def _execute_workflow(project, name, payload={}):
 
     # Check if the workflow exists
     try:
-        cel_workflows.get_by_name(fullname)
+        wf = cel_workflows.get_by_name(fullname)
+        if "schema" in wf:
+            validate(payload, wf["schema"])
     except WorkflowNotFound:
         abort(404, f"Workflow {fullname} not found")
 

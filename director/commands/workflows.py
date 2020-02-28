@@ -3,6 +3,8 @@ import json
 from json.decoder import JSONDecodeError
 from terminaltables import AsciiTable
 
+from jsonschema import validate
+
 from director.builder import WorkflowBuilder
 from director.context import pass_ctx
 from director.exceptions import WorkflowNotFound
@@ -93,13 +95,16 @@ def show_workflow(ctx, name):
 def run_workflow(ctx, fullname, payload):
     """Execute a workflow"""
     try:
-        cel_workflows.get_by_name(fullname)
+        wf = cel_workflows.get_by_name(fullname)
         payload = json.loads(payload)
+
+        if "schema" in wf:
+            validate(payload, wf["schema"])
     except WorkflowNotFound as e:
         click.echo(f"Error: {e}")
         raise click.Abort()
-    except JSONDecodeError as e:
-        click.echo(f"Error parsing the JSON payload : {e}")
+    except (JSONDecodeError) as e:
+        click.echo(f"Error in the payload : {e}")
         raise click.Abort()
 
     # Create the workflow object

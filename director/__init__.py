@@ -25,19 +25,6 @@ task = partial(cel.task, base=BaseTask)
 config = UserConfig()
 
 
-# Error handler
-def validation_error(e):
-    return (
-        jsonify(
-            {
-                "error": e.message,
-                "errors": [validation_err.message for validation_err in e.errors],
-            }
-        ),
-        409,
-    )
-
-
 # Custom Flask class
 class DirectorFlask(Flask):
     static_folder = "static"
@@ -55,9 +42,6 @@ def create_app(
 
     # Init User's config
     config.init()
-
-    # Exception handler
-    app.register_error_handler(JsonValidationError, validation_error)
 
     # Init Blueprints
     app.register_blueprint(api_bp)

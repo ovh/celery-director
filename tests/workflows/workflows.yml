@@ -36,3 +36,8 @@ example.SIMPLE_GROUP_ERROR:
         tasks:
           - TASK_ERROR
           - TASK_C
+
+schemas.SIMPLE_SCHEMA:
+  tasks:
+    - TASK_EXAMPLE
+  schema: example/simple_schema
