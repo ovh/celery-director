@@ -3,13 +3,14 @@ import json
 from json.decoder import JSONDecodeError
 from terminaltables import AsciiTable
 
-from jsonschema import validate
+from flask_json_schema import JsonValidationError
 
 from director.builder import WorkflowBuilder
 from director.context import pass_ctx
 from director.exceptions import WorkflowNotFound
 from director.extensions import cel_workflows
 from director.models.workflows import Workflow
+from director.utils import validate, format_schema_errors
 
 
 def tasks_to_ascii(tasks):
@@ -99,7 +100,16 @@ def run_workflow(ctx, fullname, payload):
         payload = json.loads(payload)
 
         if "schema" in wf:
-            validate(payload, wf["schema"])
+            try:
+                validate(payload, wf["schema"])
+            except JsonValidationError as e:
+                result = format_schema_errors(e)
+
+                click.echo(f"Error: {result['error']}")
+                for err in result["errors"]:
+                    click.echo(f"- {err}")
+                raise click.Abort()
+
     except WorkflowNotFound as e:
         click.echo(f"Error: {e}")
         raise click.Abort()
