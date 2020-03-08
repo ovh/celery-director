@@ -28,5 +28,7 @@ def start(workflow_id):
 def end(workflow_id):
     logger.info(f"Closing the workflow {workflow_id}")
     workflow = Workflow.query.filter_by(id=workflow_id).first()
-    workflow.status = StatusType.success
-    workflow.save()
+
+    if workflow.status != StatusType.error:
+        workflow.status = StatusType.success
+        workflow.save()
