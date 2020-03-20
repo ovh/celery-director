@@ -41,3 +41,12 @@ schemas.SIMPLE_SCHEMA:
   tasks:
     - TASK_EXAMPLE
   schema: example/simple_schema
+
+example.CELERY_ERROR_ONE_TASK:
+  tasks:
+    - TASK_CELERY_ERROR
+
+example.CELERY_ERROR_MULTIPLE_TASKS:
+  tasks:
+    - TASK_A
+    - TASK_CELERY_ERROR

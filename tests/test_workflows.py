@@ -2,6 +2,7 @@ import time
 
 import pytest
 from celery.result import GroupResult
+from kombu.exceptions import EncodeError
 
 from director.models.tasks import Task
 from director.models.workflows import Workflow
@@ -237,4 +238,44 @@ def test_execute_group_error(app, create_builder):
     assert task_a.status.value == "success"
     assert task_error.status.value == "error"
     assert task_c.status.value == "success"
+    assert workflow.status.value == "error"
+
+
+@pytest.mark.skip_no_worker()
+def test_execute_celery_error_one_task(app, create_builder):
+    workflow, builder = create_builder("example", "CELERY_ERROR_ONE_TASK", {})
+    assert workflow["status"] == "pending"
+
+    # Tasks executed in Celery
+    result = builder.run()
+    with pytest.raises(EncodeError):
+        assert result.get()
+
+    # DB rows status updated
+    time.sleep(0.5)
+    with app.app_context():
+        task = Task.query.order_by(Task.created_at.asc()).first()
+        workflow = Workflow.query.filter_by(id=task.workflow_id).first()
+    assert workflow.status.value == "error"
+    assert task.status.value == "error"
+
+
+@pytest.mark.skip_no_worker()
+def test_execute_celery_error_multiple_tasks(app, create_builder):
+    workflow, builder = create_builder("example", "CELERY_ERROR_MULTIPLE_TASKS", {})
+    assert workflow["status"] == "pending"
+
+    # Tasks executed in Celery
+    result = builder.run()
+    with pytest.raises(EncodeError):
+        assert result.get()
+
+    # DB rows status updated
+    time.sleep(0.5)
+    with app.app_context():
+        task_a = Task.query.filter_by(key="TASK_A").first()
+        task_celery_error = Task.query.filter_by(key="TASK_CELERY_ERROR").first()
+        workflow = Workflow.query.filter_by(id=task_a.workflow_id).first()
+    assert task_a.status.value == "success"
+    assert task_celery_error.status.value == "error"
     assert workflow.status.value == "error"
