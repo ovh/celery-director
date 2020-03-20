@@ -26,14 +26,18 @@ class BaseTask(_Task):
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         task = Task.query.filter_by(id=task_id).first()
         task.status = StatusType.error
+        task.result = {"exception": str(exc), "traceback": einfo.traceback}
         task.workflow.status = StatusType.error
         task.save()
+
         logger.info(f"Task {task_id} is now in error")
         super(BaseTask, self).on_failure(exc, task_id, args, kwargs, einfo)
 
     def on_success(self, retval, task_id, args, kwargs):
         task = Task.query.filter_by(id=task_id).first()
         task.status = StatusType.success
+        task.result = retval
         task.save()
+
         logger.info(f"Task {task_id} is now in success")
         super(BaseTask, self).on_success(retval, task_id, args, kwargs)

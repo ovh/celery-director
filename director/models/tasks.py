@@ -1,4 +1,7 @@
+import json
+
 from sqlalchemy_utils import UUIDType
+from sqlalchemy.types import PickleType
 
 from director.extensions import db
 from director.models import BaseModel, StatusType
@@ -11,6 +14,7 @@ class Task(BaseModel):
     key = db.Column(db.String(), nullable=False)
     status = db.Column(db.Enum(StatusType), default=StatusType.pending, nullable=False)
     previous = db.Column(JSONBType, default=[])
+    result = db.Column(PickleType)
 
     # Relationship
     workflow_id = db.Column(
@@ -29,6 +33,7 @@ class Task(BaseModel):
                 "status": self.status.value,
                 "task": self.id,
                 "previous": self.previous,
+                "result": self.result,
             }
         )
         return d

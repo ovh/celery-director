@@ -50,3 +50,17 @@ example.CELERY_ERROR_MULTIPLE_TASKS:
   tasks:
     - TASK_A
     - TASK_CELERY_ERROR
+
+example.RETURN_VALUES:
+  tasks:
+    - STR
+    - INT
+    - LIST
+    - NONE
+    - DICT
+    - NESTED
+
+example.RETURN_EXCEPTION:
+  tasks:
+    - STR
+    - TASK_ERROR
