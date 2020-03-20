@@ -279,3 +279,45 @@ def test_execute_celery_error_multiple_tasks(app, create_builder):
     assert task_a.status.value == "success"
     assert task_celery_error.status.value == "error"
     assert workflow.status.value == "error"
+
+
+@pytest.mark.skip_no_worker()
+def test_return_values(app, create_builder):
+    workflow, builder = create_builder("example", "RETURN_VALUES", {})
+    result = builder.run()
+
+    time.sleep(0.5)
+    with app.app_context():
+        tasks = {t.key: t.result for t in Task.query.all()}
+
+    assert tasks["STR"] == "return_value"
+    assert tasks["INT"] == 1234
+    assert tasks["LIST"] == ["jack", "sape", "guido"]
+    assert tasks["NONE"] == None
+    assert tasks["DICT"] == {"foo": "bar"}
+    assert tasks["NESTED"] == {
+        "jack": 4098,
+        "sape": 4139,
+        "guido": 4127,
+        "nested": {"foo": "bar"},
+        "none": None,
+        "list": ["jack", "sape", "guido"],
+    }
+
+
+@pytest.mark.skip_no_worker()
+def test_return_exception(app, create_builder):
+    workflow, builder = create_builder("example", "RETURN_EXCEPTION", {})
+    result = builder.run()
+
+    time.sleep(0.5)
+    with app.app_context():
+        tasks = {t.key: t.result for t in Task.query.all()}
+
+    assert tasks["STR"] == "return_value"
+    assert list(tasks["TASK_ERROR"].keys()) == ["exception", "traceback"]
+    assert tasks["TASK_ERROR"]["exception"] == "division by zero"
+    assert tasks["TASK_ERROR"]["traceback"].startswith(
+        "Traceback (most recent call last)"
+    )
+    assert "ZeroDivisionError: division by zero" in tasks["TASK_ERROR"]["traceback"]

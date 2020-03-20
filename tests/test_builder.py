@@ -59,17 +59,20 @@ def test_build_chained_tasks(app, create_builder):
     assert _remove_keys(tasks[0].to_dict(), keys) == {
         "key": "TASK_A",
         "previous": [],
+        "result": None,
         "status": "pending",
     }
     assert _remove_keys(tasks[1].to_dict(), keys) == {
         "key": "TASK_B",
         "previous": [str(tasks[0].to_dict()["id"])],
+        "result": None,
         "status": "pending",
     }
 
     assert _remove_keys(tasks[2].to_dict(), keys) == {
         "key": "TASK_C",
         "previous": [str(tasks[1].to_dict()["id"])],
+        "result": None,
         "status": "pending",
     }
 
@@ -106,15 +109,18 @@ def test_build_grouped_tasks(app, create_builder):
     assert _remove_keys(tasks[0].to_dict(), keys) == {
         "key": "TASK_A",
         "previous": [],
+        "result": None,
         "status": "pending",
     }
     assert _remove_keys(tasks[1].to_dict(), keys) == {
         "key": "TASK_B",
         "previous": [str(tasks[0].to_dict()["id"])],
+        "result": None,
         "status": "pending",
     }
     assert _remove_keys(tasks[2].to_dict(), keys) == {
         "key": "TASK_C",
         "previous": [str(tasks[0].to_dict()["id"])],
+        "result": None,
         "status": "pending",
     }

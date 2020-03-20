@@ -181,7 +181,14 @@ def test_get_workflow(client, no_worker):
         "periodic": False,
         "project": "example",
         "status": "pending",
-        "tasks": [{"key": "TASK_EXAMPLE", "previous": [], "status": "pending",}],
+        "tasks": [
+            {
+                "key": "TASK_EXAMPLE",
+                "previous": [],
+                "result": None,
+                "status": "pending",
+            }
+        ],
     }
 
 
