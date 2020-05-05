@@ -13,6 +13,11 @@ const COLORS = {
     'background': '#787777',
     'border': '#555',
     'hlborder': '#635f5f'
+  },
+  'progress': {
+    'background': '#2196f3',
+    'border': '#0b7dda',
+    'hlborder': '#0961aa'
   }
 };
 
@@ -147,6 +152,8 @@ Vue.filter('statusColor', function(status) {
     return '#4caf50';
   } else if ( status == 'error' ) {
     return '#f44336';
+  } else if ( status == 'progress' ) {
+    return '#2196f3';
   } else {
     return '#787777';
   }
@@ -187,7 +194,8 @@ new Vue({
         var color = {
           'success': 'green',
           'error': 'red',
-          'warning': 'orange'
+          'warning': 'orange',
+          'progress': 'blue'
         }[status];
         return color;
       },
