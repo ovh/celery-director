@@ -1,9 +1,8 @@
-from unittest.mock import PropertyMock, patch
+from datetime import datetime, timedelta
+from unittest.mock import patch
 
-import pytest
-from director.exceptions import WorkflowNotFound
+from director.extensions import db
 from director.models.workflows import Workflow
-from director.models.tasks import Task
 
 
 DEFAULT_PAYLOAD = {"project": "example", "name": "WORKFLOW", "payload": {}}
@@ -162,6 +161,46 @@ def test_list_workflows(client, no_worker):
         client.post("/api/workflows", json=DEFAULT_PAYLOAD)
     resp = client.get("/api/workflows")
     assert len(resp.json) == 10
+
+
+def test_list_paginated_workflows(app, client, no_worker):
+    # SQLite db.Datetime() does not include microseconds, so
+    # we need to fix dates to be able to sort workflows.
+    now = datetime.now()
+    with app.app_context():
+        for i in range(10):
+            date = now + timedelta(minutes=i)
+            w = Workflow(
+                created_at=date,
+                updated_at=date,
+                project="example",
+                name="WORKFLOW",
+                payload={"i": i + 1},
+            )
+            db.session.add(w)
+        db.session.commit()
+
+    resp = client.get("/api/workflows")
+    assert len(resp.json) == 10
+
+    resp = client.get("/api/workflows?per_page=1")
+    assert len(resp.json) == 1
+    assert resp.json[0]["payload"]["i"] == 10
+
+    resp = client.get("/api/workflows?per_page=4&page=1")
+    assert len(resp.json) == 4
+    assert [w["payload"]["i"] for w in resp.json] == [10, 9, 8, 7]
+
+    resp = client.get("/api/workflows?per_page=4&page=2")
+    assert len(resp.json) == 4
+    assert [w["payload"]["i"] for w in resp.json] == [6, 5, 4, 3]
+
+    resp = client.get("/api/workflows?per_page=4&page=3")
+    assert len(resp.json) == 2
+    assert [w["payload"]["i"] for w in resp.json] == [2, 1]
+
+    resp = client.get("/api/workflows?per_page=4&page=4")
+    assert resp.status_code == 404
 
 
 def test_get_workflow(client, no_worker):
