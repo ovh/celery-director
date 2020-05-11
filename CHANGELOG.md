@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.4 - 2020-05-11
+### Added
+- Save the result in database (database upgrade required: `director db upgrade`)
+- Limit the number of workflows to return
+
+### Fixed
+- Fix a bug when last task raises a Celery error
+- Support the progress status
+- Properly handle the 404 errors
+
+
 ## 0.0.3 - 2020-02-28
 ### Added
 - Add the workflow relaunch
@@ -8,7 +19,7 @@
 
 ### Fixed
 - Fix the roboto font display in WebUI
-- Fix a test 
+- Fix a test
 
 
 ## 0.0.2 - 2020-02-07
