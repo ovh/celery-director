@@ -38,6 +38,7 @@ class Config(object):
         )
         self.API_URL = env.str("DIRECTOR_API_URL", "http://127.0.0.1:8000/api")
         self.FLOWER_URL = env.str("DIRECTOR_FLOWER_URL", "http://127.0.0.1:5555")
+        self.WORKFLOWS_PER_PAGE = env.int("WORKFLOWS_PER_PAGE", 1000)
 
         # SQLAlchemy configuration
         self.SQLALCHEMY_TRACK_MODIFICATIONS = False

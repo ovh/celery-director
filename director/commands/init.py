@@ -19,6 +19,9 @@ DIRECTOR_API_URL="http://127.0.0.1:8000/api"
 DIRECTOR_FLOWER_URL="http://127.0.0.1:5555"
 DIRECTOR_ENABLE_DARK_THEME=false
 
+# ---------- API ----------
+DIRECTOR_WORKFLOWS_PER_PAGE=1000
+
 # These settings are designed to be used with the "director dlassets" command,
 # the DIRECTOR_STATIC_FOLDER will be used if you set DIRECTOR_ENABLE_CDN to false.
 DIRECTOR_ENABLE_CDN=true

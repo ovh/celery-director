@@ -12,6 +12,11 @@ Host: example.com
 Accept: application/json
 ```
 
+**Parameters:**
+
+- `per_page` (optional, default: 1000): the number of workflows to return
+- `page` (optional, default: 1): the page to start
+
 **Example response:**
 
 ```

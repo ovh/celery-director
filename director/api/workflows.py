@@ -71,8 +71,14 @@ def relaunch_workflow(workflow_id):
 
 @api_bp.route("/workflows")
 def list_workflows():
-    workflows = Workflow.query.all()
-    return jsonify([w.to_dict() for w in workflows])
+    page = request.args.get("page", type=int, default=1)
+    per_page = request.args.get(
+        "per_page", type=int, default=app.config["WORKFLOWS_PER_PAGE"]
+    )
+    workflows = Workflow.query.order_by(Workflow.created_at.desc()).paginate(
+        page, per_page
+    )
+    return jsonify([w.to_dict() for w in workflows.items])
 
 
 @api_bp.route("/workflows/<workflow_id>")
