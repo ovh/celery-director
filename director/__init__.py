@@ -4,7 +4,7 @@ import pkgutil
 from functools import partial
 from pathlib import Path
 
-from flask import Flask, Blueprint, jsonify
+from flask import Flask, Blueprint, jsonify, request, render_template
 from flask_json_schema import JsonValidationError
 
 from director.api import api_bp
@@ -56,6 +56,9 @@ def create_app(
         )
     )
 
+    # Error handler
+    app.register_error_handler(404, lambda e: handle_not_found(e))
+
     # Init extensions
     db.init_app(app)
     db.app = app
@@ -84,6 +87,15 @@ def create_app(
             )
 
     return app
+
+
+def handle_not_found(e):
+    """
+    Handle the "404 Not found" error in API and HTML.
+    """
+    if request.path.startswith("/api"):
+        return jsonify(error=str(e)), 404
+    return render_template("404.html", error=e), 404
 
 
 # Import director's submodules
