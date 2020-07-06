@@ -186,7 +186,6 @@ new Vue({
       taskDialog: false,
       relaunchDialog: false,
       search: '',
-      initalWorkflowsFields:  ['name', 'created', 'status'],
       headers: [
         {
           text: 'Name',
@@ -226,8 +225,6 @@ new Vue({
       }
     },
     created() {
-      this.$store.dispatch('listWorkflows', { fields: this.initalWorkflowsFields });
-
       let workflowID = this.$route.params.id;
       if (workflowID) {
         this.$store.dispatch('getWorkflow', workflowID);
