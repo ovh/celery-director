@@ -14,6 +14,11 @@ DEPENDENCIES = [
         None,
     ),
     (
+        "https://cdn.jsdelivr.net/npm/vue-router@3.3.4/dist/vue-router.min.js",
+        "sha256-87g98o5+aw7/ExJ9tBjvH8zz46FJ7hiylPtNFcPvsSw=",
+        None,
+    ),
+    (
         "https://cdn.jsdelivr.net/npm/vuex@3.1.2/dist/vuex.min.js",
         "sha256-LfE9mPMjeOg3dTn1sESY2Xvdbq7gAhONtkxacnr7FSA=",
         None,
