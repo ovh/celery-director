@@ -45,6 +45,12 @@ function getNode(task) {
   };
 }
 
+const router = new VueRouter({
+  routes: [
+    {  name: 'worfklow', path: '/:id' }
+  ]
+});
+
 const store = new Vuex.Store({
 	state: {
     workflows: [],
@@ -168,6 +174,7 @@ new Vue({
     el: '#app',
     computed: Vuex.mapState(['workflows', 'selectedWorkflow', 'selectedTask', 'taskIndex', 'network', 'loading', 'headers']),
     store,
+    router,
     vuetify: new Vuetify({
       theme: {
         dark: DARK_THEME,
@@ -200,10 +207,10 @@ new Vue({
         return color;
       },
       selectRow: function (item) {
-        let prevItem = this.workflows.find(c => c.isSelected);
-        if (prevItem) this.$delete(prevItem, 'isSelected');
-        this.$set(item, "isSelected", true)
-        this.$store.dispatch('getWorkflow', item.id)
+        // Catch to avoid redundant navigation to current location error
+        this.$router.push({ name: 'worfklow', params: { id: item.id } }).catch(() => {});
+
+        this.$store.dispatch('getWorkflow', item.id);
       },
       displayTask: function(task) {
         this.$store.dispatch('selectTask', task);
@@ -218,6 +225,9 @@ new Vue({
       }
     },
     created() {
-      this.$store.dispatch('listWorkflows')
+      let workflowID = this.$route.params.id;
+      if (workflowID) {
+        this.$store.dispatch('getWorkflow', workflowID);
+      }
     }
   });
