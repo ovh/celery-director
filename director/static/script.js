@@ -225,6 +225,8 @@ new Vue({
       }
     },
     created() {
+      this.$store.dispatch('listWorkflows');
+
       let workflowID = this.$route.params.id;
       if (workflowID) {
         this.$store.dispatch('getWorkflow', workflowID);
