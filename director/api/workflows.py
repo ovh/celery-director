@@ -40,6 +40,7 @@ def _execute_workflow(project, name, payload={}):
     app.logger.info(f"Workflow sent : {workflow.canvas}")
     return obj.to_dict(), workflow
 
+
 @api_bp.route("/workflows", methods=["POST"])
 @auth.login_required
 @schema.validate(
@@ -62,12 +63,14 @@ def create_workflow():
     data, _ = _execute_workflow(project, name, payload)
     return jsonify(data), 201
 
+
 @api_bp.route("/workflows/<workflow_id>/relaunch", methods=["POST"])
 @auth.login_required
 def relaunch_workflow(workflow_id):
     obj = _get_workflow(workflow_id)
     data, _ = _execute_workflow(obj.project, obj.name, obj.payload)
     return jsonify(data), 201
+
 
 @api_bp.route("/workflows")
 @auth.login_required
@@ -80,6 +83,7 @@ def list_workflows():
         page, per_page
     )
     return jsonify([w.to_dict() for w in workflows.items])
+
 
 @api_bp.route("/workflows/<workflow_id>")
 @auth.login_required
