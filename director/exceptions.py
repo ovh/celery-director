@@ -12,3 +12,7 @@ class SchemaNotValid(Exception):
 
 class WorkflowSyntaxError(Exception):
     pass
+
+
+class UserNotFound(Exception):
+    pass

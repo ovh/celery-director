@@ -29,6 +29,8 @@
       <v-app id="inspire">
           <v-app-bar app color="director" dark>
             <v-toolbar-title>Celery Director</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-title class="text-capitalize">{{ username }}</v-toolbar-title>
           </v-app-bar>
       
           <v-content>
@@ -187,6 +189,7 @@
     const DARK_THEME=%% config.ENABLE_DARK_THEME | int %%;
     const API_URL="%% config.API_URL %%";
     const FLOWER_URL="%% config.FLOWER_URL %%";
+    const AUTH_ENABLED=%% config.AUTH_ENABLED | int %%;
   </script>
   {% if config.ENABLE_CDN %}
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js" integrity="sha256-ngFW3UnAN0Tnm76mDuu7uUtYEcG3G5H1+zioJw3t+68=" crossorigin="anonymous"></script>

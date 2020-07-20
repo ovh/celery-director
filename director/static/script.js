@@ -21,6 +21,8 @@ const COLORS = {
   }
 };
 
+const LOGGED_IN_USER = JSON.parse(localStorage.getItem('user'));
+
 function getNode(task) {
   return {
     id: task.id,
@@ -45,14 +47,8 @@ function getNode(task) {
   };
 }
 
-const router = new VueRouter({
-  routes: [
-    {  name: 'worfklow', path: '/:id' }
-  ]
-});
-
 const store = new Vuex.Store({
-	state: {
+  state: {
     workflows: [],
     network: null,
     selectedWorkflow: null,
@@ -60,27 +56,44 @@ const store = new Vuex.Store({
     taskIndex: null,
     loading: true
   },
+  getters: {
+    auth() {
+      return JSON.parse(localStorage.getItem('user'));
+    }
+  },
   actions: {
-    listWorkflows({commit}) {
-      axios.get(API_URL + "/workflows").then((response) => {
+    listWorkflows({ commit, getters }) {
+      axios({
+        method: 'get',
+        url: API_URL + '/workflows',
+        auth: LOGGED_IN_USER
+      }).then((response) => {
         commit('updateWorkflows', response.data)
         commit('changeLoadingState', false)
-    	})
+      })
     },
-    getWorkflow({commit}, workflow_id) {
-      axios.get(API_URL + "/workflows/" + workflow_id).then((response) => {
+    getWorkflow({ commit, getters }, workflow_id) {
+      axios({
+        method: 'get',
+        url: API_URL + '/workflows/' + workflow_id,
+        auth: LOGGED_IN_USER
+      }).then((response) => {
         commit('updateSelectedWorkflow', response.data)
         commit('refreshNetwork', response.data.tasks)
         commit('changeLoadingState', false)
-    	})
+      })
     },
-    selectTask({commit}, task) {
+    selectTask({ commit, getters }, task) {
       commit('updateSelectedTask', task)
     },
-    relaunchWorkflow({commit, dispatch}, workflow_id) {
-      axios.post(API_URL + "/workflows/" + workflow_id + "/relaunch").then((response) => {
-        dispatch("listWorkflows")
-        dispatch("getWorkflow", response.data.id)
+    relaunchWorkflow({ commit, dispatch }, workflow_id) {
+      axios({
+        method: 'post',
+        url: API_URL + '/workflows/' + workflow_id + '/relaunch',
+        auth: LOGGED_IN_USER
+      }).then((response) => {
+        dispatch('listWorkflows')
+        dispatch('getWorkflow', response.data.id)
       });
     }
   },
@@ -98,138 +111,159 @@ const store = new Vuex.Store({
     refreshNetwork(state, tasks) {
       let nodes = [];
       let edges = [];
-    
+
       for (let i = 0; i < tasks.length; i++) {
         nodes.push(getNode(tasks[i]));
 
-        for (let j=0; j<tasks[i].previous.length; j++) {
+        for (let j = 0; j < tasks[i].previous.length; j++) {
           edges.push({
             'to': tasks[i].id,
             'from': tasks[i].previous[j],
             'color': {
               'color': '#3c4652',
-              'highlight':'#3c4652',
+              'highlight': '#3c4652',
             },
             'arrows': 'to',
-            'physics': false, 'smooth': {'type': 'cubicBezier'}
+            'physics': false, 'smooth': { 'type': 'cubicBezier' }
           });
         }
       }
 
       container = document.getElementById('network')
-      let data = {nodes:  nodes, edges: edges};
+      let data = { nodes: nodes, edges: edges };
       let options = {
         nodes: {
           margin: 10
         },
         layout: {
           hierarchical: {
-            direction: "UD",
-            sortMethod: "directed"
+            direction: 'UD',
+            sortMethod: 'directed'
           }
         },
         edges: {
-          arrows: "to"
+          arrows: 'to'
         },
       };
       state.network = new vis.Network(container, data, options);
-      state.network.on( 'click', function(properties) {
-        if ( properties.nodes.length > 0 ) {
+      state.network.on('click', function (properties) {
+        if (properties.nodes.length > 0) {
           let taskID = properties.nodes[0];
           state.taskIndex = tasks.findIndex(c => c.id == taskID);
         }
       });
     },
     changeLoadingState(state, loading) {
-    	state.loading = loading
+      state.loading = loading
     }
   }
 });
 
-
-Vue.filter('formatDate', function(value) {
+Vue.filter('formatDate', function (value) {
   if (value) {
     return moment(String(value)).format('MMM DD, HH:mm:ss')
   }
 });
 
-Vue.filter('statusColor', function(status) {
-  if ( status == 'success' ) {
+Vue.filter('statusColor', function (status) {
+  if (status == 'success') {
     return '#4caf50';
-  } else if ( status == 'error' ) {
+  } else if (status == 'error') {
     return '#f44336';
-  } else if ( status == 'progress' ) {
+  } else if (status == 'progress') {
     return '#2196f3';
   } else {
     return '#787777';
   }
 });
 
-Vue.filter('countTasksByStatus', function(workflows, status) {
-    const tasks = workflows.filter(c => c.status === status);
-    return tasks.length;
+Vue.filter('countTasksByStatus', function (workflows, status) {
+  const tasks = workflows.filter(c => c.status === status);
+  return tasks.length;
+});
+
+// ****** ROUTER *****
+const router = new VueRouter({
+  mode: 'history',
+  root: '/',
+  routes: [
+    { name: 'home', path: '/' },
+    { name: 'worfklow', path: '/workflows/:id' },
+  ]
+});
+
+// Redirect to login page if not logged in
+router.beforeEach((to, _, next) => {
+  const loggedIn = localStorage.getItem('user');
+
+  if (AUTH_ENABLED > 0 && !loggedIn) {
+    return window.location.replace('/login?returnUrl=/workflows/' + to.params.id);
+  }
+
+  next();
 });
 
 new Vue({
-    el: '#app',
-    computed: Vuex.mapState(['workflows', 'selectedWorkflow', 'selectedTask', 'taskIndex', 'network', 'loading', 'headers']),
-    store,
-    router,
-    vuetify: new Vuetify({
-      theme: {
-        dark: DARK_THEME,
-      },
-    }),
-    data: () => ({
-      drawer: null,
-      payloadDialog: false,
-      taskDialog: false,
-      relaunchDialog: false,
-      search: '',
-      headers: [
-        {
-          text: 'Name',
-          align: 'left',
-          value: 'fullname',
-        },
-        { text: 'Date', value: 'created' },
-        { text: 'Status', value: 'status' },
-      ],
-    }),
-    methods: {
-      getColor: function (status) {
-        var color = {
-          'success': 'green',
-          'error': 'red',
-          'warning': 'orange',
-          'progress': 'blue'
-        }[status];
-        return color;
-      },
-      selectRow: function (item) {
-        // Catch to avoid redundant navigation to current location error
-        this.$router.push({ name: 'worfklow', params: { id: item.id } }).catch(() => {});
-
-        this.$store.dispatch('getWorkflow', item.id);
-      },
-      displayTask: function(task) {
-        this.$store.dispatch('selectTask', task);
-        this.taskDialog = true;
-      },
-      relaunchWorkflow: function() {
-        this.$store.dispatch('relaunchWorkflow', this.selectedWorkflow.id);
-        this.relaunchDialog = false;
-      },
-      getFlowerTaskUrl: function() {
-        return FLOWER_URL + "/task/" + this.selectedTask.id;
-      }
+  el: '#app',
+  computed: Vuex.mapState(['workflows', 'selectedWorkflow', 'selectedTask', 'taskIndex', 'network', 'loading', 'headers']),
+  store,
+  router,
+  vuetify: new Vuetify({
+    theme: {
+      dark: DARK_THEME,
     },
-    created() {
-      this.$store.dispatch('listWorkflows');
+  }),
+  data: () => ({
+    drawer: null,
+    payloadDialog: false,
+    taskDialog: false,
+    relaunchDialog: false,
+    search: '',
+    username: LOGGED_IN_USER.username,
+    headers: [
+      {
+        text: 'Name',
+        align: 'left',
+        value: 'fullname',
+      },
+      { text: 'Date', value: 'created' },
+      { text: 'Status', value: 'status' },
+    ],
+  }),
+  methods: {
+    getColor: function (status) {
+      var color = {
+        'success': 'green',
+        'error': 'red',
+        'warning': 'orange',
+        'progress': 'blue'
+      }[status];
+      return color;
+    },
+    selectRow: function (item) {
+      // Catch to avoid redundant navigation to current location error
+      this.$router.push({ name: 'worfklow', params: { id: item.id } }).catch(() => { });
 
-      let workflowID = this.$route.params.id;
-      if (workflowID) {
-        this.$store.dispatch('getWorkflow', workflowID);
-      }
+      this.$store.dispatch('getWorkflow', item.id);
+    },
+    displayTask: function (task) {
+      this.$store.dispatch('selectTask', task);
+      this.taskDialog = true;
+    },
+    relaunchWorkflow: function () {
+      this.$store.dispatch('relaunchWorkflow', this.selectedWorkflow.id);
+      this.relaunchDialog = false;
+    },
+    getFlowerTaskUrl: function () {
+      return FLOWER_URL + '/task/' + this.selectedTask.id;
     }
-  });
+  },
+  created() {
+    this.$store.dispatch('listWorkflows');
+
+    let workflowID = this.$route.params.id;
+    if (workflowID) {
+      this.$store.dispatch('getWorkflow', workflowID);
+    }
+  }
+});

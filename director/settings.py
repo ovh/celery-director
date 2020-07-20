@@ -40,6 +40,9 @@ class Config(object):
         self.FLOWER_URL = env.str("DIRECTOR_FLOWER_URL", "http://127.0.0.1:5555")
         self.WORKFLOWS_PER_PAGE = env.int("WORKFLOWS_PER_PAGE", 1000)
 
+        # Authentication
+        self.AUTH_ENABLED = env.bool("DIRECTOR_AUTH_ENABLED", False)
+
         # SQLAlchemy configuration
         self.SQLALCHEMY_TRACK_MODIFICATIONS = False
         self.SQLALCHEMY_DATABASE_URI = env.str("DIRECTOR_DATABASE_URI", "")
