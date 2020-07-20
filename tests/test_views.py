@@ -27,4 +27,4 @@ def test_404_api(client):
     assert resp.status_code == 404
     assert resp.is_json
     assert resp.mimetype == "application/json"
-    assert "404 Not Found" in resp.json["error"]
+    assert "The requested URL was not found" in resp.json["error"]

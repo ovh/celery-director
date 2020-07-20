@@ -6,6 +6,7 @@ from pathlib import Path
 
 from flask import Flask, Blueprint, jsonify, request, render_template
 from flask_json_schema import JsonValidationError
+from werkzeug.exceptions import InternalServerError, HTTPException
 
 from director.api import api_bp
 from director.extensions import cel, cel_workflows, db, schema, migrate
@@ -57,7 +58,7 @@ def create_app(
     )
 
     # Error handler
-    app.register_error_handler(404, lambda e: handle_not_found(e))
+    app.register_error_handler(HTTPException, lambda e: http_exception_handler(e))
 
     # Init extensions
     db.init_app(app)
@@ -89,13 +90,11 @@ def create_app(
     return app
 
 
-def handle_not_found(e):
-    """
-    Handle the "404 Not found" error in API and HTML.
-    """
+def http_exception_handler(error):
     if request.path.startswith("/api"):
-        return jsonify(error=str(e)), 404
-    return render_template("404.html", error=e), 404
+        return jsonify(error=str(error.description)), error.code
+
+    return render_template("error.html", error=error), error.code
 
 
 # Import director's submodules
