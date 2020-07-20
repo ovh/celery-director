@@ -3,6 +3,7 @@ from flask import abort, jsonify, request
 from jsonschema.exceptions import ValidationError, SchemaError
 
 from director.api import api_bp, validate
+from director.auth import auth
 from director.builder import WorkflowBuilder
 from director.exceptions import WorkflowNotFound
 from director.extensions import cel_workflows, schema
@@ -39,8 +40,8 @@ def _execute_workflow(project, name, payload={}):
     app.logger.info(f"Workflow sent : {workflow.canvas}")
     return obj.to_dict(), workflow
 
-
 @api_bp.route("/workflows", methods=["POST"])
+@auth.login_required
 @schema.validate(
     {
         "required": ["project", "name", "payload"],
@@ -61,15 +62,15 @@ def create_workflow():
     data, _ = _execute_workflow(project, name, payload)
     return jsonify(data), 201
 
-
 @api_bp.route("/workflows/<workflow_id>/relaunch", methods=["POST"])
+@auth.login_required
 def relaunch_workflow(workflow_id):
     obj = _get_workflow(workflow_id)
     data, _ = _execute_workflow(obj.project, obj.name, obj.payload)
     return jsonify(data), 201
 
-
 @api_bp.route("/workflows")
+@auth.login_required
 def list_workflows():
     page = request.args.get("page", type=int, default=1)
     per_page = request.args.get(
@@ -80,8 +81,8 @@ def list_workflows():
     )
     return jsonify([w.to_dict() for w in workflows.items])
 
-
 @api_bp.route("/workflows/<workflow_id>")
+@auth.login_required
 def get_workflow(workflow_id):
     workflow = _get_workflow(workflow_id)
     tasks = [t.to_dict() for t in workflow.tasks]
