@@ -13,11 +13,6 @@ def schema_exception_handler(e):
     return jsonify(format_schema_errors(e)), 400
 
 
-@api_bp.errorhandler(404)
-def not_found(error):
-    return jsonify({"error": error.description}), 404
-
-
 @api_bp.route("/ping")
 def ping():
     return jsonify({"message": "pong"})
