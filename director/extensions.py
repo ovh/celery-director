@@ -37,6 +37,12 @@ class CeleryWorkflow:
     def get_tasks(self, name):
         return self.get_by_name(name)["tasks"]
 
+    def get_queue(self, name):
+        try:
+            return self.get_by_name(name)["queue"]
+        except KeyError:
+            return "celery"
+
     def import_user_tasks(self):
         self.plugin_base = PluginBase(package="director.foobar")
 
