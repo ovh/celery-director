@@ -79,6 +79,14 @@ def client(app):
 
 
 @pytest.fixture(scope="function")
+def enable_auth(app):
+    with app.app_context():
+        app.config["AUTH_ENABLED"] = True
+
+    return app
+
+
+@pytest.fixture(scope="function")
 def no_worker(monkeypatch):
     monkeypatch.setattr(_chain, "apply_async", lambda x: None)
 
