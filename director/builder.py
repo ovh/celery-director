@@ -14,6 +14,7 @@ class WorkflowBuilder(object):
         self.workflow_id = workflow_id
         self._workflow = None
 
+        self.queue = cel_workflows.get_queue(str(self.workflow))
         self.tasks = cel_workflows.get_tasks(str(self.workflow))
         self.canvas = []
 
@@ -32,6 +33,7 @@ class WorkflowBuilder(object):
         # We create the Celery task specifying its UID
         signature = cel.tasks.get(task_name).subtask(
             kwargs={"workflow_id": self.workflow_id, "payload": self.workflow.payload},
+            queue=self.queue,
             task_id=task_id,
         )
 
@@ -76,8 +78,8 @@ class WorkflowBuilder(object):
 
     def build(self):
         self.canvas = self.parse(self.tasks)
-        self.canvas.insert(0, start.si(self.workflow.id))
-        self.canvas.append(end.si(self.workflow.id))
+        self.canvas.insert(0, start.si(self.workflow.id).set(queue=self.queue))
+        self.canvas.append(end.si(self.workflow.id).set(queue=self.queue))
 
     def run(self):
         if not self.canvas:
