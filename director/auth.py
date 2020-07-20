@@ -32,6 +32,12 @@ def verify_password(username, password):
 
 @auth.error_handler
 def unauthorized():
-    response = jsonify({'status': 401, 'error': 'unauthorized', 'message': 'Please authenticate to access this API.'})
+    response = jsonify(
+        {
+            "status": 401,
+            "error": "unauthorized",
+            "message": "Please authenticate to access this API.",
+        }
+    )
     response.status_code = 401
     return response
