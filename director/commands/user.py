@@ -35,7 +35,7 @@ def list_users(ctx):
 
 @user.command(name="create")
 @click.argument("username")
-@click.argument("password")
+@click.password_option()
 @pass_ctx
 def create_user(ctx, username, password):
     """Create user"""
@@ -45,7 +45,7 @@ def create_user(ctx, username, password):
 
 @user.command(name="update")
 @click.argument("username")
-@click.argument("password")
+@click.password_option()
 @pass_ctx
 def update_user(ctx, username, password):
     """Update user"""
