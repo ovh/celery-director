@@ -106,3 +106,22 @@ $ director celery beat
     This way you can start your worker and scheduler instances using a single command.
     Please note this option is only to use during your development, otherwise use the `celery
     beat` command.
+
+## Use of queues in Workflows
+
+With director, you can set queues for workflows. All workflow's tasks will use the same queue:
+
+```yaml
+example.SIMPLE_ETL:
+  tasks:
+    - A
+    - B
+    - C
+  queue: q1
+```
+
+You need the start Celery worker instance with the `--queues` option:
+
+```bash
+$ director celery worker --loglevel=INFO --queues=q1
+```
