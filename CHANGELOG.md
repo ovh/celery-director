@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.0.5 - 2020-07-22
+### Added
+- Handle user authentication (database upgrade required: `director db upgrade`)
+- Support the Celery queues
+- Add permalink for workflows
+
+### Changed
+- Remove HTTP code from description
+
+
 ## 0.0.4 - 2020-05-11
 ### Added
 - Save the result in database (database upgrade required: `director db upgrade`)
