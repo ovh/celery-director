@@ -14,12 +14,15 @@ services:
 before_install:
   - pip install black==19.10b0
   - pip install pytest==5.3.5
+  - pip install mkdocs==1.0.4
+  - pip install mkdocs-material==4.6.3
 
 install:
   - python setup.py install
 
 before_script:
   - black --check director
+  - (cd docs && mkdocs build)
 
 script:
   - director celery worker -P solo -D
