@@ -259,6 +259,18 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../enable-authentication/" title="Enable Authentication" class="md-nav__link">
+      Enable Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -453,7 +465,7 @@ for example). This is possible in Director using the <strong>payload</strong> fi
 <span class="k">def</span> <span class="nf">send_mail</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">order_id</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
     <span class="n">mail</span> <span class="o">=</span> <span class="n">Mail</span><span class="p">(</span>
-      <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Your order #</span><span class="si">{order_id}</span><span class="s2"> has been received&quot;</span><span class="p">,</span>
+      <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Your order #</span><span class="si">{</span><span class="n">order_id</span><span class="si">}</span><span class="s2"> has been received&quot;</span><span class="p">,</span>
       <span class="n">user</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">][</span><span class="s2">&quot;user&quot;</span><span class="p">]</span>
     <span class="p">)</span>
     <span class="n">mail</span><span class="o">.</span><span class="n">send</span><span class="p">()</span>
@@ -550,7 +562,7 @@ can be done on a specific user :</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../run-workflows/" title="Run Workflows" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../enable-authentication/" title="Enable Authentication" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -559,7 +571,7 @@ can be done on a specific user :</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Run Workflows
+                Enable Authentication
               </span>
             </div>
           </a>

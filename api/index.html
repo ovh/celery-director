@@ -259,6 +259,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../guides/enable-authentication/" title="Enable Authentication" class="md-nav__link">
+      Enable Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../guides/use-payload/" title="Use Payload" class="md-nav__link">
       Use Payload
     </a>
@@ -310,8 +322,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#get-apiworkflowsltidgt" class="md-nav__link">
-    GET /api/workflows/&amp;lt;id&amp;gt;
+  <a href="#get-apiworkflowsid" class="md-nav__link">
+    GET /api/workflows/&lt;id&gt;
   </a>
   
 </li>
@@ -369,8 +381,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#get-apiworkflowsltidgt" class="md-nav__link">
-    GET /api/workflows/&amp;lt;id&amp;gt;
+  <a href="#get-apiworkflowsid" class="md-nav__link">
+    GET /api/workflows/&lt;id&gt;
   </a>
   
 </li>
@@ -416,6 +428,11 @@
 </code></pre></div>
 
 
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>per_page</code> (optional, default: 1000): the number of workflows to return</li>
+<li><code>page</code> (optional, default: 1): the page to start</li>
+</ul>
 <p><strong>Example response:</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="n">HTTP</span><span class="o">/</span><span class="mi">1</span><span class="p">.</span><span class="mi">1</span> <span class="mi">200</span> <span class="n">OK</span>
 
@@ -435,7 +452,7 @@
 </code></pre></div>
 
 
-<h2 id="get-apiworkflowsltidgt"><strong>GET</strong> <code>/api/workflows/&lt;id&gt;</code></h2>
+<h2 id="get-apiworkflowsid"><strong>GET</strong> <code>/api/workflows/&lt;id&gt;</code></h2>
 <p>Get the details of a specific workflow instance, including its tasks.</p>
 <p><strong>Example request:</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="nf">GET</span> <span class="nn">/api/workflows/29e7ef80-fa1b-4b91-8ccb-ef01a91601db</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
