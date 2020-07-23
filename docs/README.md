@@ -8,7 +8,8 @@ The first step is to install the requirements inside your virtualenv :
 ```
 (venv) git clone https://github.com/ovh/director
 (venv) cd director/docs
-(venv) pip install -r requirements.txt
+(venv) pip install mkdocs==1.0.4
+(venv) pip install mkdocs-material==4.6.3
 ```
 
 Then you can launch the builtins webserver :
