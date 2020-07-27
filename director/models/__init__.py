@@ -34,13 +34,16 @@ class BaseModel(db.Model):
         nullable=False,
     )
 
-    def save(self):
+    def commit(self):
         try:
-            db.session.add(self)
             db.session.commit()
         except Exception:
             db.session.rollback()
             raise
+
+    def save(self):
+        db.session.add(self)
+        self.commit()
 
     def to_dict(self):
         return {
