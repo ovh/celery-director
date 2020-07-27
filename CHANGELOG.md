@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.6 - 2020-07-27
+### Fixed
+- Fix issue in transactions with periodic tasks and Celery queues
+- Fix bad comma in documentation markdown
+
+
 ## 0.0.5 - 2020-07-22
 ### Added
 - Handle user authentication (database upgrade required: `director db upgrade`)
