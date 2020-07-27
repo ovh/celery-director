@@ -25,20 +25,12 @@ class User(BaseModel):
 
         user.password = self.password
 
-        try:
-            db.session.commit()
-        except Exception:
-            db.session.rollback()
-            raise
+        self.commit()
 
     def delete(self):
         db.session.delete(self)
 
-        try:
-            db.session.commit()
-        except Exception:
-            db.session.rollback()
-            raise
+        self.commit()
 
     def to_dict(self):
         d = super().to_dict()
