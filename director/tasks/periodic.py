@@ -13,4 +13,10 @@ def execute(workflow, payload):
     workflow = WorkflowBuilder(c_obj.id)
     workflow.run()
 
-    return c_obj.to_dict()
+    c_obj_dict = c_obj.to_dict()
+
+    # Force commit before ending the function to ensure the ongoing transaction
+    # does not end up in a "idle in transaction" state on PostgreSQL
+    c_obj.commit()
+
+    return c_obj_dict

@@ -42,6 +42,13 @@ class BaseModel(db.Model):
             db.session.rollback()
             raise
 
+    def commit(self):
+        try:
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            raise
+
     def to_dict(self):
         return {
             "id": self.id,
