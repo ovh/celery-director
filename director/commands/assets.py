@@ -39,8 +39,13 @@ DEPENDENCIES = [
         None,
     ),
     (
-        "https://cdn.jsdelivr.net/npm/vis-network@6.5.0/dist/vis-network.min.js",
-        "sha256-/205cYeu7g6jIOcLtaBIGbAWyGBNg6UUyxWTw1YIFHA=",
+        "https://cdn.jsdelivr.net/npm/d3@5.16.0/dist/d3.min.js",
+        "sha256-Xb6SSzhH3wEPC4Vy3W70Lqh9Y3Du/3KxPqI2JHQSpTw=",
+        None,
+    ),
+    (
+        "https://cdn.jsdelivr.net/npm/dagre-d3@0.6.4/dist/dagre-d3.min.js",
+        "sha256-dPm4TA8Y9PY5q5mmtWMkRGOCMHJDKy34ZrxdbBGA9cs=",
         None,
     ),
     (
@@ -52,11 +57,6 @@ DEPENDENCIES = [
         "https://cdn.jsdelivr.net/npm/@mdi/font@4.7.95/css/materialdesignicons.min.css",
         "sha256-KZNFoTq+/jQUu3YY1OnjLn605i80dhdUJKO3WHGiM6E=",
         "mdi",
-    ),
-    (
-        "https://cdn.jsdelivr.net/npm/vis-network@6.5.0/styles/vis-network.min.css",
-        "sha256-PY/tQsgegfjjzBoVuzXY7f2vT9ZxM2VJ0Tws4kOUFj4=",
-        None,
     ),
     (
         "https://fonts.gstatic.com/s/roboto/v20/KFOkCnqEu92Fr1MmgVxFIzIXKMnyrYk.woff2",

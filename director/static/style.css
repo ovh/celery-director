@@ -6,6 +6,10 @@
     content: "Loading…";
 }
 
+.v-content {
+    transition: none !important;
+}
+
 .v-application .director {
     background-color: #3c4652 !important;
     border-color: #3c4652 !important;
@@ -19,4 +23,77 @@
 
 .pointer {
     cursor: pointer;
+}
+
+.graph .details  {
+    font-weight: 300;
+    font-size: 14px;
+}
+
+.graph .node rect {
+stroke-width: 1.5px;
+stroke: #bbb;
+fill: #fff;
+}
+
+.graph .status {
+height: 50px;
+width: 10px;
+display: block;
+float: left;
+border-top-left-radius: 5px;
+border-bottom-left-radius: 5px;
+margin-right: 8px;
+}
+
+.graph .success .status {
+background-color: #4caf50;
+}
+
+.graph .error .status {
+background-color: #f44336;
+}
+
+.graph .pending .status {
+background-color: #787777;
+}
+
+.graph .name {
+    margin-top: 10px;
+}
+
+.graph .node g div {
+width: 200px;
+height: 50px;
+color: #333;
+}
+
+.graph .edgeLabel text {
+width: 50px;
+fill: #fff;
+}
+
+.graph .edgePath path {
+stroke: #999;
+stroke-width: 1.5px;
+fill: #999;
+}
+
+.v-application .overline {
+    font-size: .750rem !important;
+}
+
+.v-application code::before {
+    content: "";
+}
+.v-application code {
+  white-space: pre-wrap;
+  overflow-x:auto;
+  padding: 10px;
+  display: block !important;
+  white-space: pre;
+  background-color: #F5F5F5;
+  box-shadow: none;
+  font-weight: normal;
+  font-size: 90%;
 }
