@@ -46,7 +46,9 @@ function getNode(task) {
 }
 
 const router = new VueRouter({
+  mode: 'history',
   routes: [
+    {  name: 'home', path: '/' },
     {  name: 'worfklow', path: '/:id' }
   ]
 });
@@ -54,6 +56,7 @@ const router = new VueRouter({
 const store = new Vuex.Store({
 	state: {
     workflows: [],
+    workflowNames: [],
     network: null,
     selectedWorkflow: null,
     selectedTask: null,
@@ -87,57 +90,77 @@ const store = new Vuex.Store({
   mutations: {
     updateWorkflows(state, workflows) {
       state.workflows = workflows
+      state.workflowNames = ["All"].concat([...new Set(workflows.map(item => item.fullname))])
     },
     updateSelectedWorkflow(state, workflow) {
       state.taskIndex = null
+      state.selectedTask = null
       state.selectedWorkflow = workflow
     },
     updateSelectedTask(state, task) {
       state.selectedTask = task
     },
     refreshNetwork(state, tasks) {
-      let nodes = [];
-      let edges = [];
-    
+      var g = new dagreD3.graphlib.Graph().setGraph({});
+
       for (let i = 0; i < tasks.length; i++) {
-        nodes.push(getNode(tasks[i]));
+        var className = tasks[i].status;
+        var html = "<div class=pointer>";
+            html += "<span class=status></span>";
+            html += "<span class=name>"+tasks[i].key+"</span>";
+            html += "<br>"
+            html += "<span class=details>"+tasks[i].status+"</span>";
+            html += "</div>";
+
+        var color = COLORS[tasks[i].status]["background"];
+        g.setNode(tasks[i].id, {
+          labelType: "html",
+          label: html,
+          rx: 3,
+          ry: 3,
+          padding: 0,
+          class: className
+        });
 
         for (let j=0; j<tasks[i].previous.length; j++) {
-          edges.push({
-            'to': tasks[i].id,
-            'from': tasks[i].previous[j],
-            'color': {
-              'color': '#3c4652',
-              'highlight':'#3c4652',
-            },
-            'arrows': 'to',
-            'physics': false, 'smooth': {'type': 'cubicBezier'}
-          });
+          g.setEdge(tasks[i].previous[j], tasks[i].id, {});
         }
+
       }
 
-      container = document.getElementById('network')
-      let data = {nodes:  nodes, edges: edges};
-      let options = {
-        nodes: {
-          margin: 10
-        },
-        layout: {
-          hierarchical: {
-            direction: "UD",
-            sortMethod: "directed"
-          }
-        },
-        edges: {
-          arrows: "to"
-        },
-      };
-      state.network = new vis.Network(container, data, options);
-      state.network.on( 'click', function(properties) {
-        if ( properties.nodes.length > 0 ) {
-          let taskID = properties.nodes[0];
-          state.taskIndex = tasks.findIndex(c => c.id == taskID);
-        }
+      // Set some general styles
+      g.nodes().forEach(function(v) {
+        var node = g.node(v);
+        node.rx = node.ry = 5;
+      });
+
+      var svg = d3.select("svg"),
+          inner = svg.select("g");
+
+      // Set up zoom support
+      var zoom = d3.zoom().on("zoom", function() {
+        inner.attr("transform", d3.event.transform);
+      });
+      inner.call(zoom.transform, d3.zoomIdentity);
+      svg.call(zoom);
+
+      // Create the renderer
+      var render = new dagreD3.render();
+      render(inner, g);
+
+      // Handle the click
+      var nodes = inner.selectAll("g.node");
+      nodes.on('click', function (task_id) {
+        g.nodes().forEach(function(v) {
+            if ( v == task_id) {
+                g.node(v).style = "fill: #f0f0f0; stroke-width: 2px; stroke: #777;";
+            } else {
+                g.node(v).style = "fill: white";
+            }
+        });
+
+        render(inner, g);
+        state.selectedTask = tasks.find(c => c.id == task_id);
       });
     },
     changeLoadingState(state, loading) {
@@ -149,7 +172,7 @@ const store = new Vuex.Store({
 
 Vue.filter('formatDate', function(value) {
   if (value) {
-    return moment(String(value)).format('MMM DD, HH:mm:ss')
+    return moment(String(value)).format('YYYY-MM-DD HH:mm:ss')
   }
 });
 
@@ -172,7 +195,45 @@ Vue.filter('countTasksByStatus', function(workflows, status) {
 
 new Vue({
     el: '#app',
-    computed: Vuex.mapState(['workflows', 'selectedWorkflow', 'selectedTask', 'taskIndex', 'network', 'loading', 'headers']),
+    computed: {
+        headers () {
+          return [
+            {
+                text: 'ID',
+                value: 'id',
+                align: ' d-none'
+            },
+            {
+                text: 'Status',
+                align: 'left',
+                value: 'status',
+                width: '15%',
+                filter: value => {
+                  if (this.selectedStatus.length == 0) return true
+                  return this.selectedStatus.includes(value)
+                },
+            },
+            {
+                text: 'Name',
+                align: 'left',
+                value: 'fullname',
+                width: '60%',
+                filter: value => {
+                  if (!this.selectedWorkflowName || this.selectedWorkflowName == 'All') return true
+                  return value == this.selectedWorkflowName
+                },
+            },
+            {
+                text: 'Date',
+                align: 'left',
+                value: 'created',
+                width: '25%',
+
+            },
+          ]
+        },
+        ...Vuex.mapState(['workflows', 'workflowNames', 'selectedWorkflow', 'selectedTask', 'taskIndex', 'network', 'loading']),
+    },
     store,
     router,
     vuetify: new Vuetify({
@@ -181,20 +242,13 @@ new Vue({
       },
     }),
     data: () => ({
-      drawer: null,
+      tab: null,
       payloadDialog: false,
-      taskDialog: false,
       relaunchDialog: false,
       search: '',
-      headers: [
-        {
-          text: 'Name',
-          align: 'left',
-          value: 'fullname',
-        },
-        { text: 'Date', value: 'created' },
-        { text: 'Status', value: 'status' },
-      ],
+      selectedStatus: [],
+      status: ['success', 'error', 'progress', 'pending'],
+      selectedWorkflowName: "All",
     }),
     methods: {
       getColor: function (status) {
@@ -214,14 +268,16 @@ new Vue({
       },
       displayTask: function(task) {
         this.$store.dispatch('selectTask', task);
-        this.taskDialog = true;
       },
       relaunchWorkflow: function() {
         this.$store.dispatch('relaunchWorkflow', this.selectedWorkflow.id);
         this.relaunchDialog = false;
       },
       getFlowerTaskUrl: function() {
-        return FLOWER_URL + "/task/" + this.selectedTask.id;
+        if ( this.selectedTask ) {
+            return FLOWER_URL + "/task/" + this.selectedTask.id;
+        }
+        return '';
       }
     },
     created() {
