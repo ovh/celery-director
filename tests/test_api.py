@@ -168,7 +168,7 @@ def test_list_paginated_workflows(app, client, no_worker):
     # we need to fix dates to be able to sort workflows.
     now = datetime.now()
     with app.app_context():
-        for i in range(10):
+        for i in range(20):
             date = now + timedelta(minutes=i)
             w = Workflow(
                 created_at=date,
@@ -180,26 +180,32 @@ def test_list_paginated_workflows(app, client, no_worker):
             db.session.add(w)
         db.session.commit()
 
+    # DIRECTOR_WORKFLOWS_PER_PAGE=15 in tests/workflows/.env
     resp = client.get("/api/workflows")
-    assert len(resp.json) == 10
+    assert len(resp.json) == 15
 
+    # Last item
     resp = client.get("/api/workflows?per_page=1")
     assert len(resp.json) == 1
-    assert resp.json[0]["payload"]["i"] == 10
+    assert resp.json[0]["payload"]["i"] == 20
 
+    # Last X items
     resp = client.get("/api/workflows?per_page=4&page=1")
     assert len(resp.json) == 4
-    assert [w["payload"]["i"] for w in resp.json] == [10, 9, 8, 7]
+    assert [w["payload"]["i"] for w in resp.json] == [20, 19, 18, 17]
 
+    # Last X items, second page
     resp = client.get("/api/workflows?per_page=4&page=2")
     assert len(resp.json) == 4
-    assert [w["payload"]["i"] for w in resp.json] == [6, 5, 4, 3]
+    assert [w["payload"]["i"] for w in resp.json] == [16, 15, 14, 13]
 
-    resp = client.get("/api/workflows?per_page=4&page=3")
+    # Remaining items
+    resp = client.get("/api/workflows?per_page=3&page=7")
     assert len(resp.json) == 2
     assert [w["payload"]["i"] for w in resp.json] == [2, 1]
 
-    resp = client.get("/api/workflows?per_page=4&page=4")
+    # Out of range
+    resp = client.get("/api/workflows?per_page=4&page=6")
     assert resp.status_code == 404
 
 
