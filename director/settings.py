@@ -6,6 +6,7 @@ from environs import Env
 
 HIDDEN_CONFIG = [
     "DIRECTOR_ENABLE_DARK_THEME",
+    "DIRECTOR_ENABLE_HISTORY_MODE",
     "DIRECTOR_API_URL",
     "DIRECTOR_FLOWER_URL",
     "DIRECTOR_DATABASE_URI",
@@ -32,6 +33,7 @@ class Config(object):
         env.read_env(env_path)
 
         self.ENABLE_DARK_THEME = env.bool("DIRECTOR_ENABLE_DARK_THEME", False)
+        self.ENABLE_HISTORY_MODE = env.bool("DIRECTOR_ENABLE_HISTORY_MODE", False)
         self.ENABLE_CDN = env.bool("DIRECTOR_ENABLE_CDN", True)
         self.STATIC_FOLDER = env.str(
             "DIRECTOR_STATIC_FOLDER", str(Path(self.DIRECTOR_HOME).resolve() / "static")
