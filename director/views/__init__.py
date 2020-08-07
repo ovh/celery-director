@@ -11,15 +11,6 @@ def home():
     return render_template("index.html")
 
 
-@view_bp.route("/<id>")
-def get_workflow(id):
-    try:
-        _ = UUID(id)
-    except ValueError:
-        abort(404)
-    return render_template("index.html")
-
-
 @view_bp.app_template_filter("status")
 def status(code):
     return {

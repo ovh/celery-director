@@ -46,11 +46,7 @@ function getNode(task) {
 }
 
 const router = new VueRouter({
-  mode: HISTORY_MODE ? 'history' : 'hash',
-  routes: [{
-      name: 'home',
-      path: '/'
-    },
+  routes: [
     {
       name: 'worfklow',
       path: '/:id'

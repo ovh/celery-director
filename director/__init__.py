@@ -94,6 +94,9 @@ def http_exception_handler(error):
     if request.path.startswith("/api"):
         return jsonify(error=str(error.description)), error.code
 
+    print(error)
+    print(request.url)
+    print(request.path)
     return render_template("error.html", error=error), error.code
 
 
