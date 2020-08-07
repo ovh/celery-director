@@ -1,127 +1,128 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-  <title>Celery Director</title>
-  {% if config.ENABLE_CDN %}
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.2.1/dist/vuetify.min.css" integrity="sha256-Ch5FMlNCdr6sBrwjHdGoTnAbAcKzE+UWiCXZHDT1HYk=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@4.7.95/css/materialdesignicons.min.css" integrity="sha256-KZNFoTq+/jQUu3YY1OnjLn605i80dhdUJKO3WHGiM6E=" crossorigin="anonymous">
-  {% else %}
-  <style type="text/css">
-    @font-face {
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <title>Celery Director</title>
+    {% if config.ENABLE_CDN %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.2.1/dist/vuetify.min.css" integrity="sha256-Ch5FMlNCdr6sBrwjHdGoTnAbAcKzE+UWiCXZHDT1HYk=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@4.7.95/css/materialdesignicons.min.css" integrity="sha256-KZNFoTq+/jQUu3YY1OnjLn605i80dhdUJKO3WHGiM6E=" crossorigin="anonymous">
+    {% else %}
+    <style type="text/css">
+      @font-face {
       font-family: 'Roboto';
       font-style: normal;
       font-weight: 400;
       src: local('Roboto'), local('Roboto-Regular'), url(%% url_for('user.static', filename='fonts/KFOkCnqEu92Fr1MmgVxFIzIXKMnyrYk.woff2') %%) format('woff2');
-    }
-  </style>
-  <link rel="stylesheet" href="%% url_for('user.static', filename='vuetify.min.css') %%">
-  <link rel="stylesheet" href="%% url_for('user.static', filename='mdi/materialdesignicons.min.css') %%">
-  {% endif %}
-  <link rel="stylesheet" href="%% url_for('static', filename='style.css') %%">
-</head>
-<body>
-  <div id="app" v-cloak>
+      }
+    </style>
+    <link rel="stylesheet" href="%% url_for('user.static', filename='vuetify.min.css') %%">
+    <link rel="stylesheet" href="%% url_for('user.static', filename='mdi/materialdesignicons.min.css') %%">
+    {% endif %}
+    <link rel="stylesheet" href="%% url_for('static', filename='style.css') %%">
+  </head>
+  <body>
+    <div id="app" v-cloak>
       <v-app id="inspire">
-          <v-app-bar app clipped-right color="director" dark>
-            <v-toolbar-title @click="router.push({name: 'home'}).catch(()=>{})" class="pointer">Celery Director</v-toolbar-title>
-          </v-app-bar>
-          <v-content>
-              <v-container v-if="!$route.params.id">
-              <v-row>
-                <v-col cols="12" md="8">
-                    <v-card class="pa-4" outlined>
-                      <div>Workflows</div>
-                      <v-card-text>
-                        <v-data-table
-                          :loading="loading"
-                          loading-text="Loading... Please wait"
-                          :headers="headers"
-                          :items="workflows"
-                          :items-per-page="10"
-                          :sort-by="['created']"
-                          :sort-desc="[true]"
-                          :search="search"
-                        >
-                          <template v-slot:item="{ item }">
-                            <tr class="pointer" @click="selectRow(item)" :class="{'active': item.isSelected}">
-                              <td style="display:none;">{{ item.id }}</td>
-                              <td><v-avatar size=14 :color="item.status | statusColor"></v-avatar></td>
-                              <td>{{ item.fullname }}</td>
-                              <td><v-ship>{{ item.created }}</v-ship></td>
-                            </tr>
-                          </template>
-                        </v-data-table>
-                      </v-card-text>
-                    </v-card>
-                </v-col>
-                <v-col cols="6" md="4">
-                  <v-card class="pa-4 mb-4" outlined tile>
-                    <div>Search</div>
-                    <v-card-text>
-                      <v-text-field
-                        v-model="search"
-                        label="Search by Name/Status/Date/ID"
-                        label="Append"
-                        append-icon="mdi-magnify"
-                        single-line
-                        hide-details
-                      ></v-text-field>
-                    </v-card-text>
-                  </v-card>
-
-                  <v-card class="pa-4 mb-4" outlined tile>
-                    <div>Filter by workflow</div>
-                    <v-card-text>
-                      <v-chip-group
-                        v-model="selectedWorkflowName"
-                        active-class="primary--text"
-                        column
+        <v-app-bar app clipped-right color="director" dark>
+          <v-toolbar-title @click="router.push({name: 'home'}).catch(()=>{})" class="pointer">Celery Director</v-toolbar-title>
+        </v-app-bar>
+        <v-content>
+          <v-container v-if="!$route.params.id">
+            <v-row>
+              <v-col cols="12" md="8">
+                <v-card class="pa-4" outlined>
+                  <div>Workflows</div>
+                  <v-card-text>
+                    <v-data-table
+                      :loading="loading"
+                      loading-text="Loading... Please wait"
+                      :headers="headers"
+                      :items="workflows"
+                      :items-per-page="10"
+                      :sort-by="['created']"
+                      :sort-desc="[true]"
+                      :search="search"
                       >
-                        <v-chip label outlined v-for="name in workflowNames" :key="name" :value="name">
-                          {{ name }}
-                        </v-chip>
-                      </v-chip-group>
-                    </v-card-text>
-                  </v-card>
-
-                  <v-card class="pa-4 mb-4" outlined tile>
-                    <div>Filter by status</div>
-                    <v-card-text>
-                      <v-select
-                        v-model="selectedStatus"
-                        :items="status"
-                        label="Select the status"
-                        multiple
-                        chips
+                      <template v-slot:item="{ item }">
+                        <tr class="pointer" @click="selectRow(item)" :class="{'active': item.isSelected}">
+                          <td style="display:none;">{{ item.id }}</td>
+                          <td>
+                            <v-avatar size=14 :color="item.status | statusColor"></v-avatar>
+                          </td>
+                          <td>{{ item.fullname }}</td>
+                          <td>
+                            <v-ship>{{ item.created }}</v-ship>
+                          </td>
+                        </tr>
+                      </template>
+                    </v-data-table>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+              <v-col cols="6" md="4">
+                <v-card class="pa-4 mb-4" outlined tile>
+                  <div>Search</div>
+                  <v-card-text>
+                    <v-text-field
+                      v-model="search"
+                      label="Search by Name/Status/Date/ID"
+                      label="Append"
+                      append-icon="mdi-magnify"
+                      single-line
+                      hide-details
+                      ></v-text-field>
+                  </v-card-text>
+                </v-card>
+                <v-card class="pa-4 mb-4" outlined tile>
+                  <div>Filter by workflow</div>
+                  <v-card-text>
+                    <v-chip-group
+                      v-model="selectedWorkflowName"
+                      active-class="primary--text"
+                      column
+                      >
+                      <v-chip label outlined v-for="name in workflowNames" :key="name" :value="name">
+                        {{ name }}
+                      </v-chip>
+                    </v-chip-group>
+                  </v-card-text>
+                </v-card>
+                <v-card class="pa-4 mb-4" outlined tile>
+                  <div>Filter by status</div>
+                  <v-card-text>
+                    <v-select
+                      v-model="selectedStatus"
+                      :items="status"
+                      label="Select the status"
+                      multiple
+                      chips
                       ></v-select>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-container>
-
-            <v-container class="fill-height" fluid v-if="$route.params.id">
-              <v-row no-gutters>
-                <v-col cols="12" md="12">
-                    <div class="graph">
-                      <svg width="100%" height="800"><g/></svg>
-                    </div>
-                </v-col>
-              </v-row>
-
-              <v-navigation-drawer width="50%" app clipped right fixed>
-
-                <template v-slot:prepend v-if="selectedWorkflow">
-                  <v-list-item three-line class="workflow">
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+          <v-container class="fill-height" fluid v-if="$route.params.id">
+            <v-row no-gutters>
+              <v-col cols="12" md="12">
+                <div class="graph">
+                  <svg width="100%" height="800">
+                    <g/>
+                  </svg>
+                </div>
+              </v-col>
+            </v-row>
+            <v-navigation-drawer width="50%" app clipped right fixed>
+              <template v-slot:prepend v-if="selectedWorkflow">
+                <v-list-item three-line class="workflow">
                   <v-list-item-content>
                     <div class="overline mb-3">{{ selectedWorkflow.created | formatDate }}</div>
                     <v-list-item-title class="headline">
-                        {{ selectedWorkflow.fullname }}
-                        <v-chip v-if="selectedWorkflow.periodic" class="ma-2" small>periodic</v-chip>
-                        <v-chip small :color="getColor(selectedWorkflow.status)" dark>{{ selectedWorkflow.status }}</v-chip>
+                      {{ selectedWorkflow.fullname }}
+                      <v-chip v-if="selectedWorkflow.periodic" class="ma-2" small>periodic</v-chip>
+                      <v-chip small :color="getColor(selectedWorkflow.status)" dark>{{ selectedWorkflow.status }}</v-chip>
                     </v-list-item-title>
                     <v-list-item-subtitle class="mt-2">
                       <u>Tasks :</u> Total <strong>{{ selectedWorkflow.tasks.length }}</strong> / Success <strong>{{ selectedWorkflow.tasks | countTasksByStatus('success') }}</strong> / Error <strong>{{ selectedWorkflow.tasks | countTasksByStatus('error') }}</strong>
@@ -143,108 +144,111 @@
                     </template>
                     <span>Payload</span>
                   </v-tooltip>
-                  </v-list-item>
-                  <v-divider class="mt-2 mb-4"></v-divider>
-                </template>
-
-                <v-row v-if="!selectedTask" class="mt-4" justify="center" no-gutters >
-                  <v-col lg="10">
-                    <v-alert color="#3c4652" dark icon="mdi-alert-circle-outline" outlined border="left">
+                </v-list-item>
+                <v-divider class="mt-2 mb-4"></v-divider>
+              </template>
+              <v-row v-if="!selectedTask" class="mt-4" justify="center" no-gutters >
+                <v-col lg="10">
+                  <v-alert color="#3c4652" dark icon="mdi-alert-circle-outline" outlined border="left">
                     Select a task to display its details
-                    </v-alert>
-                  </v-col>
-                </v-row>
-
-                <div v-if="selectedTask">
-                  <v-tabs v-model="tab" grow color="director">
-                    <v-tab>Task {{ selectedTask.key }}</v-tab>
-                    <v-tab v-if="selectedTask.status != 'error'">Result</v-tab>
-                    <v-tab v-if="selectedTask.status == 'error'">Error</v-tab>
-                  </v-tabs>
-                  <div class="pa-4">
-                    <v-tabs-items v-model="tab">
-                        <v-simple-table v-if="tab == 0">
-                          <template>
-                            <tbody>
-                              <tr>
-                                <td><strong>ID</strong></td>
-                                <td>{{ selectedTask.id }}</td>
-                              </tr>
-                              <tr>
-                                <td><strong>Key</strong></td>
-                                <td>{{ selectedTask.key }}</td>
-                              </tr>
-                              <tr>
-                                <td><strong>Task Status</strong></td>
-                                <td><v-chip small :color="getColor(selectedTask.status)" dark>{{ selectedTask.status }}</v-chip></td>
-                              </tr>
-                              <tr>
-                                <td><strong>Created</strong></td>
-                                <td>{{ selectedTask.created | formatDate }}</td>
-                              </tr>
-                              <tr>
-                                <td><strong>Updated</strong></td>
-                                <td>{{ selectedTask.updated | formatDate }}</td>
-                              </tr>
-                            </tbody>
-                          </template>
-                        </v-simple-table>
-                        <div v-if="tab == 1">
-                          <v-row v-if="!selectedTask.result" class="mt-4" justify="center" no-gutters >
-                            <v-col>
-                              <v-alert color="#3c4652" dark icon="mdi-alert-circle-outline" outlined>
-                              No task result
-                              </v-alert>
-                            </v-col>
-                          </v-row>
-                          <code v-if="selectedTask.result && selectedTask.status != 'error'">{{selectedTask.result}}</code>
-                          <div v-if="selectedTask.result && selectedTask.status == 'error'">
-                            <v-row class="mt-4" justify="center" no-gutters>
-                              <v-col>
-                                <v-alert text
-                                  outlined
-                                  color="red darken-1"
-                                  icon="mdi-alert-circle-outline"  dark icon="mdi-alert-circle-outline" outlined>
-                                  {{ selectedTask.result.exception }}
-                                </v-alert>
-                              </v-col>
-                            </v-row>
-                            <code>{{ selectedTask.result.traceback }}</code>
-                          </div>
-                        </div>
-                    </v-tabs-items>
-                  </div>
+                  </v-alert>
+                </v-col>
+              </v-row>
+              <div v-if="selectedTask">
+                <v-tabs v-model="tab" grow color="director">
+                  <v-tab>Task {{ selectedTask.key }}</v-tab>
+                  <v-tab v-if="selectedTask.status != 'error'">Result</v-tab>
+                  <v-tab v-if="selectedTask.status == 'error'">Error</v-tab>
+                </v-tabs>
+                <div class="pa-4">
+                  <v-tabs-items v-model="tab">
+                    <v-simple-table v-if="tab == 0">
+                      <template>
+                        <tbody>
+                          <tr>
+                            <td><strong>ID</strong></td>
+                            <td>{{ selectedTask.id }}</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Key</strong></td>
+                            <td>{{ selectedTask.key }}</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Task Status</strong></td>
+                            <td>
+                              <v-chip small :color="getColor(selectedTask.status)" dark>{{ selectedTask.status }}</v-chip>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><strong>Created</strong></td>
+                            <td>{{ selectedTask.created | formatDate }}</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Updated</strong></td>
+                            <td>{{ selectedTask.updated | formatDate }}</td>
+                          </tr>
+                        </tbody>
+                      </template>
+                    </v-simple-table>
+                    <div v-if="tab == 1">
+                      <v-row v-if="!selectedTask.result" class="mt-4" justify="center" no-gutters >
+                        <v-col>
+                          <v-alert color="#3c4652" dark icon="mdi-alert-circle-outline" outlined>
+                            No task result
+                          </v-alert>
+                        </v-col>
+                      </v-row>
+                      <code v-if="selectedTask.result && selectedTask.status != 'error'">{{selectedTask.result}}</code>
+                      <div v-if="selectedTask.result && selectedTask.status == 'error'">
+                        <v-row class="mt-4" justify="center" no-gutters>
+                          <v-col>
+                            <v-alert text
+                              outlined
+                              color="red darken-1"
+                              icon="mdi-alert-circle-outline"  dark icon="mdi-alert-circle-outline" outlined>
+                              {{ selectedTask.result.exception }}
+                            </v-alert>
+                          </v-col>
+                        </v-row>
+                        <code>{{ selectedTask.result.traceback }}</code>
+                      </div>
+                    </div>
+                  </v-tabs-items>
                 </div>
-                <template v-slot:append v-if="selectedTask">
-                  <div class="pa-6">
-                    <v-btn block v-bind:href="getFlowerTaskUrl()" target="_blank" outlined color="director">
-                      <v-icon left>mdi-launch</v-icon> View in Flower
-                    </v-btn>
-                  </div>
-                </template>
-              </v-navigation-drawer>
-            </v-container>
-            <v-dialog v-model="relaunchDialog" max-width="650">
-              <v-card v-if="selectedWorkflow">
-                <v-card-title>
-                  Relaunch the workflow
-                  <v-spacer></v-spacer>
-                </v-card-title>
-                <v-divider></v-divider>
-                <v-card-text class="mt-5">
-                    <v-alert color="director" dark icon="mdi-alert-circle-outline" dense>
-                      The workflow <strong>{{ selectedWorkflow.fullname }}</strong> will be relaunched with the same payload.
-                    </v-alert>
-                    <i>Note that a new workflow will be created, so the current one (created on {{ selectedWorkflow.created | formatDate }}) will not be changed and will still be available in your history.</i>
-                </v-card-text>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <div class="my-2 ma-2"><v-btn depressed @click.stop="relaunchDialog = false">Cancel</v-btn></div>
-                  <div class="my-2"><v-btn depressed color="primary" @click.stop="relaunchWorkflow()">Confirm</v-btn></div>
-                  </v-card-actions>
-
-              </v-card>
+              </div>
+              <template v-slot:append v-if="selectedTask">
+                <div class="pa-6">
+                  <v-btn block v-bind:href="getFlowerTaskUrl()" target="_blank" outlined color="director">
+                    <v-icon left>mdi-launch</v-icon>
+                    View in Flower
+                  </v-btn>
+                </div>
+              </template>
+            </v-navigation-drawer>
+          </v-container>
+          <v-dialog v-model="relaunchDialog" max-width="650">
+            <v-card v-if="selectedWorkflow">
+              <v-card-title>
+                Relaunch the workflow
+                <v-spacer></v-spacer>
+              </v-card-title>
+              <v-divider></v-divider>
+              <v-card-text class="mt-5">
+                <v-alert color="director" dark icon="mdi-alert-circle-outline" dense>
+                  The workflow <strong>{{ selectedWorkflow.fullname }}</strong> will be relaunched with the same payload.
+                </v-alert>
+                <i>Note that a new workflow will be created, so the current one (created on {{ selectedWorkflow.created | formatDate }}) will not be changed and will still be available in your history.</i>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <div class="my-2 ma-2">
+                  <v-btn depressed @click.stop="relaunchDialog = false">Cancel</v-btn>
+                </div>
+                <div class="my-2">
+                  <v-btn depressed color="primary" @click.stop="relaunchWorkflow()">Confirm</v-btn>
+                </div>
+              </v-card-actions>
+            </v-card>
           </v-dialog>
           <v-dialog v-model="payloadDialog" width="500">
             <v-card v-if="selectedWorkflow">
@@ -255,33 +259,31 @@
               </v-card-text>
             </v-card>
           </v-dialog>
-      
-          </v-content>
+        </v-content>
       </v-app>
-  </div>
-
-  <script type="text/javascript">
-    const DARK_THEME=%% config.ENABLE_DARK_THEME | int %%;
-    const API_URL="%% config.API_URL %%";
-    const FLOWER_URL="%% config.FLOWER_URL %%";
-  </script>
-  {% if config.ENABLE_CDN %}
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js" integrity="sha256-ngFW3UnAN0Tnm76mDuu7uUtYEcG3G5H1+zioJw3t+68=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue-router@3.3.4/dist/vue-router.min.js" integrity="sha256-87g98o5+aw7/ExJ9tBjvH8zz46FJ7hiylPtNFcPvsSw=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuex@3.1.2/dist/vuex.min.js" integrity="sha256-LfE9mPMjeOg3dTn1sESY2Xvdbq7gAhONtkxacnr7FSA=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.1/dist/vuetify.min.js" integrity="sha256-Wksm4daF3JKKD97f/NHSJkxqQCk9XwujIEBTX0VLzTw=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios@0.19.0/dist/axios.min.js" integrity="sha256-S1J4GVHHDMiirir9qsXWc8ZWw74PHHafpsHp5PXtjTs=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/d3@5.16.0/dist/d3.min.js" integrity="sha256-Xb6SSzhH3wEPC4Vy3W70Lqh9Y3Du/3KxPqI2JHQSpTw=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dagre-d3@0.6.4/dist/dagre-d3.min.js" integrity="sha256-dPm4TA8Y9PY5q5mmtWMkRGOCMHJDKy34ZrxdbBGA9cs=" crossorigin="anonymous"></script>
-  {% else %}
-  <script src="%% url_for('user.static', filename='vue.min.js') %%"></script>
-  <script src="%% url_for('user.static', filename='vue-router.min.js') %%"></script>
-  <script src="%% url_for('user.static', filename='vuex.min.js') %%"></script>
-  <script src="%% url_for('user.static', filename='vuetify.min.js') %%"></script>
-  <script src="%% url_for('user.static', filename='moment.min.js') %%"></script>
-  <script src="%% url_for('user.static', filename='axios.min.js') %%"></script>
-  {% endif %}
-  <script src="%% url_for('static', filename='script.js') %%"></script>
-</body>
+    </div>
+    <script type="text/javascript">
+      const DARK_THEME=%% config.ENABLE_DARK_THEME | int %%;
+      const API_URL="%% config.API_URL %%";
+      const FLOWER_URL="%% config.FLOWER_URL %%";
+    </script>
+    {% if config.ENABLE_CDN %}
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js" integrity="sha256-ngFW3UnAN0Tnm76mDuu7uUtYEcG3G5H1+zioJw3t+68=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@3.3.4/dist/vue-router.min.js" integrity="sha256-87g98o5+aw7/ExJ9tBjvH8zz46FJ7hiylPtNFcPvsSw=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuex@3.1.2/dist/vuex.min.js" integrity="sha256-LfE9mPMjeOg3dTn1sESY2Xvdbq7gAhONtkxacnr7FSA=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.1/dist/vuetify.min.js" integrity="sha256-Wksm4daF3JKKD97f/NHSJkxqQCk9XwujIEBTX0VLzTw=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.19.0/dist/axios.min.js" integrity="sha256-S1J4GVHHDMiirir9qsXWc8ZWw74PHHafpsHp5PXtjTs=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@5.16.0/dist/d3.min.js" integrity="sha256-Xb6SSzhH3wEPC4Vy3W70Lqh9Y3Du/3KxPqI2JHQSpTw=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre-d3@0.6.4/dist/dagre-d3.min.js" integrity="sha256-dPm4TA8Y9PY5q5mmtWMkRGOCMHJDKy34ZrxdbBGA9cs=" crossorigin="anonymous"></script>
+    {% else %}
+    <script src="%% url_for('user.static', filename='vue.min.js') %%"></script>
+    <script src="%% url_for('user.static', filename='vue-router.min.js') %%"></script>
+    <script src="%% url_for('user.static', filename='vuex.min.js') %%"></script>
+    <script src="%% url_for('user.static', filename='vuetify.min.js') %%"></script>
+    <script src="%% url_for('user.static', filename='moment.min.js') %%"></script>
+    <script src="%% url_for('user.static', filename='axios.min.js') %%"></script>
+    {% endif %}
+    <script src="%% url_for('static', filename='script.js') %%"></script>
+  </body>
 </html>
