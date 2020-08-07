@@ -47,14 +47,19 @@ function getNode(task) {
 
 const router = new VueRouter({
   mode: 'history',
-  routes: [
-    {  name: 'home', path: '/' },
-    {  name: 'worfklow', path: '/:id' }
+  routes: [{
+      name: 'home',
+      path: '/'
+    },
+    {
+      name: 'worfklow',
+      path: '/:id'
+    }
   ]
 });
 
 const store = new Vuex.Store({
-	state: {
+  state: {
     workflows: [],
     workflowNames: [],
     network: null,
@@ -64,23 +69,32 @@ const store = new Vuex.Store({
     loading: true
   },
   actions: {
-    listWorkflows({commit}) {
+    listWorkflows({
+      commit
+    }) {
       axios.get(API_URL + "/workflows").then((response) => {
         commit('updateWorkflows', response.data)
         commit('changeLoadingState', false)
-    	})
+      })
     },
-    getWorkflow({commit}, workflow_id) {
+    getWorkflow({
+      commit
+    }, workflow_id) {
       axios.get(API_URL + "/workflows/" + workflow_id).then((response) => {
         commit('updateSelectedWorkflow', response.data)
         commit('refreshNetwork', response.data.tasks)
         commit('changeLoadingState', false)
-    	})
+      })
     },
-    selectTask({commit}, task) {
+    selectTask({
+      commit
+    }, task) {
       commit('updateSelectedTask', task)
     },
-    relaunchWorkflow({commit, dispatch}, workflow_id) {
+    relaunchWorkflow({
+      commit,
+      dispatch
+    }, workflow_id) {
       axios.post(API_URL + "/workflows/" + workflow_id + "/relaunch").then((response) => {
         dispatch("listWorkflows")
         dispatch("getWorkflow", response.data.id)
@@ -106,11 +120,11 @@ const store = new Vuex.Store({
       for (let i = 0; i < tasks.length; i++) {
         var className = tasks[i].status;
         var html = "<div class=pointer>";
-            html += "<span class=status></span>";
-            html += "<span class=name>"+tasks[i].key+"</span>";
-            html += "<br>"
-            html += "<span class=details>"+tasks[i].status+"</span>";
-            html += "</div>";
+        html += "<span class=status></span>";
+        html += "<span class=name>" + tasks[i].key + "</span>";
+        html += "<br>"
+        html += "<span class=details>" + tasks[i].status + "</span>";
+        html += "</div>";
 
         var color = COLORS[tasks[i].status]["background"];
         g.setNode(tasks[i].id, {
@@ -122,7 +136,7 @@ const store = new Vuex.Store({
           class: className
         });
 
-        for (let j=0; j<tasks[i].previous.length; j++) {
+        for (let j = 0; j < tasks[i].previous.length; j++) {
           g.setEdge(tasks[i].previous[j], tasks[i].id, {});
         }
 
@@ -135,7 +149,7 @@ const store = new Vuex.Store({
       });
 
       var svg = d3.select("svg"),
-          inner = svg.select("g");
+        inner = svg.select("g");
 
       // Set up zoom support
       var zoom = d3.zoom().on("zoom", function() {
@@ -150,13 +164,13 @@ const store = new Vuex.Store({
 
       // Handle the click
       var nodes = inner.selectAll("g.node");
-      nodes.on('click', function (task_id) {
+      nodes.on('click', function(task_id) {
         g.nodes().forEach(function(v) {
-            if ( v == task_id) {
-                g.node(v).style = "fill: #f0f0f0; stroke-width: 2px; stroke: #777;";
-            } else {
-                g.node(v).style = "fill: white";
-            }
+          if (v == task_id) {
+            g.node(v).style = "fill: #f0f0f0; stroke-width: 2px; stroke: #777;";
+          } else {
+            g.node(v).style = "fill: white";
+          }
         });
 
         render(inner, g);
@@ -164,7 +178,7 @@ const store = new Vuex.Store({
       });
     },
     changeLoadingState(state, loading) {
-    	state.loading = loading
+      state.loading = loading
     }
   }
 });
@@ -177,11 +191,11 @@ Vue.filter('formatDate', function(value) {
 });
 
 Vue.filter('statusColor', function(status) {
-  if ( status == 'success' ) {
+  if (status == 'success') {
     return '#4caf50';
-  } else if ( status == 'error' ) {
+  } else if (status == 'error') {
     return '#f44336';
-  } else if ( status == 'progress' ) {
+  } else if (status == 'progress') {
     return '#2196f3';
   } else {
     return '#787777';
@@ -189,103 +203,107 @@ Vue.filter('statusColor', function(status) {
 });
 
 Vue.filter('countTasksByStatus', function(workflows, status) {
-    const tasks = workflows.filter(c => c.status === status);
-    return tasks.length;
+  const tasks = workflows.filter(c => c.status === status);
+  return tasks.length;
 });
 
 new Vue({
-    el: '#app',
-    computed: {
-        headers () {
-          return [
-            {
-                text: 'ID',
-                value: 'id',
-                align: ' d-none'
-            },
-            {
-                text: 'Status',
-                align: 'left',
-                value: 'status',
-                width: '15%',
-                filter: value => {
-                  if (this.selectedStatus.length == 0) return true
-                  return this.selectedStatus.includes(value)
-                },
-            },
-            {
-                text: 'Name',
-                align: 'left',
-                value: 'fullname',
-                width: '60%',
-                filter: value => {
-                  if (!this.selectedWorkflowName || this.selectedWorkflowName == 'All') return true
-                  return value == this.selectedWorkflowName
-                },
-            },
-            {
-                text: 'Date',
-                align: 'left',
-                value: 'created',
-                width: '25%',
-
-            },
-          ]
+  el: '#app',
+  computed: {
+    headers() {
+      return [{
+          text: 'ID',
+          value: 'id',
+          align: ' d-none'
         },
-        ...Vuex.mapState(['workflows', 'workflowNames', 'selectedWorkflow', 'selectedTask', 'taskIndex', 'network', 'loading']),
-    },
-    store,
-    router,
-    vuetify: new Vuetify({
-      theme: {
-        dark: DARK_THEME,
-      },
-    }),
-    data: () => ({
-      tab: null,
-      payloadDialog: false,
-      relaunchDialog: false,
-      search: '',
-      selectedStatus: [],
-      status: ['success', 'error', 'progress', 'pending'],
-      selectedWorkflowName: "All",
-    }),
-    methods: {
-      getColor: function (status) {
-        var color = {
-          'success': 'green',
-          'error': 'red',
-          'warning': 'orange',
-          'progress': 'blue'
-        }[status];
-        return color;
-      },
-      selectRow: function (item) {
-        // Catch to avoid redundant navigation to current location error
-        this.$router.push({ name: 'worfklow', params: { id: item.id } }).catch(() => {});
+        {
+          text: 'Status',
+          align: 'left',
+          value: 'status',
+          width: '15%',
+          filter: value => {
+            if (this.selectedStatus.length == 0) return true
+            return this.selectedStatus.includes(value)
+          },
+        },
+        {
+          text: 'Name',
+          align: 'left',
+          value: 'fullname',
+          width: '60%',
+          filter: value => {
+            if (!this.selectedWorkflowName || this.selectedWorkflowName == 'All') return true
+            return value == this.selectedWorkflowName
+          },
+        },
+        {
+          text: 'Date',
+          align: 'left',
+          value: 'created',
+          width: '25%',
 
-        this.$store.dispatch('getWorkflow', item.id);
-      },
-      displayTask: function(task) {
-        this.$store.dispatch('selectTask', task);
-      },
-      relaunchWorkflow: function() {
-        this.$store.dispatch('relaunchWorkflow', this.selectedWorkflow.id);
-        this.relaunchDialog = false;
-      },
-      getFlowerTaskUrl: function() {
-        if ( this.selectedTask ) {
-            return FLOWER_URL + "/task/" + this.selectedTask.id;
+        },
+      ]
+    },
+    ...Vuex.mapState(['workflows', 'workflowNames', 'selectedWorkflow', 'selectedTask', 'taskIndex', 'network', 'loading']),
+  },
+  store,
+  router,
+  vuetify: new Vuetify({
+    theme: {
+      dark: DARK_THEME,
+    },
+  }),
+  data: () => ({
+    tab: null,
+    payloadDialog: false,
+    relaunchDialog: false,
+    search: '',
+    selectedStatus: [],
+    status: ['success', 'error', 'progress', 'pending'],
+    selectedWorkflowName: "All",
+  }),
+  methods: {
+    getColor: function(status) {
+      var color = {
+        'success': 'green',
+        'error': 'red',
+        'warning': 'orange',
+        'progress': 'blue'
+      } [status];
+      return color;
+    },
+    selectRow: function(item) {
+      // Catch to avoid redundant navigation to current location error
+      this.$router.push({
+        name: 'worfklow',
+        params: {
+          id: item.id
         }
-        return '';
-      }
-    },
-    created() {
-      this.$store.dispatch('listWorkflows');
+      }).catch(() => {});
 
-      let workflowID = this.$route.params.id;
-      if (workflowID) {
-        this.$store.dispatch('getWorkflow', workflowID);
+      this.$store.dispatch('getWorkflow', item.id);
+    },
+    displayTask: function(task) {
+      this.$store.dispatch('selectTask', task);
+    },
+    relaunchWorkflow: function() {
+      this.$store.dispatch('relaunchWorkflow', this.selectedWorkflow.id);
+      this.relaunchDialog = false;
+    },
+    getFlowerTaskUrl: function() {
+      if (this.selectedTask) {
+        return FLOWER_URL + "/task/" + this.selectedTask.id;
       }
+      return '';
     }
-  });
+  },
+  created() {
+    this.$store.dispatch('listWorkflows');
+
+    let workflowID = this.$route.params.id;
+    if (workflowID) {
+      this.$store.dispatch('getWorkflow', workflowID);
+    }
+  }
+});
