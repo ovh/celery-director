@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0 - 2020-08-10
+### Fixed
+- Handle the default pagination setting
+
+### Changed
+- New interface based on d3.js
+- Support the mode history in permalinks
+
+
 ## 0.0.6 - 2020-07-27
 ### Fixed
 - Fix issue in transactions with periodic tasks and Celery queues
