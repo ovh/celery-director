@@ -1,9 +1,15 @@
 site_name: "Celery Director"
+
+repo_name: ovh/celery-director
+repo_url: https://github.com/ovh/celery-director
+edit_uri: ""
+
 theme:
   name: 'material'
   palette:
     primary: 'teal'
     accent: 'teal'
+
 nav:
   - Introduction: 'index.md'
   - Quickstart: 'quickstart.md'
@@ -14,8 +20,10 @@ nav:
     - 'Enable Authentication': 'guides/enable-authentication.md'
     - 'Use Payload': 'guides/use-payload.md'
   - API: 'api.md'
+
 extra_css:
    - "css/custom.css"
+
 markdown_extensions:
   - admonition
   - codehilite
