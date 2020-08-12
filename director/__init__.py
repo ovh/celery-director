@@ -9,7 +9,7 @@ from flask_json_schema import JsonValidationError
 from werkzeug.exceptions import InternalServerError, HTTPException
 
 from director.api import api_bp
-from director.extensions import cel, cel_workflows, db, schema, migrate
+from director.extensions import cel, cel_workflows, db, schema, sentry, migrate
 from director.settings import Config, UserConfig
 from director.tasks.base import BaseTask
 from director.views import view_bp
@@ -70,6 +70,7 @@ def create_app(
     schema.init_app(app)
     cel.init_app(app)
     cel_workflows.init_app(app)
+    sentry.init_app(app)
 
     # Register the periodic tasks for Celery Beat
     for workflow, conf in cel_workflows.workflows.items():

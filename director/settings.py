@@ -13,6 +13,7 @@ HIDDEN_CONFIG = [
     "DIRECTOR_DATABASE_POOL_RECYCLE",
     "DIRECTOR_BROKER_URI",
     "DIRECTOR_RESULT_BACKEND_URI",
+    "DIRECTOR_SENTRY_DSN",
 ]
 
 
@@ -61,6 +62,9 @@ class Config(object):
             ),
             "broker_transport_options": {"master_name": "director"},
         }
+
+        # Sentry configuration
+        self.SENTRY_DSN = env.str("DIRECTOR_SENTRY_DSN", "")
 
 
 class UserConfig(dict):
