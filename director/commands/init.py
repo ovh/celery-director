@@ -22,14 +22,15 @@ DIRECTOR_ENABLE_HISTORY_MODE=false
 
 # ---------- API ----------
 DIRECTOR_WORKFLOWS_PER_PAGE=1000
+DIRECTOR_AUTH_ENABLED = false
 
 # These settings are designed to be used with the "director dlassets" command,
 # the DIRECTOR_STATIC_FOLDER will be used if you set DIRECTOR_ENABLE_CDN to false.
 DIRECTOR_ENABLE_CDN=true
 DIRECTOR_STATIC_FOLDER=${DIRECTOR_HOME}/static
 
-# Authentication
-DIRECTOR_AUTH_ENABLED = false
+# ---------- Sentry ----------
+DIRECTOR_SENTRY_DSN=""
 """
 
 
