@@ -19,6 +19,7 @@ nav:
     - 'Run Workflows': 'guides/run-workflows.md'
     - 'Enable Authentication': 'guides/enable-authentication.md'
     - 'Use Payload': 'guides/use-payload.md'
+    - 'Error Tracking': 'guides/error-tracking.md'
   - API: 'api.md'
 
 extra_css:
