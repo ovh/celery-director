@@ -24,8 +24,8 @@ DEPENDENCIES = [
         None,
     ),
     (
-        "https://cdn.jsdelivr.net/npm/vuetify@2.2.1/dist/vuetify.min.js",
-        "sha256-Wksm4daF3JKKD97f/NHSJkxqQCk9XwujIEBTX0VLzTw=",
+        "https://cdn.jsdelivr.net/npm/vuetify@2.3.8/dist/vuetify.min.js",
+        "sha256-b4RV6u+xflpPubfyN5gdooQRpDjROUcaCCSWbKQNX9Y=",
         None,
     ),
     (
@@ -49,8 +49,8 @@ DEPENDENCIES = [
         None,
     ),
     (
-        "https://cdn.jsdelivr.net/npm/vuetify@2.2.1/dist/vuetify.min.css",
-        "sha256-Ch5FMlNCdr6sBrwjHdGoTnAbAcKzE+UWiCXZHDT1HYk=",
+        "https://cdn.jsdelivr.net/npm/vuetify@2.3.8/dist/vuetify.min.css",
+        "sha256-aS2abSwj+AMqtAmTglCnsg9GkAyDUKSCFd4xNdLX/AA=",
         None,
     ),
     (
