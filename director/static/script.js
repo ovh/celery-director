@@ -220,7 +220,7 @@ new Vue({
           text: 'Status',
           align: 'left',
           value: 'status',
-          width: '15%',
+          width: '17%',
           filter: value => {
             if (this.selectedStatus.length == 0) return true
             return this.selectedStatus.includes(value)
@@ -230,7 +230,7 @@ new Vue({
           text: 'Name',
           align: 'left',
           value: 'fullname',
-          width: '60%',
+          width: '58%',
           filter: value => {
             if (!this.selectedWorkflowName || this.selectedWorkflowName == 'All') return true
             return value == this.selectedWorkflowName
