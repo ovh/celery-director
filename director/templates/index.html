@@ -6,8 +6,9 @@
     <title>Celery Director</title>
     {% if config.ENABLE_CDN %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.2.1/dist/vuetify.min.css" integrity="sha256-Ch5FMlNCdr6sBrwjHdGoTnAbAcKzE+UWiCXZHDT1HYk=" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@4.7.95/css/materialdesignicons.min.css" integrity="sha256-KZNFoTq+/jQUu3YY1OnjLn605i80dhdUJKO3WHGiM6E=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.3.8/dist/vuetify.min.css" integrity="sha256-aS2abSwj+AMqtAmTglCnsg9GkAyDUKSCFd4xNdLX/AA=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@5.5.55/css/materialdesignicons.min.css" integrity="sha256-HCkcFMiRi/WMAXrgcUj/C5aoUrPtvHxpfbOIlwdsNtg=" crossorigin="anonymous">
+
     {% else %}
     <style type="text/css">
       @font-face {
@@ -28,7 +29,7 @@
         <v-app-bar app clipped-right color="director" dark>
           <v-toolbar-title @click="router.push({name: 'home'}).catch(()=>{})" class="pointer">Celery Director</v-toolbar-title>
         </v-app-bar>
-        <v-content>
+        <v-main>
           <v-container v-if="!$route.params.id">
             <v-row>
               <v-col cols="12" md="8">
@@ -67,7 +68,7 @@
                   <v-card-text>
                     <v-text-field
                       v-model="search"
-                      label="Search by Name/Status/Date/ID"
+                      label="Search by Date/ID"
                       label="Append"
                       append-icon="mdi-magnify"
                       single-line
@@ -259,7 +260,7 @@
               </v-card-text>
             </v-card>
           </v-dialog>
-        </v-content>
+        </v-main>
       </v-app>
     </div>
     <script type="text/javascript">
@@ -272,7 +273,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js" integrity="sha256-ngFW3UnAN0Tnm76mDuu7uUtYEcG3G5H1+zioJw3t+68=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router@3.3.4/dist/vue-router.min.js" integrity="sha256-87g98o5+aw7/ExJ9tBjvH8zz46FJ7hiylPtNFcPvsSw=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuex@3.1.2/dist/vuex.min.js" integrity="sha256-LfE9mPMjeOg3dTn1sESY2Xvdbq7gAhONtkxacnr7FSA=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.1/dist/vuetify.min.js" integrity="sha256-Wksm4daF3JKKD97f/NHSJkxqQCk9XwujIEBTX0VLzTw=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.3.8/dist/vuetify.min.js" integrity="sha256-b4RV6u+xflpPubfyN5gdooQRpDjROUcaCCSWbKQNX9Y=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.19.0/dist/axios.min.js" integrity="sha256-S1J4GVHHDMiirir9qsXWc8ZWw74PHHafpsHp5PXtjTs=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3@5.16.0/dist/d3.min.js" integrity="sha256-Xb6SSzhH3wEPC4Vy3W70Lqh9Y3Du/3KxPqI2JHQSpTw=" crossorigin="anonymous"></script>
