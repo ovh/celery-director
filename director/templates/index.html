@@ -28,6 +28,10 @@
       <v-app id="inspire">
         <v-app-bar app clipped-right color="director" dark>
           <v-toolbar-title @click="router.push({name: 'home'}).catch(()=>{})" class="pointer">Celery Director</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <a :href="repoLink" class="text-decoration-none" target="_blank">
+            <v-icon large>mdi-github</v-icon>
+          </a>
         </v-app-bar>
         <v-main>
           <v-container v-if="!$route.params.id">
