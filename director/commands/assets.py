@@ -54,8 +54,8 @@ DEPENDENCIES = [
         None,
     ),
     (
-        "https://cdn.jsdelivr.net/npm/@mdi/font@4.7.95/css/materialdesignicons.min.css",
-        "sha256-KZNFoTq+/jQUu3YY1OnjLn605i80dhdUJKO3WHGiM6E=",
+        "https://cdn.jsdelivr.net/npm/@mdi/font@5.5.55/css/materialdesignicons.min.css",
+        "sha256-HCkcFMiRi/WMAXrgcUj/C5aoUrPtvHxpfbOIlwdsNtg=",
         "mdi",
     ),
     (

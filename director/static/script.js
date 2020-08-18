@@ -21,6 +21,7 @@ const COLORS = {
   }
 };
 
+const REPO_LINK = "https://github.com/ovh/celery-director"
 function getNode(task) {
   return {
     id: task.id,
@@ -258,6 +259,7 @@ new Vue({
     tab: null,
     payloadDialog: false,
     relaunchDialog: false,
+    repoLink: REPO_LINK,
     search: '',
     selectedStatus: [],
     status: ['success', 'error', 'progress', 'pending'],
