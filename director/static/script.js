@@ -22,29 +22,6 @@ const COLORS = {
 };
 
 const REPO_LINK = "https://github.com/ovh/celery-director"
-function getNode(task) {
-  return {
-    id: task.id,
-    label: task.key,
-    shape: 'box',
-    borderWidth: 1,
-    color: {
-      border: COLORS[task.status]['border'],
-      background: COLORS[task.status]['background'],
-      highlight: {
-        background: COLORS[task.status]['background'],
-        border: COLORS[task.status]['hlborder'],
-      }
-    },
-    font: {
-      face: 'arial',
-      align: 'center',
-      color: '#fff',
-      strokeWidth: 0,
-      strokeColor: '#ffffff',
-    }
-  };
-}
 
 const router = new VueRouter({
   mode: HISTORY_MODE ? 'history' : 'hash',
@@ -127,7 +104,6 @@ const store = new Vuex.Store({
         html += "<span class=details>" + tasks[i].status + "</span>";
         html += "</div>";
 
-        var color = COLORS[tasks[i].status]["background"];
         g.setNode(tasks[i].id, {
           labelType: "html",
           label: html,
