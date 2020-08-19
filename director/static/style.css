@@ -58,6 +58,10 @@
   background-color: #787777;
 }
 
+.graph .progress .status {
+  background-color: #2196f3;
+}
+
 .graph .name {
   margin-top: 10px;
 }
