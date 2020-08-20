@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.0 - 2020-08-20
+### Added
+- Add Sentry error reporting (use `DIRECTOR_ENTRY_DSN` setting)
+- Add GitHub link in the Web UI header
+
+### Fixed
+- Fix WebUI workflow table.
+- Fix WebUI task color status for `progress`
+
+### Changed
+- Limit search placeholder on dates and IDs
+
 ## 0.1.0 - 2020-08-10
 ### Fixed
 - Handle the default pagination setting
