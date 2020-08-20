@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 - 2020-08-20
+### Fixed
+- Fix issue with icons when using the `DIRECTOR_ENABLE_CDN=false` and  `director dlassets` command
+
+
 ## 0.2.0 - 2020-08-20
 ### Added
 - Add Sentry error reporting (use `DIRECTOR_ENTRY_DSN` setting)
