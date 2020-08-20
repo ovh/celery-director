@@ -64,8 +64,8 @@ DEPENDENCIES = [
         "fonts",
     ),
     (
-        "https://cdn.jsdelivr.net/npm/@mdi/font@4.7.95/fonts/materialdesignicons-webfont.woff2",
-        "sha256-Q2IIvBQJrnRI6+hNPamcSie+O6BJ7exgMv6P3r3ZzIc=",
+        "https://cdn.jsdelivr.net/npm/@mdi/font@5.5.55/fonts/materialdesignicons-webfont.woff2",
+        "sha256-6PFQMmcHK85n15RxAODS3QGyyNG04kPtO+pFnw+Ud/c=",
         "fonts",
     ),
 ]
