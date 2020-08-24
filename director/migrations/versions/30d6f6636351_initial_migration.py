@@ -72,3 +72,4 @@ def downgrade():
     op.drop_table("tasks")
     op.drop_index(op.f("ix_workflows_created_at"), table_name="workflows")
     op.drop_table("workflows")
+    sa.Enum(name="statustype").drop(op.get_bind())
