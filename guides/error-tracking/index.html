@@ -36,7 +36,7 @@
     
     
       
-        <title>Enable Authentication - Celery Director</title>
+        <title>Error Tracking - Celery Director</title>
       
     
     
@@ -87,7 +87,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#enable-authentication" tabindex="0" class="md-skip">
+      <a href="#error-tracking" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -113,7 +113,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Enable Authentication
+                Error Tracking
               
             </span>
           
@@ -303,49 +303,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Enable Authentication
-      </label>
-    
-    <a href="./" title="Enable Authentication" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../enable-authentication/" title="Enable Authentication" class="md-nav__link">
       Enable Authentication
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#manage-user" class="md-nav__link">
-    Manage user
-  </a>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -365,11 +327,20 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../error-tracking/" title="Error Tracking" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="Error Tracking" class="md-nav__link md-nav__link--active">
       Error Tracking
     </a>
+    
   </li>
 
         
@@ -407,22 +378,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#manage-user" class="md-nav__link">
-    Manage user
-  </a>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -434,17 +389,43 @@
               
                 
                 
-                <h1 id="enable-authentication">Enable authentication</h1>
-<p>Director provide basic authentication. To enable it, you have to create users and set <code>DIRECTOR_AUTH_ENABLED</code> variable to <strong>true</strong> in the <code>.env</code> file.</p>
-<h2 id="manage-user">Manage user</h2>
-<p>You can manage users using the CLI.</p>
-<div class="codehilite"><pre><span></span><code>$ director user <span class="o">[</span>create<span class="p">|</span>list<span class="p">|</span>update<span class="p">|</span>delete<span class="o">]</span>
+                <h1 id="error-tracking">Error Tracking</h1>
+<p>Director can send errors to <a href="https://docs.sentry.io/">Sentry</a>.</p>
+<p>You can enable this feature by adding your <code>SENTRY_DSN</code> value in the <code>DIRECTOR_SENTRY_DSN</code> variable of the <code>.env</code> file :</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">DIRECTOR_SENTRY_DSN</span><span class="o">=</span><span class="s2">&quot;https://xyz@sentry.example.com/0&quot;</span>
 </code></pre></div>
 
 
-<p>Create user example:</p>
-<div class="codehilite"><pre><span></span><code>$ director user create john
+<p>Let's imagine the following workflow :</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># workflows.yml</span>
+<span class="nn">---</span>
+<span class="nt">demo.SENTRY_ALERT</span><span class="p">:</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">WORKING_TASK</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ERROR_TASK</span>
 </code></pre></div>
+
+
+<p>With the associated tasks :</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># tasks/example.py</span>
+<span class="kn">from</span> <span class="nn">director</span> <span class="kn">import</span> <span class="n">task</span>
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;WORKING_TASK&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">working_task</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;hello&quot;</span><span class="p">:</span> <span class="s2">&quot;world&quot;</span><span class="p">}</span>
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ERROR_TASK&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">error_task</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>When a Celery worker will execute this code, an issue will be created in Sentry with the <code>ZeroDivisionError</code> :</p>
+<p><img alt="Sentry issue" src="../../img/sentry_issue.png" /></p>
+<p>In order to group the issues by workflow's name or by project, Director associated some tags to the event :</p>
+<p><img alt="Sentry tags" src="../../img/sentry_tags.png" /></p>
+<p>Each event also contains additional data to better dig into the problem :</p>
+<p><img alt="Sentry tags" src="../../img/sentry_additional_data.png" /></p>
                 
                   
                 
@@ -466,7 +447,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../run-workflows/" title="Run Workflows" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../use-payload/" title="Use Payload" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -475,19 +456,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Run Workflows
+                Use Payload
               </span>
             </div>
           </a>
         
         
-          <a href="../use-payload/" title="Use Payload" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../api/" title="API" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Use Payload
+                API
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
