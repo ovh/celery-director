@@ -6,8 +6,8 @@ from director.models.utils import JSONBType
 class Workflow(BaseModel):
     __tablename__ = "workflows"
 
-    name = db.Column(db.String(), nullable=False)
-    project = db.Column(db.String(), nullable=False)
+    name = db.Column(db.String(255), nullable=False)
+    project = db.Column(db.String(255), nullable=False)
     status = db.Column(db.Enum(StatusType), default=StatusType.pending, nullable=False)
     payload = db.Column(JSONBType, default={})
     periodic = db.Column(db.Boolean, default=False)

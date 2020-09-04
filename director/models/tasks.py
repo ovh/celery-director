@@ -11,7 +11,7 @@ from director.models.utils import JSONBType
 class Task(BaseModel):
     __tablename__ = "tasks"
 
-    key = db.Column(db.String(), nullable=False)
+    key = db.Column(db.String(255), nullable=False)
     status = db.Column(db.Enum(StatusType), default=StatusType.pending, nullable=False)
     previous = db.Column(JSONBType, default=[])
     result = db.Column(PickleType)
