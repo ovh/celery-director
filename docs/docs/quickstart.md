@@ -48,7 +48,7 @@ def extract(*args, **kwargs):
 While the `workflows.yml` file will be used to combine them into workflows :
 
 ```yaml
-ovh.SIMPLE_ETL:
+example.ETL:
   tasks:
     - EXTRACT
     - TRANSFORM
@@ -77,19 +77,24 @@ The `workflow` command can be used to manage your workflows.
 
 ```
 $ director workflow list
-+----------------+----------+-----------+
-| Workflows (1)  | Periodic | Tasks     |
-+----------------+----------+-----------+
-| ovh.SIMPLE_ETL |    --    | EXTRACT   |
-|                |          | TRANSFORM |
-|                |          | LOAD      |
-+----------------+----------+-----------+
++-----------------+----------+----------------------+
+| Workflows (2)   | Periodic | Tasks                |
++-----------------+----------+----------------------+
+| example.ETL     |    --    | EXTRACT              |
+|                 |          | TRANSFORM            |
+|                 |          | LOAD                 |
++-----------------+----------+----------------------+
+| example.RANDOMS |    --    | Group GROUP_RANDOMS: |
+|                 |          |  └ RANDOM            |
+|                 |          |  └ RANDOM            |
+|                 |          | ADD                  |
++-----------------+----------+----------------------+
 ```
 
 **Run**
 
 ```
-$ director workflow run ovh.SIMPLE_ETL
+$ director workflow run example.ETL
 ```
 
 ## Execute the tasks

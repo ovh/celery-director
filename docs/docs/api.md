@@ -25,12 +25,12 @@ HTTP/1.1 200 OK
 [
     {
         "created": "2020-02-06T13:56:51",
-        "fullname": "ovh.SIMPLE_ETL",
+        "fullname": "example.ETL",
         "id": "29e7ef80-fa1b-4b91-8ccb-ef01a91601db",
-        "name": "SIMPLE_ETL",
+        "name": "ETL",
         "payload": {"foo": "bar"},
         "periodic": false,
-        "project": "ovh",
+        "project": "example",
         "status": "pending",
         "updated": "2020-02-06T13:56:51"
     }
@@ -56,12 +56,12 @@ HTTP/1.1 200 OK
 
 {
     "created": "2020-02-06T13:56:51",
-    "fullname": "ovh.SIMPLE_ETL",
+    "fullname": "example.ETL",
     "id": "29e7ef80-fa1b-4b91-8ccb-ef01a91601db",
-    "name": "SIMPLE_ETL",
+    "name": "ETL",
     "payload": {},
     "periodic": false,
-    "project": "ovh",
+    "project": "example",
     "status": "pending",
     "tasks": [
         {
@@ -113,8 +113,8 @@ Host: example.com
 Accept: application/json
 
 {
-  "project": "ovh",
-  "name": "SIMPLE_ETL",
+  "project": "example",
+  "name": "ETL",
   "paylod": {}
 }
 ```
@@ -126,12 +126,12 @@ HTTP/1.1 201 CREATED
 
 {
     "created": "2020-02-06T14:01:02",
-    "fullname": "ovh.SIMPLE_ETL",
+    "fullname": "example.ETL",
     "id": "43e70707-b661-42e1-a7df-5b98851ae340",
-    "name": "SIMPLE_ETL",
+    "name": "ETL",
     "payload": {},
     "periodic": false,
-    "project": "ovh",
+    "project": "example",
     "status": "pending",
     "updated": "2020-02-06T14:01:02"
 }
