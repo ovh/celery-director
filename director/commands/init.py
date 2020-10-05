@@ -46,6 +46,24 @@ ovh.SIMPLE_ETL:
     - EXTRACT
     - TRANSFORM
     - LOAD
+
+# Group of tasks example
+#
+# +----------+       +----------+
+# |  RANDOM  |       |  RANDOM  |
+# +----+-----+       +-----+----+
+#      |     +-------+     |
+#      +---->+  ADD  <-----+
+#            +-------+
+#
+example.RANDOMS:
+  tasks:
+    - GROUP_RANDOMS:
+        type: group
+        tasks:
+          - RANDOM
+          - RANDOM
+    - ADD
 """
 
 
@@ -68,6 +86,22 @@ def load(*args, **kwargs):
 """
 
 
+GROUP_PY_TEMPLATE = """import random
+from director import task
+
+
+@task(name="RANDOM")
+def generate_random(*args, **kwargs):
+    payload = kwargs["payload"]
+    return random.randint(payload.get("start", 0), payload.get("end", 10))
+
+
+@task(name="ADD")
+def add_randoms(*args, **kwargs):
+    return sum(args[0])
+"""
+
+
 @click.command()
 @click.argument("path")
 def init(path):
@@ -86,6 +120,9 @@ def init(path):
 
     with open(user_project_path / "tasks" / "etl.py", "w", encoding="utf-8") as f:
         f.write(ETL_PY_TEMPLATE)
+
+    with open(user_project_path / "tasks" / "group.py", "w", encoding="utf-8") as f:
+        f.write(GROUP_PY_TEMPLATE)
 
     click.echo(f"[*] Project created in {user_project_path}")
     click.echo("[*] Do not forget to initialize the database")
