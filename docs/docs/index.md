@@ -2,7 +2,7 @@
 
 Director is a simple and rapid framework used to manage tasks and build workflows using Celery.
 
-![Celery Director](img/director.png)
+![Celery Director](img/director.gif)
 
 ## Features
 
