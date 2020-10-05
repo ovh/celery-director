@@ -41,7 +41,7 @@ WORKFLOWS_YML_TEMPLATE = """---
 # |  EXTRACT  +----->+  TRANSFORM  +----->+  LOAD  |
 # +-----------+      +-------------+      +--------+
 #
-ovh.SIMPLE_ETL:
+example.ETL:
   tasks:
     - EXTRACT
     - TRANSFORM

@@ -112,7 +112,7 @@ $ director celery beat
 With director, you can set queues for workflows. All workflow's tasks will use the same queue:
 
 ```yaml
-example.SIMPLE_ETL:
+example.ETL:
   tasks:
     - A
     - B
