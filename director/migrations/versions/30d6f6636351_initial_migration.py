@@ -25,8 +25,8 @@ def upgrade():
         sa.Column("id", UUIDType(binary=False), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
-        sa.Column("name", sa.String(), nullable=False),
-        sa.Column("project", sa.String(), nullable=False),
+        sa.Column("name", sa.String(255), nullable=False),
+        sa.Column("project", sa.String(255), nullable=False),
         sa.Column(
             "status",
             sa.Enum(
@@ -47,7 +47,7 @@ def upgrade():
         sa.Column("id", UUIDType(binary=False), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
-        sa.Column("key", sa.String(), nullable=False),
+        sa.Column("key", sa.String(255), nullable=False),
         sa.Column(
             "status",
             sa.Enum(
