@@ -12,7 +12,7 @@ services:
   - redis-server
 
 before_install:
-  - pip install black==19.10b0
+  - pip install black==20.8b1
   - pip install pytest==5.3.5
   - pip install mkdocs==1.0.4
   - pip install mkdocs-material==4.6.3
