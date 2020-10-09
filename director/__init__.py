@@ -30,7 +30,12 @@ config = UserConfig()
 class DirectorFlask(Flask):
     static_folder = "static"
     jinja_options = Flask.jinja_options.copy()
-    jinja_options.update(dict(variable_start_string="%%", variable_end_string="%%",))
+    jinja_options.update(
+        dict(
+            variable_start_string="%%",
+            variable_end_string="%%",
+        )
+    )
 
 
 # Create the application using a factory
@@ -65,7 +70,9 @@ def create_app(
     db.app = app
 
     migrate.init_app(
-        app=app, db=db, directory=str(Path(__file__).resolve().parent / "migrations"),
+        app=app,
+        db=db,
+        directory=str(Path(__file__).resolve().parent / "migrations"),
     )
     schema.init_app(app)
     cel.init_app(app)
@@ -83,7 +90,10 @@ def create_app(
                     f"periodic-{workflow}-{schedule}s": {
                         "task": "director.tasks.periodic.execute",
                         "schedule": schedule,
-                        "args": (workflow, payload,),
+                        "args": (
+                            workflow,
+                            payload,
+                        ),
                     }
                 }
             )
