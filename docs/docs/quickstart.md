@@ -62,6 +62,14 @@ between your tasks.
 
 Adjust the `DIRECTOR_DATABASE_URI` variable in the `.env` file and generate the database :
 
+Possible values for the `DIRECTOR_DATABASE_URI` variable:
+```shell
+DIRECTOR_DATABASE_URI="postgresql://user:password@hostname:port/database"           # Using PostgreSQL
+DIRECTOR_DATABASE_URI="mysql+mysqlconnector://user:password@hostname:port/database" # Using MySQL
+DIRECTOR_DATABASE_URI="sqlite:////path/to/your/database.db"                         # Using SQLite
+```
+
+Generate the database:
 ```
 $ director db upgrade
 INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
