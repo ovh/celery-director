@@ -18,7 +18,10 @@ class Task(BaseModel):
 
     # Relationship
     workflow_id = db.Column(
-        UUIDType(binary=False), db.ForeignKey("workflows.id"), nullable=False
+        UUIDType(binary=False),
+        db.ForeignKey("workflows.id"),
+        nullable=False,
+        index=True,
     )
     workflow = db.relationship("Workflow", backref=db.backref("tasks", lazy=True))
 
