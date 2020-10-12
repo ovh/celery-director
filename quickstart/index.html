@@ -536,6 +536,13 @@ set your <code>DIRECTOR_HOME</code> environment variable :</p>
 <p>Director needs a connection to a relational database to store the dependencies
 between your tasks.</p>
 <p>Adjust the <code>DIRECTOR_DATABASE_URI</code> variable in the <code>.env</code> file and generate the database :</p>
+<p>Possible values for the <code>DIRECTOR_DATABASE_URI</code> variable:</p>
+<div class="shell codehilite"><pre><span></span><code><span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;postgresql://user:password@hostname:port/database&quot;</span>           <span class="c1"># Using PostgreSQL</span>
+<span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;mysql+mysqlconnector://user:password@hostname:port/database&quot;</span> <span class="c1"># Using MySQL</span>
+<span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;sqlite:////path/to/your/database.db&quot;</span>                         <span class="c1"># Using SQLite</span>
+</code></pre></div>
+
+<p>Generate the database:</p>
 <div class="codehilite"><pre><span></span><code>$ director db upgrade
 INFO  <span class="o">[</span>alembic.runtime.migration<span class="o">]</span> Context impl SQLiteImpl.
 INFO  <span class="o">[</span>alembic.runtime.migration<span class="o">]</span> Will assume non-transactional DDL.
