@@ -1,7 +1,7 @@
 """force varchar 255
 
 Revision ID: 2ac615d6850b
-Revises: 3f8466b16023
+Revises: 063ff371f2da
 Create Date: 2020-10-09 17:35:12.402690
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '2ac615d6850b'
-down_revision = '3f8466b16023'
+down_revision = '063ff371f2da'
 branch_labels = None
 depends_on = None
 
