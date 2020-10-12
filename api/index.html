@@ -483,30 +483,28 @@
 <span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
 </code></pre></div>
 
-
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><code>per_page</code> (optional, default: 1000): the number of workflows to return</li>
 <li><code>page</code> (optional, default: 1): the page to start</li>
 </ul>
 <p><strong>Example response:</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="n">HTTP</span><span class="o">/</span><span class="mi">1</span><span class="p">.</span><span class="mi">1</span> <span class="mi">200</span> <span class="n">OK</span>
+<div class="codehilite"><pre><span></span><code><span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">200</span> <span class="n">OK</span>
 
 <span class="p">[</span>
-    <span class="err">{</span>
-        <span class="ss">&quot;created&quot;</span><span class="p">:</span> <span class="ss">&quot;2020-02-06T13:56:51&quot;</span><span class="p">,</span>
-        <span class="ss">&quot;fullname&quot;</span><span class="p">:</span> <span class="ss">&quot;ovh.SIMPLE_ETL&quot;</span><span class="p">,</span>
-        <span class="ss">&quot;id&quot;</span><span class="p">:</span> <span class="ss">&quot;29e7ef80-fa1b-4b91-8ccb-ef01a91601db&quot;</span><span class="p">,</span>
-        <span class="ss">&quot;name&quot;</span><span class="p">:</span> <span class="ss">&quot;SIMPLE_ETL&quot;</span><span class="p">,</span>
-        <span class="ss">&quot;payload&quot;</span><span class="p">:</span> <span class="err">{</span><span class="ss">&quot;foo&quot;</span><span class="p">:</span> <span class="ss">&quot;bar&quot;</span><span class="err">}</span><span class="p">,</span>
-        <span class="ss">&quot;periodic&quot;</span><span class="p">:</span> <span class="k">false</span><span class="p">,</span>
-        <span class="ss">&quot;project&quot;</span><span class="p">:</span> <span class="ss">&quot;ovh&quot;</span><span class="p">,</span>
-        <span class="ss">&quot;status&quot;</span><span class="p">:</span> <span class="ss">&quot;pending&quot;</span><span class="p">,</span>
-        <span class="ss">&quot;updated&quot;</span><span class="p">:</span> <span class="ss">&quot;2020-02-06T13:56:51&quot;</span>
-    <span class="err">}</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-02-06T13:56:51&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fullname&quot;</span><span class="p">:</span> <span class="s2">&quot;example.ETL&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;29e7ef80-fa1b-4b91-8ccb-ef01a91601db&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ETL&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;payload&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;periodic&quot;</span><span class="p">:</span> <span class="bp">false</span><span class="p">,</span>
+        <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="s2">&quot;example&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;pending&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;updated&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-02-06T13:56:51&quot;</span>
+    <span class="p">}</span>
 <span class="p">]</span>
 </code></pre></div>
-
 
 <h2 id="get-apiworkflowsid"><strong>GET</strong> <code>/api/workflows/&lt;id&gt;</code></h2>
 <p>Get the details of a specific workflow instance, including its tasks.</p>
@@ -516,56 +514,54 @@
 <span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
 </code></pre></div>
 
-
 <p><strong>Example response:</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="n">HTTP</span><span class="o">/</span><span class="mi">1</span><span class="p">.</span><span class="mi">1</span> <span class="mi">200</span> <span class="n">OK</span>
+<div class="codehilite"><pre><span></span><code><span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">200</span> <span class="n">OK</span>
 
-<span class="err">{</span>
-    <span class="ss">&quot;created&quot;</span><span class="p">:</span> <span class="ss">&quot;2020-02-06T13:56:51&quot;</span><span class="p">,</span>
-    <span class="ss">&quot;fullname&quot;</span><span class="p">:</span> <span class="ss">&quot;ovh.SIMPLE_ETL&quot;</span><span class="p">,</span>
-    <span class="ss">&quot;id&quot;</span><span class="p">:</span> <span class="ss">&quot;29e7ef80-fa1b-4b91-8ccb-ef01a91601db&quot;</span><span class="p">,</span>
-    <span class="ss">&quot;name&quot;</span><span class="p">:</span> <span class="ss">&quot;SIMPLE_ETL&quot;</span><span class="p">,</span>
-    <span class="ss">&quot;payload&quot;</span><span class="p">:</span> <span class="err">{}</span><span class="p">,</span>
-    <span class="ss">&quot;periodic&quot;</span><span class="p">:</span> <span class="k">false</span><span class="p">,</span>
-    <span class="ss">&quot;project&quot;</span><span class="p">:</span> <span class="ss">&quot;ovh&quot;</span><span class="p">,</span>
-    <span class="ss">&quot;status&quot;</span><span class="p">:</span> <span class="ss">&quot;pending&quot;</span><span class="p">,</span>
-    <span class="ss">&quot;tasks&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="err">{</span>
-            <span class="ss">&quot;created&quot;</span><span class="p">:</span> <span class="ss">&quot;2020-02-06T13:56:51&quot;</span><span class="p">,</span>
-            <span class="ss">&quot;id&quot;</span><span class="p">:</span> <span class="ss">&quot;c8606f67-9923-4c84-bc41-69efacb0c7cb&quot;</span><span class="p">,</span>
-            <span class="ss">&quot;key&quot;</span><span class="p">:</span> <span class="ss">&quot;EXTRACT&quot;</span><span class="p">,</span>
-            <span class="ss">&quot;previous&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="ss">&quot;status&quot;</span><span class="p">:</span> <span class="ss">&quot;pending&quot;</span><span class="p">,</span>
-            <span class="ss">&quot;task&quot;</span><span class="p">:</span> <span class="ss">&quot;c8606f67-9923-4c84-bc41-69efacb0c7cb&quot;</span><span class="p">,</span>
-            <span class="ss">&quot;updated&quot;</span><span class="p">:</span> <span class="ss">&quot;2020-02-06T13:56:51</span>
-<span class="ss">        },</span>
-<span class="ss">        {</span>
-<span class="ss">            &quot;</span><span class="n">created</span><span class="ss">&quot;: &quot;</span><span class="mi">2020</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">06</span><span class="n">T13</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mi">51</span><span class="ss">&quot;,</span>
-<span class="ss">            &quot;</span><span class="n">id</span><span class="ss">&quot;: &quot;</span><span class="mi">35</span><span class="n">a2d47b</span><span class="o">-</span><span class="mi">8105</span><span class="o">-</span><span class="mi">4</span><span class="n">d03</span><span class="o">-</span><span class="n">becb</span><span class="o">-</span><span class="mi">7</span><span class="n">eb48f8c062e</span><span class="ss">&quot;,</span>
-<span class="ss">            &quot;</span><span class="k">key</span><span class="ss">&quot;: &quot;</span><span class="k">TRANSFORM</span><span class="ss">&quot;,</span>
-<span class="ss">            &quot;</span><span class="n">previous</span><span class="ss">&quot;: [</span>
-<span class="ss">                &quot;</span><span class="n">c8606f67</span><span class="o">-</span><span class="mi">9923</span><span class="o">-</span><span class="mi">4</span><span class="n">c84</span><span class="o">-</span><span class="n">bc41</span><span class="o">-</span><span class="mi">69</span><span class="n">efacb0c7cb</span><span class="ss">&quot;</span>
-<span class="ss">            ],</span>
-<span class="ss">            &quot;</span><span class="n">status</span><span class="ss">&quot;: &quot;</span><span class="n">pending</span><span class="ss">&quot;,</span>
-<span class="ss">            &quot;</span><span class="n">task</span><span class="ss">&quot;: &quot;</span><span class="mi">35</span><span class="n">a2d47b</span><span class="o">-</span><span class="mi">8105</span><span class="o">-</span><span class="mi">4</span><span class="n">d03</span><span class="o">-</span><span class="n">becb</span><span class="o">-</span><span class="mi">7</span><span class="n">eb48f8c062e</span><span class="ss">&quot;,</span>
-<span class="ss">            &quot;</span><span class="n">updated</span><span class="ss">&quot;: &quot;</span><span class="mi">2020</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">06</span><span class="n">T13</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mi">51</span><span class="ss">&quot;</span>
-<span class="ss">        },</span>
-<span class="ss">        {</span>
-<span class="ss">            &quot;</span><span class="n">created</span><span class="ss">&quot;: &quot;</span><span class="mi">2020</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">06</span><span class="n">T13</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mi">51</span><span class="ss">&quot;,</span>
-<span class="ss">            &quot;</span><span class="n">id</span><span class="ss">&quot;: &quot;</span><span class="n">e5a8eb49</span><span class="o">-</span><span class="mi">0</span><span class="n">a8c</span><span class="o">-</span><span class="mi">4063</span><span class="o">-</span><span class="n">ad08</span><span class="o">-</span><span class="n">a5e9e7bd49d2</span><span class="ss">&quot;,</span>
-<span class="ss">            &quot;</span><span class="k">key</span><span class="ss">&quot;: &quot;</span><span class="k">LOAD</span><span class="ss">&quot;,</span>
-<span class="ss">            &quot;</span><span class="n">previous</span><span class="ss">&quot;: [</span>
-<span class="ss">                &quot;</span><span class="mi">35</span><span class="n">a2d47b</span><span class="o">-</span><span class="mi">8105</span><span class="o">-</span><span class="mi">4</span><span class="n">d03</span><span class="o">-</span><span class="n">becb</span><span class="o">-</span><span class="mi">7</span><span class="n">eb48f8c062e</span><span class="ss">&quot;</span>
-<span class="ss">            ],</span>
-<span class="ss">            &quot;</span><span class="n">status</span><span class="ss">&quot;: &quot;</span><span class="n">pending</span><span class="ss">&quot;,</span>
-<span class="ss">            &quot;</span><span class="n">task</span><span class="ss">&quot;: &quot;</span><span class="n">e5a8eb49</span><span class="o">-</span><span class="mi">0</span><span class="n">a8c</span><span class="o">-</span><span class="mi">4063</span><span class="o">-</span><span class="n">ad08</span><span class="o">-</span><span class="n">a5e9e7bd49d2</span><span class="ss">&quot;,</span>
-<span class="ss">            &quot;</span><span class="n">updated</span><span class="ss">&quot;: &quot;</span><span class="mi">2020</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">06</span><span class="n">T13</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mi">51</span><span class="ss">&quot;</span>
-<span class="ss">        }</span>
-<span class="ss">    ],</span>
-<span class="ss">    &quot;</span><span class="n">updated</span><span class="ss">&quot;: &quot;</span><span class="mi">2020</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">06</span><span class="n">T13</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mi">51</span><span class="err">&quot;</span>
-<span class="err">}</span>
+<span class="p">{</span>
+    <span class="s2">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-02-06T13:56:51&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fullname&quot;</span><span class="p">:</span> <span class="s2">&quot;example.ETL&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;29e7ef80-fa1b-4b91-8ccb-ef01a91601db&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ETL&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;payload&quot;</span><span class="p">:</span> <span class="p">{},</span>
+    <span class="s2">&quot;periodic&quot;</span><span class="p">:</span> <span class="bp">false</span><span class="p">,</span>
+    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="s2">&quot;example&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;pending&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;tasks&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-02-06T13:56:51&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;c8606f67-9923-4c84-bc41-69efacb0c7cb&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;EXTRACT&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;previous&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;pending&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="s2">&quot;c8606f67-9923-4c84-bc41-69efacb0c7cb&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;updated&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-02-06T13:56:51</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-02-06T13:56:51&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;35a2d47b-8105-4d03-becb-7eb48f8c062e&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;TRANSFORM&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;previous&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;c8606f67-9923-4c84-bc41-69efacb0c7cb&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;pending&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="s2">&quot;35a2d47b-8105-4d03-becb-7eb48f8c062e&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;updated&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-02-06T13:56:51&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-02-06T13:56:51&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;e5a8eb49-0a8c-4063-ad08-a5e9e7bd49d2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;LOAD&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;previous&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;35a2d47b-8105-4d03-becb-7eb48f8c062e&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;pending&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="s2">&quot;e5a8eb49-0a8c-4063-ad08-a5e9e7bd49d2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;updated&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-02-06T13:56:51&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;updated&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-02-06T13:56:51&quot;</span>
+<span class="p">}</span>
 </code></pre></div>
-
 
 <h2 id="post-apiworkflows"><strong>POST</strong> <code>/api/workflows</code></h2>
 <p>Execute a new workflow.</p>
@@ -575,29 +571,27 @@
 <span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
 
 {
-  &quot;project&quot;: &quot;ovh&quot;,
-  &quot;name&quot;: &quot;SIMPLE_ETL&quot;,
+  &quot;project&quot;: &quot;example&quot;,
+  &quot;name&quot;: &quot;ETL&quot;,
   &quot;paylod&quot;: {}
 }
 </code></pre></div>
 
-
 <p><strong>Example response:</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="n">HTTP</span><span class="o">/</span><span class="mi">1</span><span class="p">.</span><span class="mi">1</span> <span class="mi">201</span> <span class="n">CREATED</span>
+<div class="codehilite"><pre><span></span><code><span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">201</span> <span class="n">CREATED</span>
 
-<span class="err">{</span>
-    <span class="ss">&quot;created&quot;</span><span class="p">:</span> <span class="ss">&quot;2020-02-06T14:01:02&quot;</span><span class="p">,</span>
-    <span class="ss">&quot;fullname&quot;</span><span class="p">:</span> <span class="ss">&quot;ovh.SIMPLE_ETL&quot;</span><span class="p">,</span>
-    <span class="ss">&quot;id&quot;</span><span class="p">:</span> <span class="ss">&quot;43e70707-b661-42e1-a7df-5b98851ae340&quot;</span><span class="p">,</span>
-    <span class="ss">&quot;name&quot;</span><span class="p">:</span> <span class="ss">&quot;SIMPLE_ETL&quot;</span><span class="p">,</span>
-    <span class="ss">&quot;payload&quot;</span><span class="p">:</span> <span class="err">{}</span><span class="p">,</span>
-    <span class="ss">&quot;periodic&quot;</span><span class="p">:</span> <span class="k">false</span><span class="p">,</span>
-    <span class="ss">&quot;project&quot;</span><span class="p">:</span> <span class="ss">&quot;ovh&quot;</span><span class="p">,</span>
-    <span class="ss">&quot;status&quot;</span><span class="p">:</span> <span class="ss">&quot;pending&quot;</span><span class="p">,</span>
-    <span class="ss">&quot;updated&quot;</span><span class="p">:</span> <span class="ss">&quot;2020-02-06T14:01:02&quot;</span>
-<span class="err">}</span>
+<span class="p">{</span>
+    <span class="s2">&quot;created&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-02-06T14:01:02&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fullname&quot;</span><span class="p">:</span> <span class="s2">&quot;example.ETL&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;43e70707-b661-42e1-a7df-5b98851ae340&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ETL&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;payload&quot;</span><span class="p">:</span> <span class="p">{},</span>
+    <span class="s2">&quot;periodic&quot;</span><span class="p">:</span> <span class="bp">false</span><span class="p">,</span>
+    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="s2">&quot;example&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;pending&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;updated&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-02-06T14:01:02&quot;</span>
+<span class="p">}</span>
 </code></pre></div>
-
 
 <h2 id="get-apiping"><strong>GET</strong> <code>/api/ping</code></h2>
 <p>Health endpoint used to monitor Director API.</p>
@@ -606,7 +600,6 @@
 <span class="na">Host</span><span class="o">:</span> <span class="l">example.com</span>
 <span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
 </code></pre></div>
-
 
 <p><strong>Example response:</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="n">HTTP</span><span class="o">/</span><span class="mi">1</span><span class="p">.</span><span class="mi">1</span> <span class="mi">200</span> <span class="n">OK</span>

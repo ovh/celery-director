@@ -392,12 +392,11 @@
                 <h1 id="error-tracking">Error Tracking</h1>
 <p>Director can send errors to <a href="https://docs.sentry.io/">Sentry</a>.</p>
 <p>You can enable this feature by adding your <code>SENTRY_DSN</code> value in the <code>DIRECTOR_SENTRY_DSN</code> variable of the <code>.env</code> file :</p>
-<div class="codehilite"><pre><span></span><code><span class="nv">DIRECTOR_SENTRY_DSN</span><span class="o">=</span><span class="s2">&quot;https://xyz@sentry.example.com/0&quot;</span>
+<div class="bash codehilite"><pre><span></span><code><span class="nv">DIRECTOR_SENTRY_DSN</span><span class="o">=</span><span class="s2">&quot;https://xyz@sentry.example.com/0&quot;</span>
 </code></pre></div>
 
-
 <p>Let's imagine the following workflow :</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># workflows.yml</span>
+<div class="yaml codehilite"><pre><span></span><code><span class="c1"># workflows.yml</span>
 <span class="nn">---</span>
 <span class="nt">demo.SENTRY_ALERT</span><span class="p">:</span>
   <span class="nt">tasks</span><span class="p">:</span>
@@ -405,9 +404,8 @@
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ERROR_TASK</span>
 </code></pre></div>
 
-
 <p>With the associated tasks :</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># tasks/example.py</span>
+<div class="python codehilite"><pre><span></span><code><span class="c1"># tasks/example.py</span>
 <span class="kn">from</span> <span class="nn">director</span> <span class="kn">import</span> <span class="n">task</span>
 
 <span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;WORKING_TASK&quot;</span><span class="p">)</span>
@@ -418,7 +416,6 @@
 <span class="k">def</span> <span class="nf">error_task</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">)</span>
 </code></pre></div>
-
 
 <p>When a Celery worker will execute this code, an issue will be created in Sentry with the <code>ZeroDivisionError</code> :</p>
 <p><img alt="Sentry issue" src="../../img/sentry_issue.png" /></p>
