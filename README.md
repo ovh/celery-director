@@ -33,13 +33,61 @@ Install the latest version of Director with pip (requires `Python 3.6` at least)
 pip install celery-director
 ```
 
-## Commands
+## Usage
 
-* `director init [path]` - Create a new project.
-* `director celery [worker|beat|flower]` - Start Celery daemons.
-* `director webserver` - Start the webserver.
-* `director workflow [list|show|run]` - Manage your project workflows.
+### Write your code in Python
 
+```python
+# tasks/orders.py
+from director import task
+from .utils import Order, Mail
+
+@task(name="ORDER_PRODUCT")
+def order_product(*args, **kwargs):
+    order = Order(
+      user=kwargs["payload"]["user"],
+      product=kwargs["payload"]["product"]
+    ).save()
+    return {"id": order.id}
+
+@task(name="SEND_MAIL")
+def send_mail(*args, **kwargs):
+    order_id = args[0]["id"]
+    mail = Mail(
+      title=f"Your order #{order_id} has been received",
+      user=kwargs["payload"]["user"]
+    )
+    mail.send()
+```
+
+### Build your workflows in YAML
+
+```yaml
+# workflows.yml
+product.ORDER:
+  tasks:
+    - ORDER_PRODUCT
+    - SEND_MAIL
+```
+
+### Run it
+
+You can simply test your workflow in local :
+
+```bash
+$ director workflow run product.ORDER '{"user": 1234, "product": 1000}'
+```
+
+And run it in production using the director API :
+
+```bash
+$ curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"project": "product", "name": "ORDER", "payload": {"user": 1234, "product": 1000}}' \
+  http://localhost:8000/api/workflows
+```
+
+Read the [documentation](https://ovh.github.io/celery-director/) to try the quickstart and see advanced usages of Celery Director.
 
 ## Project layout
 
@@ -49,6 +97,12 @@ pip install celery-director
         example.py      # A file containing some tasks.
         ...             # Other files containing other tasks.
 
+## Commands
+
+* `director init [path]` - Create a new project.
+* `director celery [worker|beat|flower]` - Start Celery daemons.
+* `director webserver` - Start the webserver.
+* `director workflow [list|show|run]` - Manage your project workflows.
 
 ## License
 
