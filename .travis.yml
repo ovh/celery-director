@@ -1,8 +1,13 @@
 dist: bionic
 language: python
+
 env:
   global:
     - DIRECTOR_HOME=${TRAVIS_BUILD_DIR}/tests/workflows/
+  jobs:
+    - DB=sqlite DIRECTOR_DATABASE_URI=sqlite:////tmp/tests.db
+    - DB=postgres DIRECTOR_DATABASE_URI=postgresql://localhost:5432/tests
+
 python:
   - "3.6"
   - "3.7"
@@ -10,6 +15,7 @@ python:
 
 services:
   - redis-server
+  - postgresql
 
 before_install:
   - pip install black==20.8b1
@@ -23,6 +29,8 @@ install:
 before_script:
   - black --check director
   - (cd docs && mkdocs build)
+  - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'DROP DATABASE IF EXISTS tests;' -U postgres; fi"
+  - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'CREATE DATABASE tests;' -U postgres; fi"
 
 script:
   - director celery worker -P solo -D
