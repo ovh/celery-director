@@ -480,7 +480,7 @@
 <p>Most of the time your workflow and their tasks will not be <em>static</em> but will
 depend on some payload to work.</p>
 <p>For example you can have the following workflow :</p>
-<div class="yaml codehilite"><pre><span></span><code><span class="nt">product.ORDER</span><span class="p">:</span>
+<div class="codehilite"><pre><span></span><code><span class="nt">product.ORDER</span><span class="p">:</span>
   <span class="nt">tasks</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ORDER_PRODUCT</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SEND_MAIL</span>
@@ -506,7 +506,7 @@ for example). This is possible in Director using the <strong>payload</strong> fi
 
 <h2 id="handle-payload">Handle payload</h2>
 <p>You can handle the payload in the code using the <strong>kwargs</strong> dictionnary :</p>
-<div class="python codehilite"><pre><span></span><code><span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ORDER_PRODUCT&quot;</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><code><span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ORDER_PRODUCT&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">order_product</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">order</span> <span class="o">=</span> <span class="n">Order</span><span class="p">(</span>
       <span class="n">user</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">][</span><span class="s2">&quot;user&quot;</span><span class="p">],</span>
@@ -543,7 +543,7 @@ the folder if it doesn't exist yet):</p>
 </code></pre></div>
 
 <p>Then you can reference it in your workflow using the <code>schema</code> keyword :</p>
-<div class="yaml codehilite"><pre><span></span><code><span class="nt">product.ORDER</span><span class="p">:</span>
+<div class="codehilite"><pre><span></span><code><span class="nt">product.ORDER</span><span class="p">:</span>
   <span class="nt">tasks</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ORDER_PRODUCT</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SEND_MAIL</span>
@@ -556,7 +556,7 @@ the folder if it doesn't exist yet):</p>
 and reference it in your YAML file with : <code>schema: foo/bar/baz</code>.</p>
 </div>
 <p>From now the execution will be blocked if the payload is not valid :</p>
-<div class="text codehilite"><pre><span></span><code>$ director workflow run product.ORDER &#39;{&quot;user&quot;: &quot;john&quot;, &quot;product&quot;: 1000}&#39;
+<div class="codehilite"><pre><span></span><code>$ director workflow run product.ORDER &#39;{&quot;user&quot;: &quot;john&quot;, &quot;product&quot;: 1000}&#39;
 Error: Payload is not valid
 - &#39;john&#39; is not of type &#39;integer&#39;
 Aborted!
@@ -566,7 +566,7 @@ Aborted!
 <h2 id="periodic-workflows">Periodic workflows</h2>
 <p>Celery Director provides a YAML syntax to <a href="../build-workflows/#periodic-workflows">periodically schedule a workflow</a>.
 If your workflow needs a payload to work, you can send it default values :</p>
-<div class="yaml codehilite"><pre><span></span><code><span class="nt">users.UPDATE_CACHE</span><span class="p">:</span>
+<div class="codehilite"><pre><span></span><code><span class="nt">users.UPDATE_CACHE</span><span class="p">:</span>
   <span class="nt">tasks</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">UPDATE_CACHE</span>
   <span class="nt">periodic</span><span class="p">:</span>
@@ -575,7 +575,7 @@ If your workflow needs a payload to work, you can send it default values :</p>
 </code></pre></div>
 
 <p>The corresponding task can easily handle this default value :</p>
-<div class="python codehilite"><pre><span></span><code><span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;UPDATE_CACHE&quot;</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><code><span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;UPDATE_CACHE&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">update_cache</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">][</span><span class="s2">&quot;user&quot;</span><span class="p">]</span>
 

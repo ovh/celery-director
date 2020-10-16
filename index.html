@@ -265,15 +265,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    Commands
+  <a href="#usage" class="md-nav__link">
+    Usage
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#write-your-code-in-python" class="md-nav__link">
+    Write your code in Python
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-your-workflows-in-yaml" class="md-nav__link">
+    Build your workflows in YAML
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-it" class="md-nav__link">
+    Run it
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#project-layout" class="md-nav__link">
     Project layout
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    Commands
   </a>
   
 </li>
@@ -444,15 +478,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    Commands
+  <a href="#usage" class="md-nav__link">
+    Usage
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#write-your-code-in-python" class="md-nav__link">
+    Write your code in Python
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-your-workflows-in-yaml" class="md-nav__link">
+    Build your workflows in YAML
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-it" class="md-nav__link">
+    Run it
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#project-layout" class="md-nav__link">
     Project layout
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    Commands
   </a>
   
 </li>
@@ -497,7 +565,59 @@ the <strong>task exception retrying</strong> or even the <strong>queue routing</
 </div>
 <h2 id="installation">Installation</h2>
 <p>Install the latest version of Director with pip (requires <code>Python 3.6</code> at least):</p>
-<div class="bash codehilite"><pre><span></span><code>pip install celery-director
+<div class="codehilite"><pre><span></span><code>pip install celery-director
+</code></pre></div>
+
+<h2 id="usage">Usage</h2>
+<h3 id="write-your-code-in-python">Write your code in Python</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># tasks/orders.py</span>
+<span class="kn">from</span> <span class="nn">director</span> <span class="kn">import</span> <span class="n">task</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">Order</span><span class="p">,</span> <span class="n">Mail</span>
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ORDER_PRODUCT&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">order_product</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">Order</span><span class="p">(</span>
+      <span class="n">user</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">][</span><span class="s2">&quot;user&quot;</span><span class="p">],</span>
+      <span class="n">product</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">][</span><span class="s2">&quot;product&quot;</span><span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">order</span><span class="o">.</span><span class="n">id</span><span class="p">}</span>
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;SEND_MAIL&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">send_mail</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">order_id</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+    <span class="n">mail</span> <span class="o">=</span> <span class="n">Mail</span><span class="p">(</span>
+      <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Your order #</span><span class="si">{</span><span class="n">order_id</span><span class="si">}</span><span class="s2"> has been received&quot;</span><span class="p">,</span>
+      <span class="n">user</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">][</span><span class="s2">&quot;user&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">mail</span><span class="o">.</span><span class="n">send</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="build-your-workflows-in-yaml">Build your workflows in YAML</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># workflows.yml</span>
+<span class="nt">product.ORDER</span><span class="p">:</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ORDER_PRODUCT</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SEND_MAIL</span>
+</code></pre></div>
+
+<h3 id="run-it">Run it</h3>
+<p>You can simply test your workflow in local :</p>
+<div class="codehilite"><pre><span></span><code>$ director workflow run product.ORDER <span class="s1">&#39;{&quot;user&quot;: 1234, &quot;product&quot;: 1000}&#39;</span>
+</code></pre></div>
+
+<p>And run it in production using the director API :</p>
+<div class="codehilite"><pre><span></span><code>$ curl --header <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+  --request POST <span class="se">\</span>
+  --data <span class="s1">&#39;{&quot;project&quot;: &quot;product&quot;, &quot;name&quot;: &quot;ORDER&quot;, &quot;payload&quot;: {&quot;user&quot;: 1234, &quot;product&quot;: 1000}}&#39;</span> <span class="se">\</span>
+  http://localhost:8000/api/workflows
+</code></pre></div>
+
+<h2 id="project-layout">Project layout</h2>
+<div class="codehilite"><pre><span></span><code><span class="na">.env</span>                <span class="c1"># The configuration file.</span>
+<span class="nf">workflows.yml</span>       <span class="c1"># The workflows definition.</span>
+<span class="nf">tasks</span><span class="err">/</span>
+    <span class="nf">example.py</span>      <span class="c1"># A file containing some tasks.</span>
+    <span class="na">...</span>             <span class="c1"># Other files containing other tasks.</span>
 </code></pre></div>
 
 <h2 id="commands">Commands</h2>
@@ -507,13 +627,6 @@ the <strong>task exception retrying</strong> or even the <strong>queue routing</
 <li><code>director webserver</code> - Start the webserver.</li>
 <li><code>director workflow [list|show|run]</code> - Manage your project workflows.</li>
 </ul>
-<h2 id="project-layout">Project layout</h2>
-<div class="codehilite"><pre><span></span><code><span class="na">.env</span>                <span class="c1"># The configuration file.</span>
-<span class="nf">workflows.yml</span>       <span class="c1"># The workflows definition.</span>
-<span class="nf">tasks</span><span class="err">/</span>
-    <span class="nf">example.py</span>      <span class="c1"># A file containing some tasks.</span>
-    <span class="na">...</span>             <span class="c1"># Other files containing other tasks.</span>
-</code></pre></div>
                 
                   
                 

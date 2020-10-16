@@ -494,7 +494,7 @@
 simplify the initialization of a Celery project by removing all the long an boring
 <em>boilerplate</em> steps (application creation, broker configuration...).</p>
 <p>So the first thing to do is to generate a project using the <code>director init</code> command :</p>
-<div class="text codehilite"><pre><span></span><code>$ director init workflows
+<div class="codehilite"><pre><span></span><code>$ director init workflows
 [*] Project created in /home/director/workflows
 [*] Do not forget to initialize the database
 You can now export the DIRECTOR_HOME environment variable
@@ -516,7 +516,7 @@ set your <code>DIRECTOR_HOME</code> environment variable :</p>
 </code></pre></div>
 
 <p>The Python files in the <code>tasks</code> folder will contain your Celery tasks :</p>
-<div class="python codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">director</span> <span class="kn">import</span> <span class="n">task</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">director</span> <span class="kn">import</span> <span class="n">task</span>
 
 
 <span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;EXTRACT&quot;</span><span class="p">)</span>
@@ -525,7 +525,7 @@ set your <code>DIRECTOR_HOME</code> environment variable :</p>
 </code></pre></div>
 
 <p>While the <code>workflows.yml</code> file will be used to combine them into workflows :</p>
-<div class="yaml codehilite"><pre><span></span><code><span class="nt">example.ETL</span><span class="p">:</span>
+<div class="codehilite"><pre><span></span><code><span class="nt">example.ETL</span><span class="p">:</span>
   <span class="nt">tasks</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">EXTRACT</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TRANSFORM</span>
@@ -537,7 +537,7 @@ set your <code>DIRECTOR_HOME</code> environment variable :</p>
 between your tasks.</p>
 <p>Adjust the <code>DIRECTOR_DATABASE_URI</code> variable in the <code>.env</code> file and generate the database :</p>
 <p>Possible values for the <code>DIRECTOR_DATABASE_URI</code> variable:</p>
-<div class="shell codehilite"><pre><span></span><code><span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;postgresql://user:password@hostname:port/database&quot;</span>           <span class="c1"># Using PostgreSQL</span>
+<div class="codehilite"><pre><span></span><code><span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;postgresql://user:password@hostname:port/database&quot;</span>           <span class="c1"># Using PostgreSQL</span>
 <span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;mysql+mysqlconnector://user:password@hostname:port/database&quot;</span> <span class="c1"># Using MySQL</span>
 <span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;sqlite:////path/to/your/database.db&quot;</span>                         <span class="c1"># Using SQLite</span>
 </code></pre></div>
