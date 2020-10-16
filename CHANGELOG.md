@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.2 - 2020-10-16
+### Fixed
+- Add type deletion during downgrade
+- Fix mysql string column length (database upgrade required: `director db upgrade`)
+
+### Added
+- Add an example about a group of tasks
+- Add index on workflow_id field in tasks table
+
+### Changed
+- Rename default workflow to example.ETL
+
+
 ## 0.2.1 - 2020-08-20
 ### Fixed
 - Fix issue with icons when using the `DIRECTOR_ENABLE_CDN=false` and  `director dlassets` command
