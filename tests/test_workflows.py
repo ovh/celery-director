@@ -2,8 +2,11 @@ import time
 
 import pytest
 from celery.result import GroupResult
+from celery.schedules import crontab
 from kombu.exceptions import EncodeError
 
+from director import build_celery_schedule
+from director.exceptions import WorkflowSyntaxError
 from director.models.tasks import Task
 from director.models.workflows import Workflow
 
@@ -321,3 +324,29 @@ def test_return_exception(app, create_builder):
         "Traceback (most recent call last)"
     )
     assert "ZeroDivisionError: division by zero" in tasks["TASK_ERROR"]["traceback"]
+
+
+def test_build_celery_float_schedule():
+    float_schedule = 30.0
+    assert float_schedule == build_celery_schedule(
+        "workflow_int_schedule", float_schedule
+    )
+
+
+def test_build_celery_crontab_schedule():
+    cron_schedule = "2 * * * *"
+    assert crontab(
+        minute="2", hour="*", day_of_week="*", day_of_month="*", month_of_year="*"
+    ) == build_celery_schedule("workflow_cron_schedule1", cron_schedule)
+
+    cron_schedule = "* * */15 * *"
+    assert crontab(
+        minute="*", hour="*", day_of_week="*/15", day_of_month="*", month_of_year="*"
+    ) == build_celery_schedule("workflow_cron_schedule1", cron_schedule)
+
+
+def test_workflow_invalid_cron():
+    cron_schedule = "2 * * *"
+
+    with pytest.raises(WorkflowSyntaxError):
+        build_celery_schedule("workflow_cron_invalid_cron", cron_schedule)
