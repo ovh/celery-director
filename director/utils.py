@@ -1,5 +1,8 @@
 from flask_json_schema import JsonValidationError
 from jsonschema.validators import validator_for
+from celery.schedules import crontab
+
+from director.exceptions import WorkflowSyntaxError
 
 
 def validate(payload, schema):
@@ -17,3 +20,24 @@ def format_schema_errors(e):
         "error": e.message,
         "errors": [validation_err.message for validation_err in e.errors],
     }
+
+
+def build_celery_schedule(workflow_name, data):
+    """ A celery schedule can accept seconds or crontab """
+    try:
+        schedule = float(data)
+    except ValueError:
+        try:
+            m, h, dw, dm, my = data.split(" ")
+
+            schedule = crontab(
+                minute=m,
+                hour=h,
+                day_of_week=dw,
+                day_of_month=dm,
+                month_of_year=my,
+            )
+        except Exception as e:
+            raise WorkflowSyntaxError(workflow_name)
+
+    return schedule

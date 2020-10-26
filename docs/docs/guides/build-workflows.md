@@ -75,7 +75,9 @@ is to keep unique names in case of multiple groups in your workflow.
 Celery provides a scheduler used to periodically execute some tasks. This scheduler is named
 the [Celery beat](https://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html).
 
-Director allows you to periodically schedule a whole workflow using a simple YAML syntax :
+Director allows you to periodically schedule a whole workflow using a simple YAML syntax.
+
+First example:
 
 ```yaml
 example.CHAIN:
@@ -87,8 +89,22 @@ example.CHAIN:
     schedule: 60
 ```
 
-The `periodic > schedule` key takes an integer argument (unity is the second). So in this example
-the *example.CHAIN* worflow will be executed **every 60 seconds**.
+Second example:
+
+```yaml
+example.CHAIN_CRONTAB:
+  tasks:
+    - A
+    - B
+    - C
+  periodic:
+    schedule: "* */3 * * *"
+```
+
+The `periodic > schedule` key takes an integer (unity is the second) or a string argument
+([crontab](https://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html#crontab-schedules)
+syntax). So in the first example, the *example.CHAIN* worflow will be executed **every 60 seconds**
+and the second one, *example.CHAIN_CRONTAB*, **every three hours**.
 
 Please note that the scheduler must be started to handle periodic workflows :
 
