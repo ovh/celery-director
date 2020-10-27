@@ -232,6 +232,7 @@ new Vue({
     },
   }),
   data: () => ({
+    interval: null,
     tab: null,
     payloadDialog: false,
     relaunchDialog: false,
@@ -279,9 +280,18 @@ new Vue({
   created() {
     this.$store.dispatch('listWorkflows');
 
+    this.interval = setInterval(
+      () =>{
+        this.$store.dispatch('listWorkflows');
+      },
+      REFRESH_INTERVAL);
+    
     let workflowID = this.$route.params.id;
     if (workflowID) {
       this.$store.dispatch('getWorkflow', workflowID);
     }
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
   }
 });
