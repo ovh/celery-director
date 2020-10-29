@@ -22,6 +22,15 @@ def director_prerun(task_id, task, *args, **kwargs):
         task.save()
 
 
+@task_postrun.connect
+def close_session(*args, **kwargs):
+    # Flask SQLAlchemy will automatically create new sessions for you from
+    # a scoped session factory, given that we are maintaining the same app
+    # context, this ensures tasks have a fresh session (e.g. session errors
+    # won't propagate across tasks)
+    db.session.remove()
+
+
 class BaseTask(_Task):
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         task = Task.query.filter_by(id=task_id).first()
