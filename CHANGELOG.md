@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 - 2020-11-18
+### Fixed
+- Roll back the session when an unhandled exception occurred during the request
+
+### Added
+- Add the support of celery crontab scheduler
+- Add auto refresh workflows list in director home page
+
+
 ## 0.2.2 - 2020-10-16
 ### Fixed
 - Add type deletion during downgrade
