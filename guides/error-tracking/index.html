@@ -395,6 +395,7 @@
 <div class="codehilite"><pre><span></span><code><span class="nv">DIRECTOR_SENTRY_DSN</span><span class="o">=</span><span class="s2">&quot;https://xyz@sentry.example.com/0&quot;</span>
 </code></pre></div>
 
+
 <p>Let's imagine the following workflow :</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># workflows.yml</span>
 <span class="nn">---</span>
@@ -403,6 +404,7 @@
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">WORKING_TASK</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ERROR_TASK</span>
 </code></pre></div>
+
 
 <p>With the associated tasks :</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># tasks/example.py</span>
@@ -416,6 +418,7 @@
 <span class="k">def</span> <span class="nf">error_task</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">)</span>
 </code></pre></div>
+
 
 <p>When a Celery worker will execute this code, an issue will be created in Sentry with the <code>ZeroDivisionError</code> :</p>
 <p><img alt="Sentry issue" src="../../img/sentry_issue.png" /></p>

@@ -568,6 +568,7 @@ the <strong>task exception retrying</strong> or even the <strong>queue routing</
 <div class="codehilite"><pre><span></span><code>pip install celery-director
 </code></pre></div>
 
+
 <h2 id="usage">Usage</h2>
 <h3 id="write-your-code-in-python">Write your code in Python</h3>
 <div class="codehilite"><pre><span></span><code><span class="c1"># tasks/orders.py</span>
@@ -592,6 +593,7 @@ the <strong>task exception retrying</strong> or even the <strong>queue routing</
     <span class="n">mail</span><span class="o">.</span><span class="n">send</span><span class="p">()</span>
 </code></pre></div>
 
+
 <h3 id="build-your-workflows-in-yaml">Build your workflows in YAML</h3>
 <div class="codehilite"><pre><span></span><code><span class="c1"># workflows.yml</span>
 <span class="nt">product.ORDER</span><span class="p">:</span>
@@ -600,10 +602,12 @@ the <strong>task exception retrying</strong> or even the <strong>queue routing</
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SEND_MAIL</span>
 </code></pre></div>
 
+
 <h3 id="run-it">Run it</h3>
 <p>You can simply test your workflow in local :</p>
 <div class="codehilite"><pre><span></span><code>$ director workflow run product.ORDER <span class="s1">&#39;{&quot;user&quot;: 1234, &quot;product&quot;: 1000}&#39;</span>
 </code></pre></div>
+
 
 <p>And run it in production using the director API :</p>
 <div class="codehilite"><pre><span></span><code>$ curl --header <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
@@ -612,6 +616,7 @@ the <strong>task exception retrying</strong> or even the <strong>queue routing</
   http://localhost:8000/api/workflows
 </code></pre></div>
 
+
 <h2 id="project-layout">Project layout</h2>
 <div class="codehilite"><pre><span></span><code><span class="na">.env</span>                <span class="c1"># The configuration file.</span>
 <span class="nf">workflows.yml</span>       <span class="c1"># The workflows definition.</span>
@@ -619,6 +624,7 @@ the <strong>task exception retrying</strong> or even the <strong>queue routing</
     <span class="nf">example.py</span>      <span class="c1"># A file containing some tasks.</span>
     <span class="na">...</span>             <span class="c1"># Other files containing other tasks.</span>
 </code></pre></div>
+
 
 <h2 id="commands">Commands</h2>
 <ul>

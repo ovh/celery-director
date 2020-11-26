@@ -493,6 +493,7 @@ using the <code>director.task</code> decorator :</p>
     <span class="k">pass</span>
 </code></pre></div>
 
+
 <div class="admonition warning task naming">
 <p class="admonition-title">Warning</p>
 <p>The <code>name</code> parameter in the task decorator is mandatory. Because it will be used in the YAML
@@ -530,6 +531,7 @@ parents in the <code>args</code> parameter we always use the <code>s()</code> me
     <span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 </code></pre></div>
 
+
 <p>The following workflows present different usecases and the output of the C task (see the
 <a href="../build-workflows/">Build Workflows</a> guide to understand the YAML format) :</p>
 <div class="codehilite"><pre><span></span><code><span class="nt">example.NO_PARENT</span><span class="p">:</span>
@@ -555,6 +557,7 @@ parents in the <code>args</code> parameter we always use the <code>s()</code> me
 <span class="c1"># Result : ([{&#39;result&#39;: &#39;a_data&#39;}, {&#39;result&#39;: &#39;b_data&#39;}],)</span>
 </code></pre></div>
 
+
 <h2 id="bound-tasks">Bound Tasks</h2>
 <p>Celery allows use to <a href="https://docs.celeryproject.org/en/latest/userguide/tasks.html#bound-tasks">bind a task</a>,
 providing the task instance itself as the first parameter.</p>
@@ -566,6 +569,7 @@ providing the task instance itself as the first parameter.</p>
 <span class="k">def</span> <span class="nf">bound_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 </code></pre></div>
+
 
 <h2 id="celery-task-options">Celery Task Options</h2>
 <p>The <code>task()</code> decorator provided by Director is just a wrapper of the native <code>app.task()</code> decorator
