@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1 - 2020-12-08
+### Changed
+- Upgrade Celery and Kombu packages for bug fixes (celery 4.4.0 to 4.4.7, kombu 4.6.7 to 4.6.11)
+
 ## 0.3.0 - 2020-11-18
 ### Fixed
 - Roll back the session when an unhandled exception occurred during the request
