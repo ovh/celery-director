@@ -115,7 +115,7 @@ Accept: application/json
 {
   "project": "example",
   "name": "ETL",
-  "paylod": {}
+  "payload": {}
 }
 ```
 
