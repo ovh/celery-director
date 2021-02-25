@@ -218,8 +218,10 @@ def test_get_workflow(client, no_worker):
     assert resp.status_code == 200
     assert len(resp.json["tasks"]) == 1
 
-    del resp.json["tasks"][0]["task"]
-    assert resp.json == {
+    resp_json_copy = resp.json.copy()
+    del resp_json_copy["tasks"][0]["task"]
+
+    assert resp_json_copy == {
         "fullname": "example.WORKFLOW",
         "name": "WORKFLOW",
         "payload": {},
