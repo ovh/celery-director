@@ -101,8 +101,7 @@ def test_relaunch_workflow(client, no_worker):
     # workflows are the same
     resp = client.get("/api/workflows")
     assert len(resp.json) == 2
-    del resp.json[0]["status"]
-    del resp.json[1]["status"]
+
     assert resp.json[0] == resp.json[1]
 
     # tasks are the same
@@ -124,14 +123,12 @@ def test_not_found_workflows(client, no_worker):
     resp = client.post("/api/workflows", json=DEFAULT_PAYLOAD)
     assert resp.status_code == 201
 
-    payload = {**DEFAULT_PAYLOAD}
-    payload["name"] = "NOT_FOUND"
+    payload = {**DEFAULT_PAYLOAD, "name": "NOT_FOUND"}
     resp = client.post("/api/workflows", json=payload)
     assert resp.status_code == 404
     assert resp.json == {"error": "Workflow example.NOT_FOUND not found"}
 
-    payload = {**DEFAULT_PAYLOAD}
-    payload["project"] = "NOT_FOUND"
+    payload = {**DEFAULT_PAYLOAD, "project": "NOT_FOUND"}
     resp = client.post("/api/workflows", json=payload)
     assert resp.status_code == 404
     assert resp.json == {"error": "Workflow NOT_FOUND.WORKFLOW not found"}
@@ -241,8 +238,7 @@ def test_get_workflow(client, no_worker):
 
 @patch("tests.conftest.DirectorResponse._KEYS_TO_REMOVE", new=[])
 def test_get_workflow_simple_chain(client, no_worker):
-    payload = {**DEFAULT_PAYLOAD}
-    payload["name"] = "SIMPLE_CHAIN"
+    payload = {**DEFAULT_PAYLOAD, "name": "SIMPLE_CHAIN"}
     workflow_id = client.post("/api/workflows", json=payload).json["id"]
 
     resp = client.get(f"/api/workflows/{workflow_id}")
