@@ -33,6 +33,6 @@ before_script:
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'CREATE DATABASE tests;' -U postgres; fi"
 
 script:
-  - director celery worker -P solo -D
+  - director celery worker -P solo > /dev/null 2>&1 &
   - sleep 5
   - pytest tests/ -v
