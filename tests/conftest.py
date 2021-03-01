@@ -91,16 +91,6 @@ def no_worker(monkeypatch):
     monkeypatch.setattr(_chain, "apply_async", lambda x: None)
 
 
-@pytest.fixture(autouse=True)
-def skip_no_worker(app, request):
-    """Skip a test if a Celery worker is not running"""
-    if request.node.get_closest_marker("skip_no_worker"):
-        with app.app_context():
-            inspect = cel.control.inspect()
-            if not inspect.ping():
-                pytest.skip("Celery worker not running")
-
-
 @pytest.fixture(scope="function")
 def create_builder(app):
     def _create_builder(project, name, payload, periodic=False, keys=KEYS_TO_REMOVE):

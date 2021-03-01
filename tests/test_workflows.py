@@ -13,7 +13,6 @@ from director.models.workflows import Workflow
 KEYS = ["id", "created", "updated", "task"]
 
 
-@pytest.mark.skip_no_worker()
 def test_execute_one_task_success(app, create_builder):
     workflow, builder = create_builder("example", "WORKFLOW", {})
     assert workflow["status"] == "pending"
@@ -47,7 +46,6 @@ def test_execute_one_task_success(app, create_builder):
     assert task.status.value == "success"
 
 
-@pytest.mark.skip_no_worker()
 def test_execute_one_task_error(app, create_builder):
     workflow, builder = create_builder("example", "ERROR", {})
     assert workflow["status"] == "pending"
@@ -79,7 +77,6 @@ def test_execute_one_task_error(app, create_builder):
     assert task.status.value == "error"
 
 
-@pytest.mark.skip_no_worker()
 def test_execute_chain_success(app, create_builder):
     workflow, builder = create_builder("example", "SIMPLE_CHAIN", {})
     assert workflow["status"] == "pending"
@@ -121,7 +118,6 @@ def test_execute_chain_success(app, create_builder):
         assert task.status.value == "success"
 
 
-@pytest.mark.skip_no_worker()
 def test_execute_chain_error(app, create_builder):
     workflow, builder = create_builder("example", "SIMPLE_CHAIN_ERROR", {})
     assert workflow["status"] == "pending"
@@ -159,7 +155,6 @@ def test_execute_chain_error(app, create_builder):
     assert workflow.status.value == "error"
 
 
-@pytest.mark.skip_no_worker()
 def test_execute_group_success(app, create_builder):
     workflow, builder = create_builder("example", "SIMPLE_GROUP", {})
     assert workflow["status"] == "pending"
@@ -203,7 +198,6 @@ def test_execute_group_success(app, create_builder):
         assert task.status.value == "success"
 
 
-@pytest.mark.skip_no_worker()
 def test_execute_group_error(app, create_builder):
     workflow, builder = create_builder("example", "SIMPLE_GROUP_ERROR", {})
     assert workflow["status"] == "pending"
@@ -284,7 +278,6 @@ def test_execute_celery_error_multiple_tasks(app, create_builder):
     assert workflow.status.value == "error"
 
 
-@pytest.mark.skip_no_worker()
 def test_return_values(app, create_builder):
     workflow, builder = create_builder("example", "RETURN_VALUES", {})
     result = builder.run()
@@ -296,7 +289,7 @@ def test_return_values(app, create_builder):
     assert tasks["STR"] == "return_value"
     assert tasks["INT"] == 1234
     assert tasks["LIST"] == ["jack", "sape", "guido"]
-    assert tasks["NONE"] == None
+    assert tasks["NONE"] is None
     assert tasks["DICT"] == {"foo": "bar"}
     assert tasks["NESTED"] == {
         "jack": 4098,
@@ -308,7 +301,6 @@ def test_return_values(app, create_builder):
     }
 
 
-@pytest.mark.skip_no_worker()
 def test_return_exception(app, create_builder):
     workflow, builder = create_builder("example", "RETURN_EXCEPTION", {})
     result = builder.run()

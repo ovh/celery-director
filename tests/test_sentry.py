@@ -1,6 +1,4 @@
-from director.extensions import DirectorSentry, cel_workflows, cel
-from director.models.tasks import Task
-from director.models.workflows import Workflow
+from director.extensions import DirectorSentry, cel
 
 
 def test_sentry_enrich_data(app, create_builder):
