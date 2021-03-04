@@ -137,6 +137,38 @@ HTTP/1.1 201 CREATED
 }
 ```
 
+
+## **POST** `/api/workflows/<id>/relaunch`
+
+Relaunch a workflow with the same payload.
+
+**Example request:**
+
+```
+POST /api/workflows/29e7ef80-fa1b-4b91-8ccb-ef01a91601db/relaunch HTTP/1.1
+Host: example.com
+Accept: application/json
+```
+
+**Example response:**
+
+```
+HTTP/1.1 201 CREATED
+
+{
+    "created":"2021-03-04T12:27:11.245700+00:00",
+    "fullname": "example.ETL",
+    "id":"5afe0610-2746-413a-83d0-0099483858e6",
+    "name":"ETL",
+    "payload":{},
+    "periodic": false,
+    "project": "exemple",
+    "status": "pending",
+    "updated":"2021-03-04T12:27:11.245700+00:00"
+}
+
+```
+
 ## **GET** `/api/ping`
 
 Health endpoint used to monitor Director API.
