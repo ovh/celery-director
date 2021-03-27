@@ -28,9 +28,9 @@ def my_task(*args, **kwargs):
 ## Task signature
 
 To simplify the tasks creation, and to allow multiple workflows to reuse the same task, the
-signature is always the same : `(*args, **kwargs)`.
+signature is always the same: `(*args, **kwargs)`.
 
-The **kwargs** dictionnary can be used to [handle the payload](use-payload.md#handle-payload)
+The **kwargs** dictionary can be used to [handle the payload](use-payload.md#handle-payload)
 while **args** contains the results of the task parents (of course args is empty if your task
 is at the beginning of a workflow).
 
@@ -40,10 +40,10 @@ is at the beginning of a workflow).
     to ignore the parents results. So normally, as a developer, you have to be carefull about the
     method to use and you also have to create your tasks signatures consequently.
 
-    But Director has been created to simplify that ! As we decided to received the results of the
+    But Director has been created to simplify that! As we decided to receive the results of the
     parents in the `args` parameter we always use the `s()` method.
 
-Here is are some concrete examples based on the following tasks :
+Here is are some concrete examples based on the following tasks:
 
 ```python
 # tasks/example.py
