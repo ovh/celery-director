@@ -98,7 +98,7 @@ example.CHAIN_CRONTAB:
     - B
     - C
   periodic:
-    schedule: "* */3 * * *"
+    schedule: "0 */3 * * *"
 ```
 
 The `periodic > schedule` key takes an integer (unity is the second) or a string argument
