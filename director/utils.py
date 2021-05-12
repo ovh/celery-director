@@ -33,9 +33,9 @@ def build_celery_schedule(workflow_name, data):
             schedule = crontab(
                 minute=m,
                 hour=h,
-                day_of_week=dw,
                 day_of_month=dm,
                 month_of_year=my,
+                day_of_week=dw,
             )
         except Exception as e:
             raise WorkflowSyntaxError(workflow_name)
