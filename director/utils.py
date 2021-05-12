@@ -28,7 +28,7 @@ def build_celery_schedule(workflow_name, data):
         schedule = float(data)
     except ValueError:
         try:
-            m, h, dw, dm, my = data.split(" ")
+            m, h, dm, my, dw = data.split(" ")
 
             schedule = crontab(
                 minute=m,
