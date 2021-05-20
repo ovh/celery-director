@@ -22,14 +22,13 @@ def format_schema_errors(e):
     }
 
 
-def build_celery_schedule(workflow_name, data):
+def build_celery_schedule(workflow, data, option):
     """ A celery schedule can accept seconds or crontab """
     try:
-        schedule = float(data)
-    except ValueError:
-        try:
-            m, h, dw, dm, my = data.split(" ")
-
+        if option=="interval":
+            schedule = float(data)
+        elif option=="crontab":
+            m, h, dm, my, dw = data.split(" ")
             schedule = crontab(
                 minute=m,
                 hour=h,
@@ -37,7 +36,16 @@ def build_celery_schedule(workflow_name, data):
                 day_of_month=dm,
                 month_of_year=my,
             )
-        except Exception as e:
-            raise WorkflowSyntaxError(workflow_name)
+        elif option=="schedule":
+            m, h, dw, dm, my = data.split(" ")
+            schedule = crontab(
+                minute=m,
+                hour=h,
+                day_of_week=dw,
+                day_of_month=dm,
+                month_of_year=my,
+            )
+    except Exception as e:
+        raise WorkflowSyntaxError(workflow)
 
     return schedule

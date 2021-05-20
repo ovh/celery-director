@@ -10,6 +10,7 @@ from werkzeug.exceptions import InternalServerError, HTTPException
 
 from director.api import api_bp
 from director.extensions import cel, cel_workflows, db, schema, sentry, migrate
+from director.exceptions import WorkflowSyntaxError
 from director.settings import Config, UserConfig
 from director.tasks.base import BaseTask
 from director.views import view_bp
@@ -84,8 +85,17 @@ def create_app(
     for workflow, conf in cel_workflows.workflows.items():
         if "periodic" in conf:
             payload = conf.get("periodic").get("payload", {})
-            workflow_schedule = conf.get("periodic").get("schedule")
-            schedule = build_celery_schedule(workflow, workflow_schedule)
+            workflow_schedule = set.intersection(
+                set(conf.get("periodic").keys()),
+                {"crontab", "interval", "schedule"}
+                )
+            if len(workflow_schedule)>1:
+                raise WorkflowSyntaxError(workflow)
+            workflow_schedule_key = list(workflow_schedule)[0]
+            schedule = build_celery_schedule(
+                conf.get("periodic").get(workflow_schedule_key),
+                workflow_schedule_key
+            )
 
             cel.conf.beat_schedule.update(
                 {

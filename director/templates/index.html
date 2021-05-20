@@ -58,7 +58,7 @@
                           </td>
                           <td>{{ item.fullname }}</td>
                           <td>
-                            <v-ship>{{ item.created }}</v-ship>
+                            <v-ship>{{ item.created | formatDate }}</v-ship>
                           </td>
                         </tr>
                       </template>

@@ -321,24 +321,37 @@ def test_return_exception(app, create_builder):
 def test_build_celery_float_schedule():
     float_schedule = 30.0
     assert float_schedule == build_celery_schedule(
-        "workflow_int_schedule", float_schedule
-    )
+        "workflow_int_schedule1", float_schedule, "interval"
+        )
 
 
-def test_build_celery_crontab_schedule():
+def test_build_celery_schedule():
     cron_schedule = "2 * * * *"
     assert crontab(
         minute="2", hour="*", day_of_week="*", day_of_month="*", month_of_year="*"
-    ) == build_celery_schedule("workflow_cron_schedule1", cron_schedule)
+    ) == build_celery_schedule("workflow_cron_schedule1", cron_schedule, "schedule")
 
     cron_schedule = "* * */15 * *"
     assert crontab(
         minute="*", hour="*", day_of_week="*/15", day_of_month="*", month_of_year="*"
-    ) == build_celery_schedule("workflow_cron_schedule1", cron_schedule)
+    ) == build_celery_schedule("workflow_cron_schedule1", cron_schedule, "schedule")
+
+
+def test_build_celery_crontab_schedule():
+    cron_schedule = "2 * * * 1"
+    assert crontab(
+        minute="2", hour="*", day_of_week="1", day_of_month="*", month_of_year="*"
+    ) == build_celery_schedule("workflow_cron_schedule1", cron_schedule, "crontab")
 
 
 def test_workflow_invalid_cron():
     cron_schedule = "2 * * *"
 
     with pytest.raises(WorkflowSyntaxError):
-        build_celery_schedule("workflow_cron_invalid_cron", cron_schedule)
+        build_celery_schedule("workflow_cron_invalid_cron", cron_schedule, "crontab")
+
+
+def test_workflow_invalid_schedule():
+    cron_schedule = "2 * * * 1"
+    with pytest.raises(WorkflowSyntaxError):
+        build_celery_schedule("workflow_cron_invalid_cron", cron_schedule, "schedule")

@@ -86,7 +86,7 @@ example.CHAIN:
     - B
     - C
   periodic:
-    schedule: 60
+    interval: 60
 ```
 
 Second example:
@@ -98,13 +98,18 @@ example.CHAIN_CRONTAB:
     - B
     - C
   periodic:
-    schedule: "0 */3 * * *"
+    crontab: "0 */3 * * *"
 ```
 
-The `periodic > schedule` key takes an integer (unity is the second) or a string argument
+The `periodic > interval` key takes an integer (unity is the second) or using `periodic > crontab ` key a string argument
 ([crontab](https://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html#crontab-schedules)
 syntax). So in the first example, the *example.CHAIN* worflow will be executed **every 60 seconds**
 and the second one, *example.CHAIN_CRONTAB*, **every three hours**.
+
+
+!!! warning
+    The `periodic > schedule` key is deprecated. It is strongly advised to migrate to `interval` or `crontab` key to set up scheduler.
+
 
 Please note that the scheduler must be started to handle periodic workflows :
 
