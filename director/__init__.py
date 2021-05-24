@@ -93,6 +93,7 @@ def create_app(
                 raise WorkflowSyntaxError(workflow)
             workflow_schedule_key = list(workflow_schedule)[0]
             schedule = build_celery_schedule(
+                workflow,
                 conf.get("periodic").get(workflow_schedule_key),
                 workflow_schedule_key
             )

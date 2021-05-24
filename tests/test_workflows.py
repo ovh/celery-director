@@ -355,3 +355,9 @@ def test_workflow_invalid_schedule():
     cron_schedule = "2 * * * 1"
     with pytest.raises(WorkflowSyntaxError):
         build_celery_schedule("workflow_cron_invalid_cron", cron_schedule, "schedule")
+
+
+def test_workflow_invalid_schedule_key():
+    cron_schedule = "2 * * * 1"
+    with pytest.raises(WorkflowSyntaxError):
+        build_celery_schedule("workflow_cron_invalid_cron", cron_schedule, "non_valid_key")

@@ -45,6 +45,8 @@ def build_celery_schedule(workflow, data, option):
                 day_of_month=dm,
                 month_of_year=my,
             )
+        else:
+            raise WorkflowSyntaxError(workflow)
     except Exception as e:
         raise WorkflowSyntaxError(workflow)
 
