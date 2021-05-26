@@ -51,3 +51,14 @@ def build_celery_schedule(workflow, data, option):
         raise WorkflowSyntaxError(workflow)
 
     return schedule
+
+
+def schedule_type(workflow, keys):
+    """ Get the periodic key from workflow (interval or crontab) """
+    periodic_key = set.intersection(
+        set(keys),
+        {"crontab", "interval", "schedule"}
+        )
+    if len(periodic_key)>1:
+        raise WorkflowSyntaxError(workflow)
+    return periodic_key[0]
