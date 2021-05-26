@@ -14,7 +14,7 @@ from director.exceptions import WorkflowSyntaxError
 from director.settings import Config, UserConfig
 from director.tasks.base import BaseTask
 from director.views import view_bp
-from director.utils import build_celery_schedule, schedule_type
+from director.utils import build_celery_schedule, read_schedule
 
 with open(Path(__file__).parent.resolve() / "VERSION", encoding="utf-8") as version:
     __version__ = version.readline().rstrip()
@@ -85,7 +85,7 @@ def create_app(
     for workflow, conf in cel_workflows.workflows.items():
         if "periodic" in conf:
             payload = conf.get("periodic").get("payload", {})
-            schedule_type = schedule_type(workflow, conf.get("periodic").keys())
+            schedule_type = read_schedule(workflow, conf.get("periodic").keys())
             workflow_schedule = conf.get("periodic").get(schedule_type)
             schedule = build_celery_schedule(
                 workflow, 
