@@ -163,7 +163,7 @@ const store = new Vuex.Store({
 
 Vue.filter('formatDate', function(value) {
   if (value) {
-    return moment(String(value)).format('YYYY-MM-DD HH:mm:ss')
+    return moment.utc(String(value)).local().format('YYYY-MM-DD HH:mm:ss')
   }
 });
 
