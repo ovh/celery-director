@@ -10,7 +10,7 @@ from director.context import pass_ctx
 from director.exceptions import WorkflowNotFound
 from director.extensions import cel_workflows
 from director.models.workflows import Workflow
-from director.utils import validate, format_schema_errors
+from director.utils import validate, format_schema_errors, read_schedule
 
 
 def tasks_to_ascii(tasks):
@@ -50,7 +50,8 @@ def list_workflow(ctx):
 
     # Add a row for each workflow
     for name, conf in workflows.items():
-        periodic = conf.get("periodic", {}).get("schedule", "--")
+        periodic_k = read_schedule(name, conf.get("periodic", {}).keys())
+        periodic = conf.get("periodic", {}).get(periodic_k, "--" )
         tasks_str = tasks_to_ascii(conf["tasks"])
         data.append([name, periodic, tasks_str])
 
@@ -72,7 +73,8 @@ def show_workflow(ctx, name):
         raise click.Abort()
 
     tasks_str = tasks_to_ascii(_workflow["tasks"])
-    periodic = _workflow.get("periodic", {}).get("schedule", "--")
+    periodic_k = read_schedule(_workflow, _workflow.get("periodic", {}).keys())
+    periodic = _workflow.get("periodic", {}).get(periodic_k, "--")
     payload = _workflow.get("periodic", {}).get("payload", {})
 
     # Construct the table
