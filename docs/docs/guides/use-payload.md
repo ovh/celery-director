@@ -117,7 +117,7 @@ users.UPDATE_CACHE:
   tasks:
     - UPDATE_CACHE
   periodic:
-    schedule: 3600
+    interval: 3600
     payload: {"user": False}
 ```
 
