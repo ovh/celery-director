@@ -51,7 +51,7 @@ def build_celery_schedule(workflow, data, option):
         raise WorkflowSyntaxError(workflow)
 
     return schedule
-
+  
 
 def read_schedule(workflow, keys):
     """ Get the periodic key from workflow (interval, crontab or schedule) """
