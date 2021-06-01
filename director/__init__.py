@@ -14,7 +14,7 @@ from director.extensions import cel, cel_workflows, db, schema, sentry, migrate
 from director.settings import Config, UserConfig
 from director.tasks.base import BaseTask
 from director.views import view_bp
-from director.utils import build_celery_schedule
+from director.utils import build_celery_schedule, read_schedule
 
 
 with open(Path(__file__).parent.resolve() / "VERSION", encoding="utf-8") as version:
@@ -97,8 +97,9 @@ def create_app(
 
         if "periodic" in conf:
             payload = conf.get("periodic").get("payload", {})
-            workflow_schedule = conf.get("periodic").get("schedule")
-            schedule = build_celery_schedule(workflow, workflow_schedule)
+            schedule_type = read_schedule(workflow, conf.get("periodic").keys())
+            workflow_schedule = conf.get("periodic").get(schedule_type)
+            schedule = build_celery_schedule(workflow, workflow_schedule, schedule_type)
 
             cel.conf.beat_schedule.update(
                 {
