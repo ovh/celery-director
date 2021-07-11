@@ -1,3 +1,4 @@
+import pdb
 from flask import current_app as app
 from flask import abort, jsonify, request
 from jsonschema.exceptions import ValidationError, SchemaError
@@ -94,3 +95,9 @@ def get_workflow(workflow_id):
     resp = workflow.to_dict()
     resp.update({"tasks": tasks})
     return jsonify(resp)
+
+
+@api_bp.route("/workflows_schema")
+@auth.login_required
+def list_workflows_schema():
+    return jsonify(list(cel_workflows.workflows.keys()))

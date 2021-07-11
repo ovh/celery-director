@@ -1,12 +1,10 @@
 from celery import Task as _Task
-from celery.signals import after_task_publish, task_prerun, task_postrun
+from celery.signals import after_task_publish, task_postrun, task_prerun
 from celery.utils.log import get_task_logger
-
 from director.extensions import cel, db
 from director.models import StatusType
-from director.models.workflows import Workflow
 from director.models.tasks import Task
-
+from director.models.workflows import Workflow
 
 logger = get_task_logger(__name__)
 
@@ -14,6 +12,13 @@ logger = get_task_logger(__name__)
 @task_prerun.connect
 def director_prerun(task_id, task, *args, **kwargs):
     if task.name.startswith("director.tasks"):
+        return
+
+    # In case of a chord celery run chord unlock to check if
+    # all the tasks in a group did already run.
+    # escape the task here because it's not saved in the tasks
+    # table.
+    if task.name == 'celery.celery.chord_unlock':
         return
 
     with cel.app.app_context():

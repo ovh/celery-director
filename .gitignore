@@ -26,3 +26,5 @@ celerybeat-schedule.db
 
 # Docs
 docs/site/
+
+*.egg-info/

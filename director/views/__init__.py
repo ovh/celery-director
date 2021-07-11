@@ -11,6 +11,11 @@ def home():
     return render_template("index.html")
 
 
+# @view_bp.route("/workflows")
+# def workflows():
+#     return render_template("index.html")
+
+
 @view_bp.route("/<id>")
 def get_workflow(id):
     try:

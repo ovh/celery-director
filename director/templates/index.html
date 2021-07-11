@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-    <title>Celery Director</title>
+    <title>Haydra</title>
     {% if config.ENABLE_CDN %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.3.8/dist/vuetify.min.css" integrity="sha256-aS2abSwj+AMqtAmTglCnsg9GkAyDUKSCFd4xNdLX/AA=" crossorigin="anonymous">
@@ -27,15 +27,23 @@
     <div id="app" v-cloak>
       <v-app id="inspire">
         <v-app-bar app clipped-right color="director" dark>
-          <v-toolbar-title @click="router.push({name: 'home'}).catch(()=>{})" class="pointer">Celery Director</v-toolbar-title>
+          <todo-item></todo-item>
+          <v-toolbar-title @click="router.push({name: 'home'}).catch(()=>{})" class="pointer">Haydra</v-toolbar-title>
           <v-spacer></v-spacer>
           <a :href="repoLink" class="text-decoration-none" target="_blank">
             <v-icon large>mdi-github</v-icon>
           </a>
+          <template v-slot:extension>
+            <v-tabs fixed-tabs dark>
+              <v-tab @click="getWorkflowSchemas()">Workflows</v-tab>
+              <v-tab>Workflow Executions</v-tab>
+              <v-tab>Task Executions</v-tab>
+            </v-tabs>
+          </template>
         </v-app-bar>
         <v-main>
           <v-container v-if="!$route.params.id">
-            <v-row>
+            <v-row v-if="$route.path == '/'">
               <v-col cols="12" md="8">
                 <v-card class="pa-4" outlined>
                   <div>Workflows</div>
@@ -104,6 +112,27 @@
                       multiple
                       chips
                       ></v-select>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row v-if="$route.path == '/workflows'">
+              <v-col cols="12" md="8">
+                <v-card class="pa-4" outlined>
+                  <div>Workflows Schemas</div>
+                  <v-card-text>
+                    <v-data-table
+                      :loading="loading"
+                      loading-text="Loading... Please wait"
+                      :items="schemas"
+                      :items-per-page="10"
+                      >
+                      <template v-slot:item="{ item }">
+                        <tr class="pointer" @click="selectRow(item)" :class="{'active': item.isSelected}">
+                          <td>{{ item }}</td>
+                        </tr>
+                      </template>
+                    </v-data-table>
                   </v-card-text>
                 </v-card>
               </v-col>

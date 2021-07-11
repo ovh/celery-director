@@ -32,6 +32,10 @@ const router = new VueRouter({
     {
       name: 'worfklow',
       path: '/:id'
+    },
+    {
+      name: "schemas",
+      path: '/workflows'
     }
   ]
 });
@@ -40,6 +44,7 @@ const store = new Vuex.Store({
   state: {
     workflows: [],
     workflowNames: [],
+    schemas: [], // Workflow Schemas names.
     network: null,
     selectedWorkflow: null,
     selectedTask: null,
@@ -52,6 +57,14 @@ const store = new Vuex.Store({
     }) {
       axios.get(API_URL + "/workflows").then((response) => {
         commit('updateWorkflows', response.data)
+        commit('changeLoadingState', false)
+      })
+    },
+    listWorkflowsSchemas({
+      commit
+    }) {
+      axios.get(API_URL + "/workflows_schema").then((response) => {
+        commit('updateWorkflowsSchema', response.data)
         commit('changeLoadingState', false)
       })
     },
@@ -83,6 +96,9 @@ const store = new Vuex.Store({
     updateWorkflows(state, workflows) {
       state.workflows = workflows
       state.workflowNames = ["All"].concat([...new Set(workflows.map(item => item.fullname))])
+    },
+    updateWorkflowsSchema(state, schemas) {
+      state.schemas = schemas
     },
     updateSelectedWorkflow(state, workflow) {
       state.taskIndex = null
@@ -184,6 +200,10 @@ Vue.filter('countTasksByStatus', function(workflows, status) {
   return tasks.length;
 });
 
+Vue.component('todo-item', {
+  template: '<div>This is a todo</div>'
+})
+
 new Vue({
   el: '#app',
   computed: {
@@ -222,7 +242,7 @@ new Vue({
         },
       ]
     },
-    ...Vuex.mapState(['workflows', 'workflowNames', 'selectedWorkflow', 'selectedTask', 'taskIndex', 'network', 'loading']),
+    ...Vuex.mapState(['workflows', 'workflowNames', 'schemas', 'selectedWorkflow', 'selectedTask', 'taskIndex', 'network', 'loading']),
   },
   store,
   router,
@@ -275,20 +295,32 @@ new Vue({
         return FLOWER_URL + "/task/" + this.selectedTask.id;
       }
       return '';
+    },
+    getWorkflowSchemas: function() {
+      this.$router.push({
+        name: 'schemas',
+      }).catch(() => {});
+
+      this.$store.dispatch('listWorkflowsSchemas');
     }
   },
   created() {
-    this.$store.dispatch('listWorkflows');
+    console.log(this.$route)
+    if (this.$route.path == "/workflows") {
+      this.$store.dispatch('listWorkflowsSchemas');
+    } else {
+      this.$store.dispatch('listWorkflows');
 
-    this.interval = setInterval(
-      () =>{
-        this.$store.dispatch('listWorkflows');
-      },
-      REFRESH_INTERVAL);
-    
-    let workflowID = this.$route.params.id;
-    if (workflowID) {
-      this.$store.dispatch('getWorkflow', workflowID);
+      this.interval = setInterval(
+        () =>{
+          this.$store.dispatch('listWorkflows');
+        },
+        REFRESH_INTERVAL);
+
+      let workflowID = this.$route.params.id;
+      if (workflowID) {
+        this.$store.dispatch('getWorkflow', workflowID);
+      }
     }
   },
   beforeDestroy() {

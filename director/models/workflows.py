@@ -1,6 +1,7 @@
 from director.extensions import db
 from director.models import BaseModel, StatusType
 from director.models.utils import JSONBType
+from sqlalchemy_utils import UUIDType
 
 
 class Workflow(BaseModel):
@@ -11,6 +12,15 @@ class Workflow(BaseModel):
     status = db.Column(db.Enum(StatusType), default=StatusType.pending, nullable=False)
     payload = db.Column(JSONBType, default={})
     periodic = db.Column(db.Boolean, default=False)
+
+    # Relationship
+    # parent_id = db.Column(
+    #     UUIDType(binary=False),
+    #     db.ForeignKey("workflows.id"),
+    #     nullable=True,
+    #     index=True,
+    # )
+    # workflow = db.relationship("Workflow", remote_side=[parent_id])
 
     def __str__(self):
         return f"{self.project}.{self.name}"

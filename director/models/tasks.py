@@ -6,7 +6,7 @@ from sqlalchemy.types import PickleType
 from director.extensions import db
 from director.models import BaseModel, StatusType
 from director.models.utils import JSONBType
-
+from celery.result import GroupResult
 
 class Task(BaseModel):
     __tablename__ = "tasks"
@@ -36,7 +36,7 @@ class Task(BaseModel):
                 "status": self.status.value,
                 "task": self.id,
                 "previous": self.previous,
-                "result": self.result,
+                "result": self.result.as_tuple() if isinstance(self.result, GroupResult) else self.result,
             }
         )
         return d
