@@ -1,0 +1,77 @@
+name: Tests
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-python@v2
+          with:
+            python-version: 3.7
+            architecture: x64
+        - name: Check code with Python Black
+          run: |
+            python -m pip install --upgrade pip
+            pip install black==20.8b1
+            black --check --diff director
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+          python-version: [3.6, 3.7, 3.8]
+          database-type: ["sqlite", "postgres"]
+    services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: director
+          POSTGRES_PASSWORD: director
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+        - name: Git checkout
+          uses: actions/checkout@v2
+        - name: Setup Python ${{ matrix.python-version }}
+          uses: actions/setup-python@v2
+          with:
+            python-version: ${{ matrix.python-version }}
+            architecture: x64
+        - name: Install requirements
+          run: |
+            python -m pip install --upgrade pip
+            pip install ".[ci]"
+            pip install ".[doc]"
+        - name: Test documentation build
+          run: |
+            cd docs && mkdocs build
+        - name: Configure sqlite database
+          if: ${{ matrix.database-type == 'sqlite' }}
+          run: |
+            export DIRECTOR_DATABASE_URI=sqlite:////tmp/tests.db
+        - name: Configure postgres database
+          if: ${{ matrix.database-type == 'postgres' }}
+          run: |
+            PGPASSWORD=director psql -h localhost -p 5432 -U director director -c "CREATE DATABASE tests;"
+            export DIRECTOR_DATABASE_URI=postgresql://director:director@localhost:5432/tests
+        - name: Execute tests
+          run: |
+            export DIRECTOR_HOME=$GITHUB_WORKSPACE/tests/workflows/
+            director celery worker -P solo > /dev/null 2>&1 &
+            sleep 5
+            pytest tests/ -v
