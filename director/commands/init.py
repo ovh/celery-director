@@ -32,6 +32,9 @@ DIRECTOR_STATIC_FOLDER=${DIRECTOR_HOME}/static
 
 # ---------- Sentry ----------
 DIRECTOR_SENTRY_DSN=""
+
+# ---------- Retention ----------
+DIRECTOR_DEFAULT_RETENTION=1000
 """
 
 

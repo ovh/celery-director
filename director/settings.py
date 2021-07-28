@@ -68,6 +68,9 @@ class Config(object):
         # Sentry configuration
         self.SENTRY_DSN = env.str("DIRECTOR_SENTRY_DSN", "")
 
+        # Default retention value (number of workflows to keep in the database)
+        self.DEFAULT_RETENTION = env.int("DIRECTOR_DEFAULT_RETENTION", -1)
+
 
 class UserConfig(dict):
     """Handle the user configuration"""

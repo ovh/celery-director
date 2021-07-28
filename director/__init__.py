@@ -4,6 +4,7 @@ import pkgutil
 from functools import partial
 from pathlib import Path
 
+from celery.schedules import crontab
 from flask import Flask, Blueprint, jsonify, request, render_template
 from flask_json_schema import JsonValidationError
 from werkzeug.exceptions import InternalServerError, HTTPException
@@ -14,6 +15,8 @@ from director.settings import Config, UserConfig
 from director.tasks.base import BaseTask
 from director.views import view_bp
 from director.utils import build_celery_schedule
+from director.models.workflows import Workflow
+
 
 with open(Path(__file__).parent.resolve() / "VERSION", encoding="utf-8") as version:
     __version__ = version.readline().rstrip()
@@ -80,8 +83,18 @@ def create_app(
     cel_workflows.init_app(app)
     sentry.init_app(app)
 
+    # This list is will be passed to the cleaning function
+    workflows_to_delete = []
+    retentions = {}
+
     # Register the periodic tasks for Celery Beat
     for workflow, conf in cel_workflows.workflows.items():
+        retention = conf.get("retention", app.config.get("DEFAULT_RETENTION"))
+
+        # A dict is built for the periodic cleaning if the retention is valid
+        if retention >= 0:
+            retentions[workflow] = retention
+
         if "periodic" in conf:
             payload = conf.get("periodic").get("payload", {})
             workflow_schedule = conf.get("periodic").get("schedule")
@@ -99,6 +112,17 @@ def create_app(
                     }
                 }
             )
+
+    if len(retentions):
+        cel.conf.beat_schedule.update(
+            {
+                "periodic-cleanup": {
+                    "task": "director.tasks.periodic.cleanup",
+                    "schedule": crontab(minute=0, hour=0),
+                    "args": (retentions,),
+                }
+            }
+        )
 
     @app.teardown_request
     def session_clear(exception=None):
