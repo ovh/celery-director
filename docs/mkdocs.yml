@@ -20,6 +20,7 @@ nav:
     - 'Enable Authentication': 'guides/enable-authentication.md'
     - 'Use Payload': 'guides/use-payload.md'
     - 'Error Tracking': 'guides/error-tracking.md'
+    - 'Custom Configuration': 'guides/custom-configuration.md'
   - API: 'api.md'
 
 extra_css:
