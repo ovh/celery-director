@@ -23,11 +23,11 @@ def format_schema_errors(e):
 
 
 def build_celery_schedule(workflow, data, option):
-    """ A celery schedule can accept seconds or crontab """
+    """A celery schedule can accept seconds or crontab"""
     try:
-        if option=="interval":
+        if option == "interval":
             schedule = float(data)
-        elif option=="crontab":
+        elif option == "crontab":
             m, h, dm, my, dw = data.split(" ")
             schedule = crontab(
                 minute=m,
@@ -36,7 +36,7 @@ def build_celery_schedule(workflow, data, option):
                 day_of_month=dm,
                 month_of_year=my,
             )
-        elif option=="schedule":
+        elif option == "schedule":
             m, h, dw, dm, my = data.split(" ")
             schedule = crontab(
                 minute=m,
@@ -51,11 +51,11 @@ def build_celery_schedule(workflow, data, option):
         raise WorkflowSyntaxError(workflow)
 
     return schedule
-  
+
 
 def read_schedule(workflow, keys):
-    """ Get the periodic key from workflow (interval, crontab or schedule) """
+    """Get the periodic key from workflow (interval, crontab or schedule)"""
     periodic = set.intersection(set(keys), {"crontab", "interval", "schedule"})
-    if len(periodic)>1:
+    if len(periodic) > 1:
         raise WorkflowSyntaxError(workflow)
     return next(iter(periodic), None)

@@ -51,7 +51,7 @@ def list_workflow(ctx):
     # Add a row for each workflow
     for name, conf in workflows.items():
         periodic_k = read_schedule(name, conf.get("periodic", {}).keys())
-        periodic = conf.get("periodic", {}).get(periodic_k, "--" )
+        periodic = conf.get("periodic", {}).get(periodic_k, "--")
         tasks_str = tasks_to_ascii(conf["tasks"])
         data.append([name, periodic, tasks_str])
 
