@@ -87,12 +87,8 @@ def create_app(
             payload = conf.get("periodic").get("payload", {})
             schedule_type = read_schedule(workflow, conf.get("periodic").keys())
             workflow_schedule = conf.get("periodic").get(schedule_type)
-            schedule = build_celery_schedule(
-                workflow, 
-                workflow_schedule, 
-                schedule_type
-                )
-            
+            schedule = build_celery_schedule(workflow, workflow_schedule, schedule_type)
+
             cel.conf.beat_schedule.update(
                 {
                     f"periodic-{workflow}-{workflow_schedule}s": {
