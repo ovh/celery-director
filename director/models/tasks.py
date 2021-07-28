@@ -19,11 +19,13 @@ class Task(BaseModel):
     # Relationship
     workflow_id = db.Column(
         UUIDType(binary=False),
-        db.ForeignKey("workflows.id"),
+        db.ForeignKey("workflows.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
-    workflow = db.relationship("Workflow", backref=db.backref("tasks", lazy=True))
+    workflow = db.relationship(
+        "Workflow", backref=db.backref("tasks", lazy=True), cascade="all,delete"
+    )
 
     def __repr__(self):
         return f"<Task {self.key}>"
