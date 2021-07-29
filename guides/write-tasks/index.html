@@ -501,8 +501,8 @@ file to <a href="../build-workflows/">combine tasks into workflows</a>, this nam
 </div>
 <h2 id="task-signature">Task signature</h2>
 <p>To simplify the tasks creation, and to allow multiple workflows to reuse the same task, the
-signature is always the same : <code>(*args, **kwargs)</code>.</p>
-<p>The <strong>kwargs</strong> dictionnary can be used to <a href="../use-payload/#handle-payload">handle the payload</a>
+signature is always the same: <code>(*args, **kwargs)</code>.</p>
+<p>The <strong>kwargs</strong> dictionary can be used to <a href="../use-payload/#handle-payload">handle the payload</a>
 while <strong>args</strong> contains the results of the task parents (of course args is empty if your task
 is at the beginning of a workflow).</p>
 <div class="admonition info">
@@ -511,10 +511,10 @@ is at the beginning of a workflow).</p>
 parents with 2 methods : <strong>s()</strong> and <strong>si()</strong>. The <em>i</em> means <strong>immutability</strong> and is intended
 to ignore the parents results. So normally, as a developer, you have to be carefull about the
 method to use and you also have to create your tasks signatures consequently.</p>
-<p>But Director has been created to simplify that ! As we decided to received the results of the
+<p>But Director has been created to simplify that! As we decided to receive the results of the
 parents in the <code>args</code> parameter we always use the <code>s()</code> method.</p>
 </div>
-<p>Here is are some concrete examples based on the following tasks :</p>
+<p>Here is are some concrete examples based on the following tasks:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># tasks/example.py</span>
 <span class="kn">from</span> <span class="nn">director</span> <span class="kn">import</span> <span class="n">task</span>
 

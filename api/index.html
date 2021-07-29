@@ -392,6 +392,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#post-apiworkflowsidrelaunch" class="md-nav__link">
+    POST /api/workflows/&lt;id&gt;/relaunch
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#get-apiping" class="md-nav__link">
     GET /api/ping
   </a>
@@ -446,6 +453,13 @@
         <li class="md-nav__item">
   <a href="#post-apiworkflows" class="md-nav__link">
     POST /api/workflows
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-apiworkflowsidrelaunch" class="md-nav__link">
+    POST /api/workflows/&lt;id&gt;/relaunch
   </a>
   
 </li>
@@ -595,6 +609,32 @@
     <span class="ss">&quot;project&quot;</span><span class="p">:</span> <span class="ss">&quot;example&quot;</span><span class="p">,</span>
     <span class="ss">&quot;status&quot;</span><span class="p">:</span> <span class="ss">&quot;pending&quot;</span><span class="p">,</span>
     <span class="ss">&quot;updated&quot;</span><span class="p">:</span> <span class="ss">&quot;2020-02-06T14:01:02&quot;</span>
+<span class="err">}</span>
+</code></pre></div>
+
+
+<h2 id="post-apiworkflowsidrelaunch"><strong>POST</strong> <code>/api/workflows/&lt;id&gt;/relaunch</code></h2>
+<p>Relaunch a workflow with the same payload.</p>
+<p><strong>Example request:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nf">POST</span> <span class="nn">/api/workflows/29e7ef80-fa1b-4b91-8ccb-ef01a91601db/relaunch</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">example.com</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+</code></pre></div>
+
+
+<p><strong>Example response:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">HTTP</span><span class="o">/</span><span class="mi">1</span><span class="p">.</span><span class="mi">1</span> <span class="mi">201</span> <span class="n">CREATED</span>
+
+<span class="err">{</span>
+    <span class="ss">&quot;created&quot;</span><span class="p">:</span><span class="ss">&quot;2021-03-04T12:27:11.245700+00:00&quot;</span><span class="p">,</span>
+    <span class="ss">&quot;fullname&quot;</span><span class="p">:</span> <span class="ss">&quot;example.ETL&quot;</span><span class="p">,</span>
+    <span class="ss">&quot;id&quot;</span><span class="p">:</span><span class="ss">&quot;5afe0610-2746-413a-83d0-0099483858e6&quot;</span><span class="p">,</span>
+    <span class="ss">&quot;name&quot;</span><span class="p">:</span><span class="ss">&quot;ETL&quot;</span><span class="p">,</span>
+    <span class="ss">&quot;payload&quot;</span><span class="p">:</span><span class="err">{}</span><span class="p">,</span>
+    <span class="ss">&quot;periodic&quot;</span><span class="p">:</span> <span class="k">false</span><span class="p">,</span>
+    <span class="ss">&quot;project&quot;</span><span class="p">:</span> <span class="ss">&quot;exemple&quot;</span><span class="p">,</span>
+    <span class="ss">&quot;status&quot;</span><span class="p">:</span> <span class="ss">&quot;pending&quot;</span><span class="p">,</span>
+    <span class="ss">&quot;updated&quot;</span><span class="p">:</span><span class="ss">&quot;2021-03-04T12:27:11.245700+00:00&quot;</span>
 <span class="err">}</span>
 </code></pre></div>
 
