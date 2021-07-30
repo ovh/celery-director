@@ -15,7 +15,6 @@ from director.settings import Config, UserConfig
 from director.tasks.base import BaseTask
 from director.views import view_bp
 from director.utils import build_celery_schedule
-from director.models.workflows import Workflow
 
 
 with open(Path(__file__).parent.resolve() / "VERSION", encoding="utf-8") as version:
@@ -83,8 +82,7 @@ def create_app(
     cel_workflows.init_app(app)
     sentry.init_app(app)
 
-    # This list is will be passed to the cleaning function
-    workflows_to_delete = []
+    # Dict passed to the cleanup function
     retentions = {}
 
     # Register the periodic tasks for Celery Beat
