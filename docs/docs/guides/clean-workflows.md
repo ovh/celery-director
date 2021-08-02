@@ -24,7 +24,7 @@ example.ETL:
     - TRANSFORM
     - LOAD
   retention: 
-      offset: 2
+    offset: 2
 
 # Group of tasks example
 example.RANDOMS:
