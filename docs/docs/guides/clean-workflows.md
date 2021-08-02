@@ -23,7 +23,8 @@ example.ETL:
     - EXTRACT
     - TRANSFORM
     - LOAD
-  retention: 2
+  retention: 
+      offset: 2
 
 # Group of tasks example
 example.RANDOMS:
