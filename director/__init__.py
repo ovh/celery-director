@@ -87,7 +87,7 @@ def create_app(
 
     # Register the periodic tasks for Celery Beat
     for workflow, conf in cel_workflows.workflows.items():
-        retention = conf.get("retention", app.config.get("DEFAULT_RETENTION"))
+        retention = conf.get("retention", {}).get("offset", app.config.get("DEFAULT_RETENTION"))
 
         # A dict is built for the periodic cleaning if the retention is valid
         if retention >= 0:
