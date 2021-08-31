@@ -19,7 +19,7 @@ class Task(BaseModel):
     # Relationship
     workflow_id = db.Column(
         UUIDType(binary=False),
-        db.ForeignKey("workflows.id", ondelete="CASCADE"),
+        db.ForeignKey("workflows.id", ondelete="cascade"),
         nullable=False,
         index=True,
     )
