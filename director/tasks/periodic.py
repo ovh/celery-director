@@ -35,7 +35,7 @@ def cleanup(retentions):
     count = 0
     for workflow, retention in retentions.items():
         project, name = workflow.split(".")
-        logger.info(f"Cleaning {workflow} (retention of {retention}).")
+        logger.info(f"Cleaning {workflow} (retention of {retention})")
         rows_of_workflow = (
             Workflow.query.filter_by(
                 project=project, name=name, status=StatusType.success
@@ -47,11 +47,11 @@ def cleanup(retentions):
 
         ids = [row.id for row in rows_of_workflow]
         if not ids:
-            logger.info(f"No need to clean {workflow}.")
+            logger.info(f"No need to clean {workflow}")
             continue
 
         Workflow.query.filter(Workflow.id.in_(ids)).delete(synchronize_session=False)
         db.session.commit()
         count += len(ids)
-        logger.info(f"{len(ids)} workflows deleted.")
+        logger.info(f"Deleted workflows: {len(ids)}")
     return count
