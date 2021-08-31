@@ -4,11 +4,11 @@ Director allows you to permanently delete useless records of your workflows base
 For example, you can use it to keep only the 10 last records of a workflow. 
 The deletions start every day at midnight.
 
-# Prerequisite
+## Prerequisite
 
-This feature requires that you start a Celery Beat scheduler[the build guide](./build-workflows.md).
+This feature requires to start a Celery beat and a worker (see [Periodic workflows](./build-workflows.md#periodic-workflows)).
 
-# Example :
+## Example
 
 ```.env
 # ---------- Retention -----------------
@@ -38,8 +38,8 @@ example.RANDOMS:
 
 ```
 - For *example.ETL*, Director will read the retention in the .yaml configuration. Only two records will be kept. Everything else will be deleted.
-- For *example.RANDOMS*, Director will get the retention from DIRECTOR_DEFAULT_RETENTION in *.env*. As the value is -1, nothing will happen.
+- For *example.RANDOMS*, Director will get the retention from `DIRECTOR_DEFAULT_RETENTION` in *.env*. As the value is **-1**, nothing will happen.
 
 ## Define a custom retention value
-To define your own default retention, you simply have to modify the value of DIRECTOR_DEFAULT_RETENTION in *.env*
+To define your own default retention, you simply have to modify the value of `DIRECTOR_DEFAULT_RETENTION` in *.env*.
 

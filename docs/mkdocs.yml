@@ -17,7 +17,7 @@ nav:
     - 'Write Tasks': 'guides/write-tasks.md'
     - 'Build Workflows': 'guides/build-workflows.md'
     - 'Run Workflows': 'guides/run-workflows.md'
-    - 'Clean Workflows': 'guides/clean-workflows.md'
+    - 'Cleanup Workflows': 'guides/cleanup-workflows.md'
     - 'Enable Authentication': 'guides/enable-authentication.md'
     - 'Use Payload': 'guides/use-payload.md'
     - 'Error Tracking': 'guides/error-tracking.md'

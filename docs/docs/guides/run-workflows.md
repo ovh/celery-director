@@ -40,5 +40,5 @@ $ curl --header "Content-Type: application/json" \
 
 ## Using the periodic scheduling
 
-A workflow can also be execute periodically without any manual action from the user. Director provides
+A workflow can also be executed periodically without any manual action from the user. Director provides
 a [simple YAML syntax](build-workflows.md#periodic-workflows) for that.
