@@ -1,12 +1,10 @@
 import logging
 
-from flask import jsonify
+from sqlalchemy.orm import load_only
 
 from director.builder import WorkflowBuilder
 from director.extensions import cel, db
-from director.models import StatusType
 from director.models.workflows import Workflow
-
 
 logger = logging.getLogger()
 
@@ -33,21 +31,27 @@ def execute(workflow, payload):
 @cel.task()
 def cleanup(retentions):
     count = 0
-    for workflow, retention in retentions.items():
-        project, name = workflow.split(".")
-        logger.info(f"Cleaning {workflow} (retention of {retention})")
-        rows_of_workflow = (
-            Workflow.query.filter_by(
-                project=project, name=name, status=StatusType.success
-            )
+    for workflow_name, retention in retentions.items():
+        project, name = workflow_name.split(".")
+        logger.info(f"Cleaning {workflow_name} (retention of {retention})")
+
+        bind = db.session.get_bind()
+        if bind.engine.name == "sqlite":
+            # SQLite does not use ON DELETE CASCADE by default
+            db.session.execute("PRAGMA foreign_keys=ON")
+
+        workflows = (
+            db.session.query(Workflow)
+            .options(load_only(Workflow.id))
+            .filter_by(project=project, name=name)
             .order_by(Workflow.created_at.desc())
             .offset(retention)
             .all()
         )
 
-        ids = [row.id for row in rows_of_workflow]
+        ids = [workflow.id for workflow in workflows]
         if not ids:
-            logger.info(f"No need to clean {workflow}")
+            logger.info(f"No need to clean {workflow_name}")
             continue
 
         Workflow.query.filter(Workflow.id.in_(ids)).delete(synchronize_session=False)

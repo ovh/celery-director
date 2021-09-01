@@ -12,7 +12,7 @@ This feature requires to start a Celery beat and a worker (see [Periodic workflo
 
 ```.env
 # ---------- Retention -----------------
-DIRECTOR_DEFAULT_RETENTION=-1
+DIRECTOR_DEFAULT_RETENTION_OFFSET=-1
 ```
 
 ```yaml
@@ -35,11 +35,9 @@ example.RANDOMS:
           - RANDOM
           - RANDOM
     - ADD
-
 ```
 - For *example.ETL*, Director will read the retention in the .yaml configuration. Only two records will be kept. Everything else will be deleted.
-- For *example.RANDOMS*, Director will get the retention from `DIRECTOR_DEFAULT_RETENTION` in *.env*. As the value is **-1**, nothing will happen.
+- For *example.RANDOMS*, Director will get the retention from `DIRECTOR_DEFAULT_RETENTION_OFFSET` in *.env*. As the value is **-1**, nothing will happen.
 
 ## Define a custom retention value
-To define your own default retention, you simply have to modify the value of `DIRECTOR_DEFAULT_RETENTION` in *.env*.
-
+To define your own default retention, you simply have to modify the value of `DIRECTOR_DEFAULT_RETENTION_OFFSET` in *.env*.
