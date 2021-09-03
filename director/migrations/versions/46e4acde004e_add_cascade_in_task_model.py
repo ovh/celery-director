@@ -21,6 +21,9 @@ tables = db.metadata.tables
 def upgrade():
     bind = op.get_bind()
     if bind.engine.name == "sqlite":
+        # SQLite does not support to alter constraints on existing tables.
+        # Batch mode is used to copy data to a temporary table meanwhile creating a brand new
+        # table with the required constraint.
         with op.batch_alter_table("tasks", copy_from=tables["tasks"]) as batch_op:
             batch_op.drop_constraint(
                 op.f("fk_tasks_workflow_id_workflows"), type_="foreignkey"
