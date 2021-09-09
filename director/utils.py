@@ -22,40 +22,53 @@ def format_schema_errors(e):
     }
 
 
-def build_celery_schedule(workflow, data, option):
+def build_celery_schedule(workflow, data):
     """A celery schedule can accept seconds or crontab"""
+
+    def _handle_schedule(schedule):
+        try:
+            value = float(schedule)
+        except ValueError:
+            print("here")
+            m, h, dw, dm, my = schedule.split(" ")
+            value = crontab(
+                minute=m,
+                hour=h,
+                day_of_month=dm,
+                month_of_year=my,
+                day_of_week=dw,
+            )
+        return value
+
+    def _handle_crontab(ct):
+        m, h, dm, my, dw = ct.split(" ")
+        return crontab(
+            minute=m,
+            hour=h,
+            day_of_week=dw,
+            day_of_month=dm,
+            month_of_year=my,
+        )
+
+    excluded_keys = ["payload"]
+    keys = [k for k in data.keys() if k not in excluded_keys]
+
+    schedule_functions = {
+        # Legacy syntax for backward compatibility
+        "schedule": _handle_schedule,
+        # Current syntax
+        "crontab": _handle_crontab,
+        "interval": float,
+    }
+
+    if len(keys) != 1 or keys[0] not in schedule_functions.keys():
+        # When there is no key (schedule, interval, crontab) in the periodic configuration
+        raise WorkflowSyntaxError(workflow)
+
+    schedule_key = keys[0]
+    schedule_input = data[schedule_key]
     try:
-        if option == "interval":
-            schedule = float(data)
-        elif option == "crontab":
-            m, h, dm, my, dw = data.split(" ")
-            schedule = crontab(
-                minute=m,
-                hour=h,
-                day_of_week=dw,
-                day_of_month=dm,
-                month_of_year=my,
-            )
-        elif option == "schedule":
-            m, h, dw, dm, my = data.split(" ")
-            schedule = crontab(
-                minute=m,
-                hour=h,
-                day_of_month=dm,
-                month_of_year=my,
-                day_of_week=dw,
-            )
-        else:
-            raise WorkflowSyntaxError(workflow)
-    except Exception as e:
+        # Apply the function mapped to the schedule type
+        return str(schedule_input), schedule_functions[schedule_key](schedule_input)
+    except Exception:
         raise WorkflowSyntaxError(workflow)
-
-    return schedule
-
-
-def read_schedule(workflow, keys):
-    """Get the periodic key from workflow (interval, crontab or schedule)"""
-    periodic = set.intersection(set(keys), {"crontab", "interval", "schedule"})
-    if len(periodic) > 1:
-        raise WorkflowSyntaxError(workflow)
-    return next(iter(periodic), None)

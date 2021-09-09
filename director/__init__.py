@@ -6,15 +6,14 @@ from pathlib import Path
 
 from celery.schedules import crontab
 from flask import Flask, Blueprint, jsonify, request, render_template
-from flask_json_schema import JsonValidationError
-from werkzeug.exceptions import InternalServerError, HTTPException
+from werkzeug.exceptions import HTTPException
 
 from director.api import api_bp
 from director.extensions import cel, cel_workflows, db, schema, sentry, migrate
 from director.settings import Config, UserConfig
 from director.tasks.base import BaseTask
+from director.utils import build_celery_schedule
 from director.views import view_bp
-from director.utils import build_celery_schedule, read_schedule
 
 
 with open(Path(__file__).parent.resolve() / "VERSION", encoding="utf-8") as version:
@@ -96,19 +95,20 @@ def create_app(
             retentions[workflow] = retention
 
         if "periodic" in conf:
-            payload = conf.get("periodic").get("payload", {})
-            schedule_type = read_schedule(workflow, conf.get("periodic").keys())
-            workflow_schedule = conf.get("periodic").get(schedule_type)
-            schedule = build_celery_schedule(workflow, workflow_schedule, schedule_type)
+            periodic_conf = conf.get("periodic")
+            periodic_payload = periodic_conf.get("payload", {})
+            schedule_str, schedule_value = build_celery_schedule(
+                workflow, periodic_conf
+            )
 
             cel.conf.beat_schedule.update(
                 {
-                    f"periodic-{workflow}-{workflow_schedule}s": {
+                    f"periodic-{workflow}-{schedule_str}": {
                         "task": "director.tasks.periodic.execute",
-                        "schedule": schedule,
+                        "schedule": schedule_value,
                         "args": (
                             workflow,
-                            payload,
+                            periodic_payload,
                         ),
                     }
                 }
