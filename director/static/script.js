@@ -163,7 +163,7 @@ const store = new Vuex.Store({
 
 Vue.filter('formatDate', function(value) {
   if (value) {
-    return moment(String(value)).format('YYYY-MM-DD HH:mm:ss')
+    return moment.utc(value).local().format('YYYY-MM-DD HH:mm:ss Z');
   }
 });
 
@@ -197,7 +197,7 @@ new Vue({
           text: 'Status',
           align: 'left',
           value: 'status',
-          width: '17%',
+          width: '14%',
           filter: value => {
             if (this.selectedStatus.length == 0) return true
             return this.selectedStatus.includes(value)
@@ -207,7 +207,7 @@ new Vue({
           text: 'Name',
           align: 'left',
           value: 'fullname',
-          width: '58%',
+          width: '56%',
           filter: value => {
             if (!this.selectedWorkflowName || this.selectedWorkflowName == 'All') return true
             return value == this.selectedWorkflowName
@@ -217,7 +217,7 @@ new Vue({
           text: 'Date',
           align: 'left',
           value: 'created',
-          width: '25%',
+          width: '30%',
 
         },
       ]
