@@ -1,4 +1,3 @@
-from director.utils import read_schedule
 import time
 
 import pytest
@@ -319,63 +318,73 @@ def test_return_exception(app, create_builder):
     assert "ZeroDivisionError: division by zero" in tasks["TASK_ERROR"]["traceback"]
 
 
-def test_build_celery_float_schedule():
-    float_schedule = 30.0
-    assert float_schedule == build_celery_schedule(
-        "workflow_int_schedule1", float_schedule, "interval"
+def test_build_celery_schedule_float_with_payload():
+    float_schedule = {"payload": {}, "schedule": 30.0}
+    assert ("30.0", 30.0) == build_celery_schedule("workflow_schedule_float", float_schedule)
+
+
+def test_build_celery_schedule_float():
+    float_schedule = {"schedule": 30.0}
+    assert ("30.0", 30.0) == build_celery_schedule("workflow_schedule_float", float_schedule)
+
+
+@pytest.mark.parametrize(
+    "test_input, expected",
+    [
+        ("1 * * * *", crontab(minute="1", hour="*", day_of_week="*", day_of_month="*", month_of_year="*")),
+        ("* 1 * * *", crontab(minute="*", hour="1", day_of_week="*", day_of_month="*", month_of_year="*")),
+        ("* * 1 * *", crontab(minute="*", hour="*", day_of_week="1", day_of_month="*", month_of_year="*")),
+        ("* * * 1 *", crontab(minute="*", hour="*", day_of_week="*", day_of_month="1", month_of_year="*")),
+        ("* * * * 1", crontab(minute="*", hour="*", day_of_week="*", day_of_month="*", month_of_year="1")),
+        (
+            "*/10 */11 */12 */13 */14",
+            crontab(minute="*/10", hour="*/11", day_of_week="*/12", day_of_month="*/13", month_of_year="*/14")
         )
+    ]
+)
+def test_build_celery_schedule_crontab(test_input, expected):
+    cron_schedule = {"schedule": test_input}
+    assert (test_input, expected) == build_celery_schedule("workflow_crontab", cron_schedule)
 
 
-def test_build_celery_schedule():
-    cron_schedule = "2 * * * *"
-    assert crontab(
-        minute="2", hour="*", day_of_week="*", day_of_month="*", month_of_year="*"
-    ) == build_celery_schedule("workflow_cron_schedule1", cron_schedule, "schedule")
-
-    cron_schedule = "* * */15 * *"
-    assert crontab(
-        minute="*", hour="*", day_of_week="*/15", day_of_month="*", month_of_year="*"
-    ) == build_celery_schedule("workflow_cron_schedule1", cron_schedule, "schedule")
+def test_build_celery_interval():
+    float_schedule = {"interval": 30.0}
+    assert ("30.0", 30.0) == build_celery_schedule("workflow_schedule_float", float_schedule)
 
 
-def test_build_celery_crontab_schedule():
-    cron_schedule = "2 * * * 1"
-    assert crontab(
-        minute="2", hour="*", day_of_week="1", day_of_month="*", month_of_year="*"
-    ) == build_celery_schedule("workflow_cron_schedule1", cron_schedule, "crontab")
+@pytest.mark.parametrize(
+    "test_input, expected",
+    [
+        ("1 * * * *", crontab(minute="1", hour="*", day_of_month="*", month_of_year="*", day_of_week="*")),
+        ("* 1 * * *", crontab(minute="*", hour="1", day_of_month="*", month_of_year="*", day_of_week="*")),
+        ("* * 1 * *", crontab(minute="*", hour="*", day_of_month="1", month_of_year="*", day_of_week="*")),
+        ("* * * 1 *", crontab(minute="*", hour="*", day_of_month="*", month_of_year="1", day_of_week="*")),
+        ("* * * * 1", crontab(minute="*", hour="*", day_of_month="*", month_of_year="*", day_of_week="1")),
+        (
+            "*/10 */11 */12 */13 */14",
+            crontab(minute="*/10", hour="*/11", day_of_month="*/12", month_of_year="*/13", day_of_week="*/14")
+        )
+    ]
+)
+def test_build_celery_crontab(test_input, expected):
+    cron_schedule = {"crontab": test_input}
+    assert (test_input, expected) == build_celery_schedule("workflow_crontab", cron_schedule)
 
 
-def test_workflow_invalid_cron():
-    cron_schedule = "2 * * *"
-
+def test_build_celery_invalid_crontab():
+    # missing one element on the crontab syntax
+    periodic_conf = {"crontab": "* * * *"}
     with pytest.raises(WorkflowSyntaxError):
-        build_celery_schedule("workflow_cron_invalid_cron", cron_schedule, "crontab")
+        build_celery_schedule("workflow_invalid_crontab", periodic_conf)
 
 
-def test_workflow_invalid_schedule():
-    cron_schedule = "2 * * * 1"
+def test_build_celery_invalid_schedule():
+    cron_schedule = {"crontab": "* * * * 12"}
     with pytest.raises(WorkflowSyntaxError):
-        build_celery_schedule("workflow_cron_invalid_cron", cron_schedule, "schedule")
+        build_celery_schedule("workflow_cron_invalid_cron", cron_schedule)
 
 
-def test_workflow_invalid_schedule_key():
-    cron_schedule = "2 * * * 1"
+def test_build_celery_invalid_periodic_key():
+    cron_schedule = {"non_valid_key": "* * * * *"}
     with pytest.raises(WorkflowSyntaxError):
-        build_celery_schedule("workflow_cron_invalid_cron", cron_schedule, "non_valid_key")
-
-
-def test_read_schedule():
-    data = {"payload", "crontab"}
-    assert "payload" == read_schedule("test", data)
-    
-    data = {"payload", "schedule"}
-    assert "schedule" == read_schedule("test", data)
-
-    data = {"interval", "payload"}
-    assert "interval" == read_schedule("test", data)
-
-
-def test_read_schedule_too_much_keys():
-    data = {"payload", "crontab", "interval"}
-    with pytest.raises(WorkflowSyntaxError):
-        read_schedule("test", data)
+        build_celery_schedule("workflow_cron_invalid_key", cron_schedule)
