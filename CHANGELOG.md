@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.4.0 - 2021-09-13
+### Changed
+- Update WebUI to display all dates on the local user timezone (the offset is displayed along the side of each date)
+- Update documentation to schedule a periodic workflow
+- Bump dependency `PyAML` from 5.1.2 to 5.4.1
+
+### Fixed
+- Fix typos on documentation
+
+### Added
+- Add new keys (`interval`, `crontab`) to schedule periodic workflows (key `schedule` is still supported but should not be used anymore)
+- Add cleanup Celery task and retention offset to flush old workflows in the database
+- Add documentation about the custom user configuration
+- Add documentation for API endpoint to relaunch workflow
+- Add documentation to set up the built-in cleanup task
+
+
 ## 0.3.1 - 2020-12-08
 ### Changed
 - Upgrade Celery and Kombu packages for bug fixes (celery 4.4.0 to 4.4.7, kombu 4.6.7 to 4.6.11)
