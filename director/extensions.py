@@ -1,5 +1,6 @@
 import imp
 import json
+from os import sep
 from pathlib import Path
 from json.decoder import JSONDecodeError
 
@@ -61,7 +62,7 @@ class CeleryWorkflow:
                 if task.stem == "__init__":
                     continue
 
-                name = str(task.relative_to(folder))[:-3].replace("/", ".")
+                name = str(task.relative_to(folder))[:-3].replace(sep, ".")
                 __import__(
                     self.plugin_source.base.package + "." + name,
                     globals(),
