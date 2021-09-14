@@ -105,7 +105,7 @@ The format is the following (the [official documentation](https://docs.celerypro
 
 ```yaml
 periodic:
-  crontab: "minute hour day_of_week day_of_month month_of_year"
+  crontab: "minute hour day_of_month month_of_year day_of_week"
 ```
 
 So in the first example, the *example.CHAIN* workflow will be executed **every 60 seconds** and the second one, *example.CHAIN_CRONTAB*, **every three hours**.
