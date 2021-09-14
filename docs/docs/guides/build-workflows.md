@@ -111,7 +111,9 @@ periodic:
 So in the first example, the *example.CHAIN* workflow will be executed **every 60 seconds** and the second one, *example.CHAIN_CRONTAB*, **every three hours**.
 
 !!! warning
-    The `periodic > schedule` key is deprecated. It is strongly advised to migrate to `interval` or `crontab` key to set up a scheduled workflow.
+    Older versions of Celery Director used the `periodic > schedule` key which is now deprecated.
+
+    It is strongly advised to migrate to `periodic > interval` or `periodic > crontab` keys to set up a scheduled workflow.
 
 Please note that the scheduler must be started to handle periodic workflows :
 
