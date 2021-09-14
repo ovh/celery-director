@@ -77,7 +77,7 @@ the [Celery beat](https://docs.celeryproject.org/en/latest/userguide/periodic-ta
 
 Director allows you to periodically schedule a whole workflow using a simple YAML syntax.
 
-First example:
+You can use the `periodic > interval` key with a number argument (unity is the second):
 
 ```yaml
 example.CHAIN:
@@ -89,7 +89,7 @@ example.CHAIN:
     interval: 60
 ```
 
-Second example:
+You can also use the `periodic > crontab` key with a string argument:
 
 ```yaml
 example.CHAIN_CRONTAB:
@@ -101,13 +101,17 @@ example.CHAIN_CRONTAB:
     crontab: "0 */3 * * *"
 ```
 
-The `periodic > interval` key takes a number (unity is the second) or using `periodic > crontab ` key a string argument ([crontab](https://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html#crontab-schedules) syntax). So in the first example, the *example.CHAIN* workflow will be executed **every 60 seconds** and the second one, *example.CHAIN_CRONTAB*, **every three hours**.
+The format is the following (the [official documentation](https://docs.celeryproject.org/en/v4.4.7/userguide/periodic-tasks.html#crontab-schedules) of the `crontab` function gives some examples of each attribute):
 
+```yaml
+periodic:
+  crontab: "minute hour day_of_week day_of_month month_of_year"
+```
+
+So in the first example, the *example.CHAIN* workflow will be executed **every 60 seconds** and the second one, *example.CHAIN_CRONTAB*, **every three hours**.
 
 !!! warning
     The `periodic > schedule` key is deprecated. It is strongly advised to migrate to `interval` or `crontab` key to set up a scheduled workflow.
-
-
 
 Please note that the scheduler must be started to handle periodic workflows :
 
