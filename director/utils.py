@@ -29,7 +29,6 @@ def build_celery_schedule(workflow, data):
         try:
             value = float(schedule)
         except ValueError:
-            print("here")
             m, h, dw, dm, my = schedule.split(" ")
             value = crontab(
                 minute=m,
@@ -45,9 +44,9 @@ def build_celery_schedule(workflow, data):
         return crontab(
             minute=m,
             hour=h,
-            day_of_week=dw,
             day_of_month=dm,
             month_of_year=my,
+            day_of_week=dw,
         )
 
     excluded_keys = ["payload"]
