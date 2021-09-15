@@ -77,7 +77,7 @@ the [Celery beat](https://docs.celeryproject.org/en/latest/userguide/periodic-ta
 
 Director allows you to periodically schedule a whole workflow using a simple YAML syntax.
 
-You can use the `periodic > interval` key with a number argument (unity is the second):
+You can use the `periodic > interval` key with a number argument (in seconds):
 
 ```yaml
 example.CHAIN:
@@ -114,6 +114,16 @@ So in the first example, the *example.CHAIN* workflow will be executed **every 6
     Older versions of Celery Director used the `periodic > schedule` key which is now deprecated.
 
     It is strongly advised to migrate to `periodic > interval` or `periodic > crontab` keys to set up a scheduled workflow.
+
+    How to migrate:
+
+    * **If your schedule is in seconds**: just rename `schedule` to `interval`;
+    * **If your schedule is a crontab**: rename `schedule` to `crontab`.
+
+        Be careful when migrating from `schedule` to `crontab`, there is also a fix to apply.
+        The old `schedule` syntax incorrectly parses the string as `minute hour day_of_week day_of_month month_of_year` but the `crontab` syntax properly parses the string as `minute hour day_of_month month_of_year day_of_week`.
+
+        For example: `0 12 1 * *` should become `0 12 * * 1` for a scheduled workflow at 12:00 UTC on Monday.
 
 Please note that the scheduler must be started to handle periodic workflows :
 
