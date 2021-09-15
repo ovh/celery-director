@@ -381,10 +381,10 @@ def test_build_celery_invalid_crontab():
 def test_build_celery_invalid_schedule():
     cron_schedule = {"crontab": "* * * * 12"}
     with pytest.raises(WorkflowSyntaxError):
-        build_celery_schedule("workflow_cron_invalid_cron", cron_schedule)
+        build_celery_schedule("workflow_invalid_crontab", cron_schedule)
 
 
 def test_build_celery_invalid_periodic_key():
     cron_schedule = {"non_valid_key": "* * * * *"}
     with pytest.raises(WorkflowSyntaxError):
-        build_celery_schedule("workflow_cron_invalid_key", cron_schedule)
+        build_celery_schedule("workflow_invalid_key", cron_schedule)

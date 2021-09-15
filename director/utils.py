@@ -22,7 +22,7 @@ def format_schema_errors(e):
     }
 
 
-def build_celery_schedule(workflow, data):
+def build_celery_schedule(workflow_name, data):
     """A celery schedule can accept seconds or crontab"""
 
     def _handle_schedule(schedule):
@@ -62,7 +62,7 @@ def build_celery_schedule(workflow, data):
 
     if len(keys) != 1 or keys[0] not in schedule_functions.keys():
         # When there is no key (schedule, interval, crontab) in the periodic configuration
-        raise WorkflowSyntaxError(workflow)
+        raise WorkflowSyntaxError(workflow_name)
 
     schedule_key = keys[0]
     schedule_input = data[schedule_key]
@@ -70,4 +70,4 @@ def build_celery_schedule(workflow, data):
         # Apply the function mapped to the schedule type
         return str(schedule_input), schedule_functions[schedule_key](schedule_input)
     except Exception:
-        raise WorkflowSyntaxError(workflow)
+        raise WorkflowSyntaxError(workflow_name)
