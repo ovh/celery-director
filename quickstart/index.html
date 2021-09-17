@@ -369,6 +369,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../guides/cleanup-workflows/" title="Cleanup Workflows" class="md-nav__link">
+      Cleanup Workflows
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../guides/enable-authentication/" title="Enable Authentication" class="md-nav__link">
       Enable Authentication
     </a>
@@ -395,6 +407,18 @@
   <li class="md-nav__item">
     <a href="../guides/error-tracking/" title="Error Tracking" class="md-nav__link">
       Error Tracking
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guides/custom-configuration/" title="Custom Configuration" class="md-nav__link">
+      Custom Configuration
     </a>
   </li>
 
@@ -500,7 +524,6 @@ simplify the initialization of a Celery project by removing all the long an bori
 You can now export the DIRECTOR_HOME environment variable
 </code></pre></div>
 
-
 <div class="admonition info">
 <p class="admonition-title">Info</p>
 <p>Because you can have several projects in your machine, Director needs to know what
@@ -516,7 +539,6 @@ set your <code>DIRECTOR_HOME</code> environment variable :</p>
     <span class="na">...</span>             <span class="c1"># Other files containing other tasks.</span>
 </code></pre></div>
 
-
 <p>The Python files in the <code>tasks</code> folder will contain your Celery tasks :</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">director</span> <span class="kn">import</span> <span class="n">task</span>
 
@@ -526,7 +548,6 @@ set your <code>DIRECTOR_HOME</code> environment variable :</p>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Extracting data&quot;</span><span class="p">)</span>
 </code></pre></div>
 
-
 <p>While the <code>workflows.yml</code> file will be used to combine them into workflows :</p>
 <div class="codehilite"><pre><span></span><code><span class="nt">example.ETL</span><span class="p">:</span>
   <span class="nt">tasks</span><span class="p">:</span>
@@ -534,7 +555,6 @@ set your <code>DIRECTOR_HOME</code> environment variable :</p>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TRANSFORM</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">LOAD</span>
 </code></pre></div>
-
 
 <h2 id="configure-the-database">Configure the database</h2>
 <p>Director needs a connection to a relational database to store the dependencies
@@ -546,7 +566,6 @@ between your tasks.</p>
 <span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;sqlite:////path/to/your/database.db&quot;</span>                         <span class="c1"># Using SQLite</span>
 </code></pre></div>
 
-
 <p>Generate the database:</p>
 <div class="codehilite"><pre><span></span><code>$ director db upgrade
 INFO  <span class="o">[</span>alembic.runtime.migration<span class="o">]</span> Context impl SQLiteImpl.
@@ -554,42 +573,37 @@ INFO  <span class="o">[</span>alembic.runtime.migration<span class="o">]</span> 
 INFO  <span class="o">[</span>alembic.runtime.migration<span class="o">]</span> Running upgrade  -&gt; 70631f8bcff3, Init database
 </code></pre></div>
 
-
 <h2 id="run-the-workflow">Run the workflow</h2>
 <p>The <code>workflow</code> command can be used to manage your workflows.</p>
 <p><strong>List</strong></p>
-<div class="codehilite"><pre><span></span><code>$ director workflow list
-+-----------------+----------+----------------------+
-<span class="p">|</span> Workflows <span class="o">(</span><span class="m">2</span><span class="o">)</span>   <span class="p">|</span> Periodic <span class="p">|</span> Tasks                <span class="p">|</span>
-+-----------------+----------+----------------------+
-<span class="p">|</span> example.ETL     <span class="p">|</span>    --    <span class="p">|</span> EXTRACT              <span class="p">|</span>
-<span class="p">|</span>                 <span class="p">|</span>          <span class="p">|</span> TRANSFORM            <span class="p">|</span>
-<span class="p">|</span>                 <span class="p">|</span>          <span class="p">|</span> LOAD                 <span class="p">|</span>
-+-----------------+----------+----------------------+
-<span class="p">|</span> example.RANDOMS <span class="p">|</span>    --    <span class="p">|</span> Group GROUP_RANDOMS: <span class="p">|</span>
-<span class="p">|</span>                 <span class="p">|</span>          <span class="p">|</span>  └ RANDOM            <span class="p">|</span>
-<span class="p">|</span>                 <span class="p">|</span>          <span class="p">|</span>  └ RANDOM            <span class="p">|</span>
-<span class="p">|</span>                 <span class="p">|</span>          <span class="p">|</span> ADD                  <span class="p">|</span>
-+-----------------+----------+----------------------+
+<div class="codehilite"><pre><span></span><code><span class="c">$ director workflow list</span>
+<span class="nb">+-----------------+----------+----------------------+</span><span class="c"></span>
+<span class="c">| Workflows (2)   | Periodic | Tasks                |</span>
+<span class="nb">+-----------------+----------+----------------------+</span><span class="c"></span>
+<span class="c">| example</span><span class="nt">.</span><span class="c">ETL     |    </span><span class="nb">--</span><span class="c">    | EXTRACT              |</span>
+<span class="c">|                 |          | TRANSFORM            |</span>
+<span class="c">|                 |          | LOAD                 |</span>
+<span class="nb">+-----------------+----------+----------------------+</span><span class="c"></span>
+<span class="c">| example</span><span class="nt">.</span><span class="c">RANDOMS |    </span><span class="nb">--</span><span class="c">    | Group GROUP_RANDOMS: |</span>
+<span class="c">|                 |          |  └ RANDOM            |</span>
+<span class="c">|                 |          |  └ RANDOM            |</span>
+<span class="c">|                 |          | ADD                  |</span>
+<span class="nb">+-----------------+----------+----------------------+</span><span class="c"></span>
 </code></pre></div>
-
 
 <p><strong>Run</strong></p>
 <div class="codehilite"><pre><span></span><code>$ director workflow run example.ETL
 </code></pre></div>
-
 
 <h2 id="execute-the-tasks">Execute the tasks</h2>
 <p>A Celery worker instance needs to be started to consume the broker and execute the tasks :</p>
 <div class="codehilite"><pre><span></span><code>$ director celery worker --loglevel<span class="o">=</span>INFO
 </code></pre></div>
 
-
 <h2 id="display-the-result">Display the result</h2>
 <p>You can finally start the webserver to track the tasks evolution :</p>
 <div class="codehilite"><pre><span></span><code>$ director webserver
 </code></pre></div>
-
 
 <p>The WebUI is available by default on <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a> :</p>
 <p><img alt="Celery Director ETL" src="../img/etl.png" /></p>

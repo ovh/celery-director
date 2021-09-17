@@ -357,6 +357,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../cleanup-workflows/" title="Cleanup Workflows" class="md-nav__link">
+      Cleanup Workflows
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../enable-authentication/" title="Enable Authentication" class="md-nav__link">
       Enable Authentication
     </a>
@@ -383,6 +395,18 @@
   <li class="md-nav__item">
     <a href="../error-tracking/" title="Error Tracking" class="md-nav__link">
       Error Tracking
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../custom-configuration/" title="Custom Configuration" class="md-nav__link">
+      Custom Configuration
     </a>
   </li>
 
@@ -471,17 +495,15 @@ are developing them :</p>
 <div class="codehilite"><pre><span></span><code>$ director workflow run ovh.MY_WORKFLOW
 </code></pre></div>
 
-
 <h2 id="using-the-api">Using the API</h2>
 <p>You can run a workflow using a POST request on the Director API. This is very
 convenient if your applications are based on webservices.</p>
 <p>The request is a <strong>POST</strong> on the <code>/api/workflows</code> endpoint :</p>
-<div class="codehilite"><pre><span></span><code>$ curl --header <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
-  --request POST <span class="se">\</span>
-  --data <span class="s1">&#39;{&quot;project&quot;:&quot;ovh&quot;, &quot;name&quot;: &quot;MY_WORKFLOW&quot;, &quot;payload&quot;: {}}&#39;</span> <span class="se">\</span>
-  http://localhost:8000/api/workflows
+<div class="codehilite"><pre><span></span><code><span class="o">$</span> <span class="n">curl</span> <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> \
+  <span class="o">--</span><span class="n">request</span> <span class="n">POST</span> \
+  <span class="o">--</span><span class="n">data</span> <span class="s1">&#39;{&quot;project&quot;:&quot;ovh&quot;, &quot;name&quot;: &quot;MY_WORKFLOW&quot;, &quot;payload&quot;: {}}&#39;</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">workflows</span>
 </code></pre></div>
-
 
 <div class="admonition info">
 <p class="admonition-title">Technical explanation</p>
@@ -495,7 +517,7 @@ by providing an endpoint used to execute a workflow and its tasks, so there's no
 have the modules available in the producer's PYTHON_PATH.</p>
 </div>
 <h2 id="using-the-periodic-scheduling">Using the periodic scheduling</h2>
-<p>A workflow can also be execute periodically without any manual action from the user. Director provides
+<p>A workflow can also be executed periodically without any manual action from the user. Director provides
 a <a href="../build-workflows/#periodic-workflows">simple YAML syntax</a> for that.</p>
                 
                   
@@ -533,13 +555,13 @@ a <a href="../build-workflows/#periodic-workflows">simple YAML syntax</a> for th
           </a>
         
         
-          <a href="../enable-authentication/" title="Enable Authentication" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../cleanup-workflows/" title="Cleanup Workflows" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Enable Authentication
+                Cleanup Workflows
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

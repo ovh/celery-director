@@ -364,6 +364,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../cleanup-workflows/" title="Cleanup Workflows" class="md-nav__link">
+      Cleanup Workflows
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../enable-authentication/" title="Enable Authentication" class="md-nav__link">
       Enable Authentication
     </a>
@@ -390,6 +402,18 @@
   <li class="md-nav__item">
     <a href="../error-tracking/" title="Error Tracking" class="md-nav__link">
       Error Tracking
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../custom-configuration/" title="Custom Configuration" class="md-nav__link">
+      Custom Configuration
     </a>
   </li>
 
@@ -496,7 +520,6 @@ simple YAML syntax.</p>
     <span class="k">pass</span>
 </code></pre></div>
 
-
 <h2 id="chaining-multiple-tasks">Chaining multiple tasks</h2>
 <p>Chaining these tasks in the <code>workflows.yml</code> file is pretty simple :</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># Chain example</span>
@@ -511,7 +534,6 @@ simple YAML syntax.</p>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">B</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">C</span>
 </code></pre></div>
-
 
 <p>In this example each task will be executed one after the other : first the task A will
 be executed, then the task B and finally the task C.</p>
@@ -536,43 +558,56 @@ The <code>type: group</code> keywords can be used to handle this canvas :</p>
           <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">C</span>
 </code></pre></div>
 
-
 <p>In this example the group is named <strong>GROUP_1</strong> but it can be anything. The important
 is to keep unique names in case of multiple groups in your workflow.</p>
 <h2 id="periodic-workflows">Periodic workflows</h2>
 <p>Celery provides a scheduler used to periodically execute some tasks. This scheduler is named
 the <a href="https://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html">Celery beat</a>.</p>
 <p>Director allows you to periodically schedule a whole workflow using a simple YAML syntax.</p>
-<p>First example:</p>
+<p>You can use the <code>periodic &gt; interval</code> key with a number argument (in seconds):</p>
 <div class="codehilite"><pre><span></span><code><span class="nt">example.CHAIN</span><span class="p">:</span>
   <span class="nt">tasks</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">A</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">B</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">C</span>
   <span class="nt">periodic</span><span class="p">:</span>
-    <span class="nt">schedule</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">60</span>
+    <span class="nt">interval</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">60</span>
 </code></pre></div>
 
-
-<p>Second example:</p>
+<p>You can also use the <code>periodic &gt; crontab</code> key with a string argument:</p>
 <div class="codehilite"><pre><span></span><code><span class="nt">example.CHAIN_CRONTAB</span><span class="p">:</span>
   <span class="nt">tasks</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">A</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">B</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">C</span>
   <span class="nt">periodic</span><span class="p">:</span>
-    <span class="nt">schedule</span><span class="p">:</span> <span class="s">&quot;0</span><span class="nv"> </span><span class="s">*/3</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&quot;</span>
+    <span class="nt">crontab</span><span class="p">:</span> <span class="s">&quot;0</span><span class="nv"> </span><span class="s">*/3</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&quot;</span>
 </code></pre></div>
 
+<p>The format is the following (the <a href="https://docs.celeryproject.org/en/v4.4.7/userguide/periodic-tasks.html#crontab-schedules">official documentation</a> of the <code>crontab</code> function gives some examples of each attribute):</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">periodic</span><span class="p">:</span>
+  <span class="nt">crontab</span><span class="p">:</span> <span class="s">&quot;minute</span><span class="nv"> </span><span class="s">hour</span><span class="nv"> </span><span class="s">day_of_month</span><span class="nv"> </span><span class="s">month_of_year</span><span class="nv"> </span><span class="s">day_of_week&quot;</span>
+</code></pre></div>
 
-<p>The <code>periodic &gt; schedule</code> key takes an integer (unity is the second) or a string argument
-(<a href="https://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html#crontab-schedules">crontab</a>
-syntax). So in the first example, the <em>example.CHAIN</em> worflow will be executed <strong>every 60 seconds</strong>
-and the second one, <em>example.CHAIN_CRONTAB</em>, <strong>every three hours</strong>.</p>
+<p>So in the first example, the <em>example.CHAIN</em> workflow will be executed <strong>every 60 seconds</strong> and the second one, <em>example.CHAIN_CRONTAB</em>, <strong>every three hours</strong>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Older versions of Celery Director used the <code>periodic &gt; schedule</code> key which is now deprecated.</p>
+<p>It is strongly advised to migrate to <code>periodic &gt; interval</code> or <code>periodic &gt; crontab</code> keys to set up a scheduled workflow.</p>
+<p>How to migrate:</p>
+<ul>
+<li><strong>If your schedule is in seconds</strong>: just rename <code>schedule</code> to <code>interval</code>;</li>
+<li>
+<p><strong>If your schedule is a crontab</strong>: rename <code>schedule</code> to <code>crontab</code>.</p>
+<p>Be careful when migrating from <code>schedule</code> to <code>crontab</code>, there is also a fix to apply.
+The old <code>schedule</code> syntax incorrectly parses the string as <code>minute hour day_of_week day_of_month month_of_year</code> but the <code>crontab</code> syntax properly parses the string as <code>minute hour day_of_month month_of_year day_of_week</code>.</p>
+<p>For example: <code>0 12 1 * *</code> should become <code>0 12 * * 1</code> for a scheduled workflow at 12:00 UTC on Monday.</p>
+</li>
+</ul>
+</div>
 <p>Please note that the scheduler must be started to handle periodic workflows :</p>
 <div class="codehilite"><pre><span></span><code>$ director celery beat
 </code></pre></div>
-
 
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -591,7 +626,6 @@ beat</code> command.</p>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">C</span>
   <span class="nt">queue</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">q1</span>
 </code></pre></div>
-
 
 <p>You need the start Celery worker instance with the <code>--queues</code> option:</p>
 <div class="codehilite"><pre><span></span><code>$ director celery worker --loglevel<span class="o">=</span>INFO --queues<span class="o">=</span>q1

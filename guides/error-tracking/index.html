@@ -305,6 +305,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../cleanup-workflows/" title="Cleanup Workflows" class="md-nav__link">
+      Cleanup Workflows
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../enable-authentication/" title="Enable Authentication" class="md-nav__link">
       Enable Authentication
     </a>
@@ -341,6 +353,18 @@
       Error Tracking
     </a>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../custom-configuration/" title="Custom Configuration" class="md-nav__link">
+      Custom Configuration
+    </a>
   </li>
 
         
@@ -395,7 +419,6 @@
 <div class="codehilite"><pre><span></span><code><span class="nv">DIRECTOR_SENTRY_DSN</span><span class="o">=</span><span class="s2">&quot;https://xyz@sentry.example.com/0&quot;</span>
 </code></pre></div>
 
-
 <p>Let's imagine the following workflow :</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># workflows.yml</span>
 <span class="nn">---</span>
@@ -404,7 +427,6 @@
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">WORKING_TASK</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ERROR_TASK</span>
 </code></pre></div>
-
 
 <p>With the associated tasks :</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># tasks/example.py</span>
@@ -418,7 +440,6 @@
 <span class="k">def</span> <span class="nf">error_task</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">)</span>
 </code></pre></div>
-
 
 <p>When a Celery worker will execute this code, an issue will be created in Sentry with the <code>ZeroDivisionError</code> :</p>
 <p><img alt="Sentry issue" src="../../img/sentry_issue.png" /></p>
@@ -462,13 +483,13 @@
           </a>
         
         
-          <a href="../../api/" title="API" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../custom-configuration/" title="Custom Configuration" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                API
+                Custom Configuration
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
