@@ -2,7 +2,7 @@
 
 ## **GET** `/api/workflows`
 
-List the workflows instances.
+List the workflow instances.
 
 **Example request:**
 
