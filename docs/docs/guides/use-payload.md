@@ -37,7 +37,7 @@ $ curl --header "Content-Type: application/json" \
 
 ## Handle payload
 
-You can handle the payload in the code using the **kwargs** dictionnary :
+You can handle the payload in the code using the **kwargs** dictionary :
 
 ```python
 @task(name="ORDER_PRODUCT")
@@ -63,7 +63,7 @@ your workflow.
 
 ## Create the schema
 
-The previous example executes the workflow without validate its payload. Director
+The previous example executes the workflow without validating its payload. Director
 provides a way to validate it using [JsonSchema](https://json-schema.org/understanding-json-schema/).
 
 Your schema needs to be stored in a `schemas` folder inside your `DIRECTOR_HOME` (you have to create
@@ -92,7 +92,7 @@ product.ORDER:
 ```
 
 !!! tip
-    You can host your schemas into subfolders (ie `$DIRECTOR_HOME/schemas/foo/bar/baz.json`)
+    You can host your schemas into subfolders (i.e. `$DIRECTOR_HOME/schemas/foo/bar/baz.json`)
     and reference it in your YAML file with : `schema: foo/bar/baz`.
 
 From now the execution will be blocked if the payload is not valid :
@@ -133,7 +133,7 @@ def update_cache(*args, **kwargs):
     return update_user(user)
 ```
 
-This way the whole list of users will be updated every hours, and a manual update
+This way the whole list of users will be updated every hour, and a manual update
 can be done on a specific user :
 
 ```
