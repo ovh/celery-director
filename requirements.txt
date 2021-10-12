@@ -4,11 +4,11 @@ flower==0.9.3
 kombu==4.6.11
 
 # Databases
-psycopg2-binary
+psycopg2-binary==2.8.4
 SQLAlchemy==1.3.11
 sqlalchemy-utils==0.35.0
-mysql-connector-python
-redis
+mysql-connector-python==8.0.21
+redis==3.3.11
 alembic==1.3.2
 
 # Flask
@@ -20,10 +20,10 @@ Flask-HTTPAuth==4.1.0
 Werkzeug==1.0.1
 
 # Misc
-gunicorn
+gunicorn==20.0.4
 environs==6.1.0
 pyyaml==5.4.1
 click==7.0
 terminaltables==3.1.0
 pluginbase==1.0.0
-sentry-sdk
+sentry-sdk==0.16.3
