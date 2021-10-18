@@ -18,9 +18,9 @@ def beat(dev_mode, beat_args):
     """Start the beat instance"""
     args = [
         "celery",
-        "beat",
         "-A",
         "director._auto:cel",
+        "beat",
     ]
     if dev_mode:
         args += [
@@ -38,9 +38,9 @@ def worker(dev_mode, worker_args):
     """Start a Celery worker instance"""
     args = [
         "celery",
-        "worker",
         "-A",
         "director._auto:cel",
+        "worker",
     ]
     if dev_mode:
         args += [
