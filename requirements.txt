@@ -1,7 +1,7 @@
 # Celery Packages
-celery==5.1.2
-flower==1.0.0
-kombu==5.1.0
+celery==5.2.0rc1
+flower==1.0.1
+kombu==5.2.0rc1
 
 # Databases
 psycopg2-binary==2.8.4
@@ -23,7 +23,7 @@ Werkzeug==1.0.1
 gunicorn==20.1.0
 environs==6.1.0
 pyyaml==5.4.1
-click==7.1.2
+click==8.0.3
 terminaltables==3.1.0
 pluginbase==1.0.1
 sentry-sdk==0.16.3
