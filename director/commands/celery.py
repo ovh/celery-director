@@ -57,5 +57,5 @@ def worker(dev_mode, worker_args):
 def flower(ctx, flower_args):
     """Start the flower instance"""
     broker = ctx.app.config["CELERY_CONF"]["broker_url"]
-    args = ["flower", "-b", broker] + list(flower_args)
-    os.execvp(args[0], args)
+    args = ["celery", "flower", "-b", broker] + list(flower_args)
+    os.execvp(args[0], args[1:])
