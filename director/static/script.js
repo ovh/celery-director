@@ -50,7 +50,7 @@ const store = new Vuex.Store({
     listWorkflows({
       commit
     }) {
-      axios.get(API_URL + "/workflows").then((response) => {
+      axios.get(API_URL + "/workflows?with_payload=false").then((response) => {
         commit('updateWorkflows', response.data)
         commit('changeLoadingState', false)
       })
@@ -285,7 +285,7 @@ new Vue({
         this.$store.dispatch('listWorkflows');
       },
       REFRESH_INTERVAL);
-    
+
     let workflowID = this.$route.params.id;
     if (workflowID) {
       this.$store.dispatch('getWorkflow', workflowID);

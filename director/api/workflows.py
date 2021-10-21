@@ -1,6 +1,7 @@
-from flask import current_app as app
+from distutils.util import strtobool
+
 from flask import abort, jsonify, request
-from jsonschema.exceptions import ValidationError, SchemaError
+from flask import current_app as app
 
 from director.api import api_bp, validate
 from director.auth import auth
@@ -76,13 +77,23 @@ def relaunch_workflow(workflow_id):
 @auth.login_required
 def list_workflows():
     page = request.args.get("page", type=int, default=1)
+    # Convert with_payload arg to boolean, if we encounter an error,
+    # ignore and set with_payload to its default value (True)
+    # We don't do request.args.get with type=bool because it doesn't seem to work as expected because
+    # this most likely casts the string as bool which is not the proper string to bool conversion we need
+    try:
+        with_payload = strtobool(
+            request.args.get("with_payload", type=str, default="True")
+        )
+    except ValueError:
+        with_payload = True
     per_page = request.args.get(
         "per_page", type=int, default=app.config["WORKFLOWS_PER_PAGE"]
     )
     workflows = Workflow.query.order_by(Workflow.created_at.desc()).paginate(
         page, per_page
     )
-    return jsonify([w.to_dict() for w in workflows.items])
+    return jsonify([w.to_dict(with_payload=with_payload) for w in workflows.items])
 
 
 @api_bp.route("/workflows/<workflow_id>")
