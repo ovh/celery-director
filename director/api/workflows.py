@@ -1,5 +1,7 @@
+from datetime import datetime, timedelta
 from distutils.util import strtobool
 
+import pytz
 from flask import abort, jsonify, request
 from flask import current_app as app
 
@@ -9,6 +11,7 @@ from director.builder import WorkflowBuilder
 from director.exceptions import WorkflowNotFound
 from director.extensions import cel_workflows, schema
 from director.models.workflows import Workflow
+from director.utils import build_celery_schedule
 
 
 def _get_workflow(workflow_id):
@@ -105,3 +108,40 @@ def get_workflow(workflow_id):
     resp = workflow.to_dict()
     resp.update({"tasks": tasks})
     return jsonify(resp)
+
+
+@api_bp.route("/list/workflows")
+@auth.login_required
+def get_definition():
+    tz = pytz.utc
+    page = request.args.get("page", type=int, default=1)
+    per_page = request.args.get(
+        "per_page", type=int, default=app.config["WORKFLOWS_PER_PAGE"]
+    )
+    data = [
+        {"fullname": k, "project": k.split(".")[0], "name": k.split(".")[1], **v}
+        for k, v in sorted(cel_workflows.workflows.items(), key=lambda item: item[0])
+    ]
+    data = data[per_page * (page - 1) : per_page * page - 1]
+    for item in data:
+        if item.get("periodic"):
+            _, schedule = build_celery_schedule("name", item["periodic"])
+            last_workflow = (
+                Workflow.query.filter_by(name=item["name"], project=item["project"])
+                .order_by(Workflow.created_at.desc())
+                .first()
+            )
+            now = tz.localize(datetime.now())
+            last_run = tz.localize(last_workflow.created_at) if last_workflow else now
+            if isinstance(schedule, float):
+                delta = timedelta(seconds=schedule)
+                next_run = last_run + delta if last_run + delta > now else now + delta
+            else:
+                delta = schedule.remaining_estimate(last_run)
+                next_run = (
+                    last_run + delta
+                    if last_run + delta > now
+                    else now + schedule.remaining_estimate(now)
+                )
+            item["next_run"] = next_run
+    return jsonify(data)

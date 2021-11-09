@@ -271,3 +271,87 @@ def test_schema(client, no_worker):
     payload["payload"] = {"name": "foo", "price": 100}
     resp = client.post("/api/workflows", json=payload)
     assert resp.status_code == 201
+
+
+def test_get_definition(client, no_worker):
+    resp = client.get("/api/list/workflows")
+    assert resp.status_code == 200
+    assert resp.json == [
+        {
+            "fullname": "example.CELERY_ERROR_MULTIPLE_TASKS",
+            "name": "CELERY_ERROR_MULTIPLE_TASKS",
+            "project": "example",
+            "tasks": ["TASK_A", "TASK_CELERY_ERROR"],
+        },
+        {
+            "fullname": "example.CELERY_ERROR_ONE_TASK",
+            "name": "CELERY_ERROR_ONE_TASK",
+            "project": "example",
+            "tasks": ["TASK_CELERY_ERROR"],
+        },
+        {
+            "fullname": "example.ERROR",
+            "name": "ERROR",
+            "project": "example",
+            "tasks": ["TASK_ERROR"],
+        },
+        {
+            "fullname": "example.RETURN_EXCEPTION",
+            "name": "RETURN_EXCEPTION",
+            "project": "example",
+            "tasks": ["STR", "TASK_ERROR"],
+        },
+        {
+            "fullname": "example.RETURN_VALUES",
+            "name": "RETURN_VALUES",
+            "project": "example",
+            "tasks": ["STR", "INT", "LIST", "NONE", "DICT", "NESTED"],
+        },
+        {
+            "fullname": "example.SIMPLE_CHAIN",
+            "name": "SIMPLE_CHAIN",
+            "project": "example",
+            "tasks": ["TASK_A", "TASK_B", "TASK_C"],
+        },
+        {
+            "fullname": "example.SIMPLE_CHAIN_ERROR",
+            "name": "SIMPLE_CHAIN_ERROR",
+            "project": "example",
+            "tasks": ["TASK_A", "TASK_B", "TASK_ERROR"],
+        },
+        {
+            "fullname": "example.SIMPLE_GROUP",
+            "name": "SIMPLE_GROUP",
+            "project": "example",
+            "tasks": [
+                "TASK_A",
+                {"EXAMPLE_GROUP": {"tasks": ["TASK_B", "TASK_C"], "type": "group"}},
+            ],
+        },
+        {
+            "fullname": "example.SIMPLE_GROUP_ERROR",
+            "name": "SIMPLE_GROUP_ERROR",
+            "project": "example",
+            "tasks": [
+                "TASK_A",
+                {"EXAMPLE_GROUP": {"tasks": ["TASK_ERROR", "TASK_C"], "type": "group"}},
+            ],
+        },
+        {
+            "fullname": "example.WORKFLOW",
+            "name": "WORKFLOW",
+            "project": "example",
+            "tasks": ["TASK_EXAMPLE"],
+        },
+        {
+            "fullname": "schemas.SIMPLE_SCHEMA",
+            "name": "SIMPLE_SCHEMA",
+            "project": "schemas",
+            "schema": {
+                "properties": {"name": {"type": "string"}, "price": {"type": "number"}},
+                "required": ["name"],
+                "type": "object",
+            },
+            "tasks": ["TASK_EXAMPLE"],
+        },
+    ]
