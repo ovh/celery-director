@@ -12,6 +12,7 @@ HIDDEN_CONFIG = [
     "DIRECTOR_FLOWER_URL",
     "DIRECTOR_DATABASE_URI",
     "DIRECTOR_DATABASE_POOL_RECYCLE",
+    "DIRECTOR_DATABASE_TABLE_PREFIX",
     "DIRECTOR_BROKER_URI",
     "DIRECTOR_RESULT_BACKEND_URI",
     "DIRECTOR_SENTRY_DSN",
@@ -54,6 +55,7 @@ class Config(object):
         self.SQLALCHEMY_ENGINE_OPTIONS = {
             "pool_recycle": env.int("DIRECTOR_DATABASE_POOL_RECYCLE", -1),
         }
+        self.DB_TABLE_PREFIX = env.str("DIRECTOR_DATABASE_TABLE_PREFIX", "")
 
         # Celery configuration
         self.CELERY_CONF = {
