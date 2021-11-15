@@ -5,12 +5,12 @@ from sqlalchemy.types import PickleType
 
 from director.extensions import db
 from director.exceptions import UserNotFound
-from director.models import BaseModel, StatusType
+from director.models import BaseModel, StatusType, DB_TABLE_PREFIX
 from director.models.utils import JSONBType
 
 
 class User(BaseModel):
-    __tablename__ = "users"
+    __tablename__ = f"{DB_TABLE_PREFIX}users"
 
     username = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)

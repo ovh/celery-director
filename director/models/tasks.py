@@ -4,12 +4,12 @@ from sqlalchemy_utils import UUIDType
 from sqlalchemy.types import PickleType
 
 from director.extensions import db
-from director.models import BaseModel, StatusType
+from director.models import BaseModel, StatusType, DB_TABLE_PREFIX
 from director.models.utils import JSONBType
 
 
 class Task(BaseModel):
-    __tablename__ = "tasks"
+    __tablename__ = f"{DB_TABLE_PREFIX}tasks"
 
     key = db.Column(db.String(255), nullable=False)
     status = db.Column(db.Enum(StatusType), default=StatusType.pending, nullable=False)

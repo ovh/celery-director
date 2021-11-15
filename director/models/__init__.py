@@ -1,5 +1,6 @@
 import enum
 import uuid
+import os
 
 from sqlalchemy_utils import UUIDType
 
@@ -8,6 +9,9 @@ from director.extensions import db
 
 def get_uuid():
     return str(uuid.uuid4())
+
+
+DB_TABLE_PREFIX = os.getenv('DB_TABLE_PREFIX', '')
 
 
 class StatusType(enum.Enum):
