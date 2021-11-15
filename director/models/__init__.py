@@ -11,7 +11,7 @@ def get_uuid():
     return str(uuid.uuid4())
 
 
-DB_TABLE_PREFIX = os.getenv('DB_TABLE_PREFIX')
+DB_TABLE_PREFIX = os.getenv('DB_TABLE_PREFIX', '')
 
 
 class StatusType(enum.Enum):
