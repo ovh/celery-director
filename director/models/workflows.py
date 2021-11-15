@@ -1,10 +1,10 @@
 from director.extensions import db
-from director.models import BaseModel, StatusType
+from director.models import BaseModel, StatusType, DB_TABLE_PREFIX
 from director.models.utils import JSONBType
 
 
 class Workflow(BaseModel):
-    __tablename__ = "workflows"
+    __tablename__ = f"{DB_TABLE_PREFIX}workflows"
 
     name = db.Column(db.String(255), nullable=False)
     project = db.Column(db.String(255), nullable=False)
