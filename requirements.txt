@@ -1,5 +1,5 @@
 # Celery Packages
-celery==5.2.0rc1
+celery==5.2.1
 flower==1.0.0
 kombu==5.2.0rc1
 
