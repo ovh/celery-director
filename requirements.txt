@@ -1,7 +1,7 @@
 # Celery Packages
 celery==5.2.1
 flower==1.0.0
-kombu==5.2.0rc1
+kombu==5.2.1
 
 # Databases
 psycopg2-binary==2.8.4
