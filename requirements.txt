@@ -1,5 +1,5 @@
 # Celery Packages
-celery==4.4.7
+celery==5.2.2
 flower==0.9.3
 kombu==4.6.11
 
