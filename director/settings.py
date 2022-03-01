@@ -73,6 +73,8 @@ class Config(object):
         # Default retention value (number of workflows to keep in the database)
         self.DEFAULT_RETENTION_OFFSET = env.int("DIRECTOR_DEFAULT_RETENTION_OFFSET", -1)
 
+        # static workflow file format
+        self.WORKFLOW_FORMAT = env.str("DIRECTOR_WORKFLOW_FORMAT", "yaml").lower()
 
 class UserConfig(dict):
     """Handle the user configuration"""

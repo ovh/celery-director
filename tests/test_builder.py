@@ -1,21 +1,26 @@
+import os
 from uuid import UUID
-
 import pytest
 
 from director.exceptions import WorkflowNotFound
 from director.tasks.workflows import start, end
 from director.models.tasks import Task
 from director.models.workflows import Workflow
+from director.settings import Config
 
 from tests.conftest import _remove_keys
 
 
-def test_create_unknown_workflow(create_builder):
+@pytest.mark.parametrize("workflow_fmt", [('yaml'), ('json')])
+def test_create_unknown_workflow(app, create_builder, workflow_fmt):
+    app.config["WORKFLOW_FORMAT"] = workflow_fmt
     with pytest.raises(WorkflowNotFound):
         create_builder("project", "UNKNOW_WORKFLOW", {})
 
 
-def test_build_one_task(create_builder):
+@pytest.mark.parametrize("workflow_fmt", [('yaml'), ('json')])
+def test_build_one_task(app, create_builder, workflow_fmt):
+    app.config["WORKFLOW_FORMAT"] = workflow_fmt
     data, builder = create_builder("example", "WORKFLOW", {"foo": "bar"})
     assert data == {
         "name": "WORKFLOW",
@@ -32,7 +37,9 @@ def test_build_one_task(create_builder):
     assert builder.canvas[1].task == "TASK_EXAMPLE"
 
 
-def test_build_chained_tasks(app, create_builder):
+@pytest.mark.parametrize("workflow_fmt", [('yaml'), ('json')])
+def test_build_chained_tasks(app, create_builder, workflow_fmt):
+    app.config["WORKFLOW_FORMAT"] = workflow_fmt
     keys = ["id", "created", "updated", "task"]
     data, builder = create_builder("example", "SIMPLE_CHAIN", {"foo": "bar"})
     assert data == {
@@ -76,8 +83,9 @@ def test_build_chained_tasks(app, create_builder):
         "status": "pending",
     }
 
-
-def test_build_grouped_tasks(app, create_builder):
+@pytest.mark.parametrize("workflow_fmt", [('yaml'), ('json')])
+def test_build_grouped_tasks(app, create_builder, workflow_fmt):
+    app.config["WORKFLOW_FORMAT"] = workflow_fmt
     keys = ["id", "created", "updated", "task"]
     data, builder = create_builder("example", "SIMPLE_GROUP", {"foo": "bar"})
     assert data == {
