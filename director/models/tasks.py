@@ -6,6 +6,7 @@ from sqlalchemy.types import PickleType
 from director.extensions import db
 from director.models import BaseModel, StatusType
 from director.models.utils import JSONBType
+from director.exceptions import TaskNotFound
 
 
 class Task(BaseModel):
@@ -29,6 +30,13 @@ class Task(BaseModel):
 
     def __repr__(self):
         return f"<Task {self.key}>"
+
+    @classmethod
+    def get_or_raise(cls, task_id):
+        task = cls.query.filter_by(id=task_id).first()
+        if not task:
+            raise TaskNotFound(f"Task {task_id} not found")
+        return task
 
     def to_dict(self):
         d = super().to_dict()
