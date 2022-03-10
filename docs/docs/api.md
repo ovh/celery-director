@@ -16,6 +16,7 @@ Accept: application/json
 
 - `per_page` (optional, default: 1000): the number of workflows to return
 - `page` (optional, default: 1): the page to start
+- `with_payload` (optional, default: True): return the "payload" property inside the workflows list response
 
 **Example response:**
 
