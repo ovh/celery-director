@@ -3,7 +3,6 @@ from pathlib import Path
 
 from environs import Env
 
-
 HIDDEN_CONFIG = [
     "DIRECTOR_ENABLE_DARK_THEME",
     "DIRECTOR_ENABLE_HISTORY_MODE",
@@ -15,6 +14,11 @@ HIDDEN_CONFIG = [
     "DIRECTOR_BROKER_URI",
     "DIRECTOR_RESULT_BACKEND_URI",
     "DIRECTOR_SENTRY_DSN",
+]
+
+SUPPORTED_WORKFLOW_FORMATS = [
+    'yml',
+    'json',
 ]
 
 
@@ -70,6 +74,11 @@ class Config(object):
 
         # Default retention value (number of workflows to keep in the database)
         self.DEFAULT_RETENTION_OFFSET = env.int("DIRECTOR_DEFAULT_RETENTION_OFFSET", -1)
+
+        # Workflow file format
+        self.WORKFLOW_FORMAT = env.str("DIRECTOR_WORKFLOW_FORMAT", "yml").lower()
+        if self.WORKFLOW_FORMAT not in SUPPORTED_WORKFLOW_FORMATS:
+            raise ValueError(f"unsupported workflow format: '{self.WORKFLOW_FORMAT}'")
 
 
 class UserConfig(dict):

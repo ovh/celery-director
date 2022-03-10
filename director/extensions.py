@@ -1,4 +1,3 @@
-import imp
 import json
 from pathlib import Path
 from json.decoder import JSONDecodeError
@@ -25,12 +24,23 @@ class CeleryWorkflow:
 
     def init_app(self, app):
         self.app = app
-        self.path = Path(self.app.config["DIRECTOR_HOME"]).resolve() / "workflows.yml"
-        with open(self.path) as f:
-            self.workflows = yaml.load(f, Loader=yaml.SafeLoader)
-
+        self.load_workflows()
         self.import_user_tasks()
         self.read_schemas()
+
+    @property
+    def format(self):
+        return self.app.config["WORKFLOW_FORMAT"]
+
+    @property
+    def loader(self):
+        return {
+            "yml": lambda f: yaml.load(f, Loader=yaml.SafeLoader),
+            "json": json.load,
+        }[self.format]
+
+    def home_path(self):
+        return Path(self.app.config["DIRECTOR_HOME"]).resolve()
 
     def get_by_name(self, name):
         workflow = self.workflows.get(name)
@@ -47,10 +57,13 @@ class CeleryWorkflow:
         except KeyError:
             return "celery"
 
-    def import_user_tasks(self):
-        self.plugin_base = PluginBase(package="director.foobar")
+    def load_workflows(self):
+        with open(Path(self.home_path() / f"workflows.{self.format}")) as f:
+            self.workflows = self.loader(f)
 
-        folder = Path(self.app.config["DIRECTOR_HOME"]).resolve()
+    def import_user_tasks(self):
+        folder = self.home_path()
+        self.plugin_base = PluginBase(package="director.foobar")
         self.plugin_source = self.plugin_base.make_plugin_source(
             searchpath=[str(folder)]
         )
@@ -70,11 +83,9 @@ class CeleryWorkflow:
                 )
 
     def read_schemas(self):
-        folder = Path(self.app.config["DIRECTOR_HOME"]).resolve()
-
         for name, conf in self.workflows.items():
             if "schema" in conf:
-                path = Path(folder / "schemas" / f"{conf['schema']}.json")
+                path = Path(self.home_path() / "schemas" / f"{conf['schema']}.json")
 
                 try:
                     schema = json.loads(open(path).read())
