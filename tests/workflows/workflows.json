@@ -1,0 +1,87 @@
+{
+    "example.WORKFLOW": {
+        "tasks": [
+            "TASK_EXAMPLE"
+        ]
+    },
+    "example.SIMPLE_CHAIN": {
+        "tasks": [
+            "TASK_A",
+            "TASK_B",
+            "TASK_C"
+        ]
+    },
+    "example.SIMPLE_GROUP": {
+        "tasks": [
+            "TASK_A",
+            {
+                "EXAMPLE_GROUP": {
+                    "type": "group",
+                    "tasks": [
+                        "TASK_B",
+                        "TASK_C"
+                    ]
+                }
+            }
+        ]
+    },
+    "example.ERROR": {
+        "tasks": [
+            "TASK_ERROR"
+        ]
+    },
+    "example.SIMPLE_CHAIN_ERROR": {
+        "tasks": [
+            "TASK_A",
+            "TASK_B",
+            "TASK_ERROR"
+        ]
+    },
+    "example.SIMPLE_GROUP_ERROR": {
+        "tasks": [
+            "TASK_A",
+            {
+                "EXAMPLE_GROUP": {
+                    "type": "group",
+                    "tasks": [
+                        "TASK_ERROR",
+                        "TASK_C"
+                    ]
+                }
+            }
+        ]
+    },
+    "schemas.SIMPLE_SCHEMA": {
+        "tasks": [
+            "TASK_EXAMPLE"
+        ],
+        "schema": "example/simple_schema"
+    },
+    "example.CELERY_ERROR_ONE_TASK": {
+        "tasks": [
+            "TASK_CELERY_ERROR"
+        ]
+    },
+    "example.CELERY_ERROR_MULTIPLE_TASKS": {
+        "tasks": [
+            "TASK_A",
+            "TASK_CELERY_ERROR"
+        ]
+    },
+    "example.RETURN_VALUES": {
+        "tasks": [
+            "STR",
+            "INT",
+            "LIST",
+            "NONE",
+            "DICT",
+            "NESTED"
+        ]
+    },
+    "example.RETURN_EXCEPTION": {
+        "tasks": [
+            "STR",
+            "TASK_ERROR"
+        ]
+    }
+}
