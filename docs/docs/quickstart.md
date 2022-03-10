@@ -55,6 +55,13 @@ example.ETL:
     - LOAD
 ```
 
+## Select your workflow format
+
+```shell
+DIRECTOR_WORKFLOW_FORMAT=yml  # Using YAML
+DIRECTOR_WORKFLOW_FORMAT=json # Using JSON
+```
+
 ## Configure the database
 
 Director needs a connection to a relational database to store the dependencies
