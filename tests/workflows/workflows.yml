@@ -64,3 +64,26 @@ example.RETURN_EXCEPTION:
   tasks:
     - STR
     - TASK_ERROR
+
+example.COMPLEX_WORKFLOW:
+  complex: true
+  tasks:
+  - name: TASK_EXAMPLE
+    type: task
+  - name: GROUP_EXAMPLE
+    type: group
+    tasks:
+    - name: TASK_A
+      type: task
+      queue: complex
+      options:
+        retries: 3
+    - name: TASK_B
+      type: task
+    - name: TASK_C
+      type: task
+  - name: TASK_EXAMPLE
+    type: task
+    queue: complex
+    options:
+      retries: 5

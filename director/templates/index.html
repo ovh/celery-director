@@ -179,6 +179,10 @@
                             <td>{{ selectedTask.key }}</td>
                           </tr>
                           <tr>
+                            <td><strong>Queue</strong></td>
+                            <td>{{ selectedTask.queue }}</td>
+                          </tr>
+                          <tr>
                             <td><strong>Task Status</strong></td>
                             <td>
                               <v-chip small :color="getColor(selectedTask.status)" dark>{{ selectedTask.status }}</v-chip>

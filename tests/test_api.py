@@ -228,6 +228,7 @@ def test_get_workflow(client, no_worker):
         "tasks": [
             {
                 "key": "TASK_EXAMPLE",
+                "queue": "celery",
                 "previous": [],
                 "result": None,
                 "status": "pending",
@@ -288,6 +289,35 @@ def test_get_definition(client, no_worker):
             "name": "CELERY_ERROR_ONE_TASK",
             "project": "example",
             "tasks": ["TASK_CELERY_ERROR"],
+        },
+        {
+            "fullname": "example.COMPLEX_WORKFLOW",
+            "name": "COMPLEX_WORKFLOW",
+            "project": "example",
+            "complex": True,
+            "tasks": [
+                {"name": "TASK_EXAMPLE", "type": "task"},
+                {
+                    "name": "GROUP_EXAMPLE",
+                    "tasks": [
+                        {
+                            "name": "TASK_A",
+                            "options": {"retries": 3},
+                            "queue": "complex",
+                            "type": "task",
+                        },
+                        {"name": "TASK_B", "type": "task"},
+                        {"name": "TASK_C", "type": "task"},
+                    ],
+                    "type": "group",
+                },
+                {
+                    "name": "TASK_EXAMPLE",
+                    "options": {"retries": 5},
+                    "queue": "complex",
+                    "type": "task",
+                },
+            ],
         },
         {
             "fullname": "example.ERROR",

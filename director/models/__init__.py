@@ -44,6 +44,7 @@ class BaseModel(db.Model):
     def save(self):
         db.session.add(self)
         self.commit()
+        return self
 
     def to_dict(self):
         return {

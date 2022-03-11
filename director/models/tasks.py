@@ -9,12 +9,11 @@ from director.models.utils import JSONBType
 
 
 class Task(BaseModel):
-    __tablename__ = "tasks"
-
     key = db.Column(db.String(255), nullable=False)
     status = db.Column(db.Enum(StatusType), default=StatusType.pending, nullable=False)
     previous = db.Column(JSONBType, default=[])
     result = db.Column(PickleType)
+    queue = db.Column(db.String(255))
 
     # Relationship
     workflow_id = db.Column(
@@ -37,6 +36,7 @@ class Task(BaseModel):
                 "key": self.key,
                 "status": self.status.value,
                 "task": self.id,
+                "queue": self.queue,
                 "previous": self.previous,
                 "result": self.result,
             }

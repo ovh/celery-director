@@ -99,6 +99,7 @@ def test_execute_chain_success(app, create_builder):
     # Tasks executed in Celery
     result = builder.run()
     assert result.get() is None
+
     assert result.parent.parent.parent.parent.get() is None
     assert result.parent.get() == "task_c"
     assert result.parent.state == "SUCCESS"
@@ -106,6 +107,55 @@ def test_execute_chain_success(app, create_builder):
     assert result.parent.parent.state == "SUCCESS"
     assert result.parent.parent.parent.get() == "task_a"
     assert result.parent.parent.parent.state == "SUCCESS"
+
+    # DB rows status updated
+    time.sleep(0.5)
+    with app.app_context():
+        tasks = Task.query.filter_by(id=tasks[0].id).all()
+        workflow = Workflow.query.filter_by(id=tasks[0].workflow_id).first()
+    assert workflow.status.value == "success"
+
+    for task in tasks:
+        assert task.status.value == "success"
+
+
+def test_execute_complex_success(app, create_builder):
+    app.config["WORKFLOW_FORMAT"] = "json"
+    workflow, builder = create_builder("example", "COMPLEX_WORKFLOW", {})
+    assert workflow["status"] == "pending"
+
+    # Canvas has been built
+    assert len(builder.canvas) == 5
+    assert builder.canvas[0].task == "director.tasks.workflows.start"
+    assert builder.canvas[-1].task == "director.tasks.workflows.end"
+    assert builder.canvas[1].task == "TASK_EXAMPLE"
+    grouped_tasks = builder.canvas[2].tasks
+    assert len(grouped_tasks) == 3
+
+    # Tasks added in DB
+    with app.app_context():
+        tasks = Task.query.order_by(Task.created_at.asc()).all()
+
+    expeted_tasks = ["TASK_EXAMPLE", "TASK_A", "TASK_B", "TASK_C", "TASK_EXAMPLE"]
+    assert len(tasks) == len(expeted_tasks)
+    assert [n.key for n in tasks] == expeted_tasks
+    assert set([n.status.value for n in tasks]) == {
+        "pending",
+    }
+
+    # Tasks executed in Celery
+    result = builder.run()
+    assert result.get() is None
+
+    assert result.parent.parent.parent.parent.parent.get() is None
+
+    assert result.parent.get() == "task_example"
+    assert result.parent.state == "SUCCESS"
+    assert result.parent.parent.get() == "task_example"
+    assert result.parent.parent.state == "SUCCESS"
+    assert result.parent.parent.parent.get() == ["task_a", "task_b", "task_c"]
+    assert result.parent.parent.parent.parent.get() == "task_example"
+    assert result.parent.parent.parent.parent.state == "SUCCESS"
 
     # DB rows status updated
     time.sleep(0.5)
@@ -268,7 +318,7 @@ def test_execute_celery_error_multiple_tasks(app, create_builder):
         assert result.get()
 
     # DB rows status updated
-    time.sleep(0.5)
+    time.sleep(1)
     with app.app_context():
         task_a = Task.query.filter_by(key="TASK_A").first()
         task_celery_error = Task.query.filter_by(key="TASK_CELERY_ERROR").first()
