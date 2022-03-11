@@ -5,14 +5,15 @@ venv/
 
 # Build
 build/
-director.egg-info/
 dist/
+*.egg-info/
 
 # Celery
 celerybeat-schedule.bak
 celerybeat-schedule.dat
 celerybeat-schedule.dir
 celerybeat-schedule.db
+*.pid
 
 # IDE
 .vscode/
