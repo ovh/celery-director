@@ -1,0 +1,7 @@
+example.FOLDER_1:
+  tasks:
+    - TASK_EXAMPLE
+
+example.FOLDER_2:
+  tasks:
+    - TASK_EXAMPLE

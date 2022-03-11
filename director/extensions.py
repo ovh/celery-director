@@ -58,8 +58,20 @@ class CeleryWorkflow:
             return "celery"
 
     def load_workflows(self):
-        with open(Path(self.home_path() / f"workflows.{self.format}")) as f:
-            self.workflows = self.loader(f)
+        folder = self.app.config["WORKFLOW_FOLDER"]
+        if folder:
+            files = Path(self.home_path() / folder).glob(f"**/*.{self.format}")
+        else:
+            files = [Path(self.home_path() / f"workflows.{self.format}")]
+
+        self.workflows = {}
+        for wf in files:
+            with open(wf) as f:
+                workflows = self.loader(f)
+                if not set(workflows) - set(self.workflows):
+                    raise ValueError("Duplicate workflows loaded")
+
+                self.workflows.update(workflows)
 
     def import_user_tasks(self):
         folder = self.home_path()

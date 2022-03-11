@@ -48,6 +48,7 @@ class Config(object):
         self.FLOWER_URL = env.str("DIRECTOR_FLOWER_URL", "http://127.0.0.1:5555")
         self.WORKFLOWS_PER_PAGE = env.int("DIRECTOR_WORKFLOWS_PER_PAGE", 1000)
         self.REFRESH_INTERVAL = env.int("DIRECTOR_REFRESH_INTERVAL", 30000)
+        self.WORKFLOW_FOLDER = env.str("DIRECTOR_WORKFLOW_FOLDER", "")
         self.WORKFLOW_FORMAT = env.str("DIRECTOR_WORKFLOW_FORMAT", "yml").lower()
         if self.WORKFLOW_FORMAT not in SUPPORTED_WORKFLOW_FORMATS:
             raise ValueError(f"unsupported workflow format: '{self.WORKFLOW_FORMAT}'")
