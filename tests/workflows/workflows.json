@@ -83,5 +83,10 @@
             "STR",
             "TASK_ERROR"
         ]
+    },
+    "example.JSON_WORKFLOW": {
+        "tasks": [
+            "TASK_EXAMPLE"
+        ]
     }
 }

@@ -64,3 +64,7 @@ example.RETURN_EXCEPTION:
   tasks:
     - STR
     - TASK_ERROR
+
+example.YML_WORKFLOW:
+  tasks:
+    - TASK_EXAMPLE
