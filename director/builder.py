@@ -1,4 +1,3 @@
-from functools import cached_property
 from types import MappingProxyType
 from uuid import uuid4
 
@@ -21,13 +20,17 @@ class WorkflowBuilder(object):
         self.canvas = []
         self.previous = []
 
-    @cached_property
+    @property
     def blueprint(self):
-        return MappingProxyType(self._blueprint)
+        if not getattr(self, "_blueprint_proxy", None):
+            self._blueprint_proxy = MappingProxyType(self._blueprint)
+        return self._blueprint_proxy
 
-    @cached_property
+    @property
     def workflow(self):
-        return Workflow.query.filter_by(id=self.workflow_id).first()
+        if not getattr(self, "_workflow", None):
+            self._workflow = Workflow.query.filter_by(id=self.workflow_id).first()
+        return self._workflow
 
     def new_task(self, name, single=True, options=None, kwargs=None, **params):
         task_id = str(uuid4())
