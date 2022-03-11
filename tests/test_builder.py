@@ -10,14 +10,14 @@ from director.models.workflows import Workflow
 from tests.conftest import _remove_keys
 
 
-@pytest.mark.parametrize("workflow_fmt", [('yml'), ('json')])
+@pytest.mark.parametrize("workflow_fmt", [("yml"), ("json")])
 def test_create_unknown_workflow(app, create_builder, workflow_fmt):
     app.config["WORKFLOW_FORMAT"] = workflow_fmt
     with pytest.raises(WorkflowNotFound):
         create_builder("project", "UNKNOW_WORKFLOW", {})
 
 
-@pytest.mark.parametrize("workflow_fmt", [('yml'), ('json')])
+@pytest.mark.parametrize("workflow_fmt", [("yml"), ("json")])
 def test_build_one_task(app, create_builder, workflow_fmt):
     app.config["WORKFLOW_FORMAT"] = workflow_fmt
     data, builder = create_builder("example", "WORKFLOW", {"foo": "bar"})
@@ -36,7 +36,7 @@ def test_build_one_task(app, create_builder, workflow_fmt):
     assert builder.canvas[1].task == "TASK_EXAMPLE"
 
 
-@pytest.mark.parametrize("workflow_fmt", [('yml'), ('json')])
+@pytest.mark.parametrize("workflow_fmt", [("yml"), ("json")])
 def test_build_chained_tasks(app, create_builder, workflow_fmt):
     app.config["WORKFLOW_FORMAT"] = workflow_fmt
     keys = ["id", "created", "updated", "task"]
@@ -82,7 +82,8 @@ def test_build_chained_tasks(app, create_builder, workflow_fmt):
         "status": "pending",
     }
 
-@pytest.mark.parametrize("workflow_fmt", [('yml'), ('json')])
+
+@pytest.mark.parametrize("workflow_fmt", [("yml"), ("json")])
 def test_build_grouped_tasks(app, create_builder, workflow_fmt):
     app.config["WORKFLOW_FORMAT"] = workflow_fmt
     keys = ["id", "created", "updated", "task"]

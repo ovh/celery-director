@@ -3,7 +3,7 @@ import pytest
 from director.extensions import CeleryWorkflow
 
 
-@pytest.mark.parametrize("fmt", [('yml'), ('json')])
+@pytest.mark.parametrize("fmt", [("yml"), ("json")])
 def test_load_workflow_formats(app, fmt):
     app.config["WORKFLOW_FORMAT"] = fmt
     name = f"example.{fmt.upper()}_WORKFLOW"

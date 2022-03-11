@@ -17,8 +17,8 @@ HIDDEN_CONFIG = [
 ]
 
 SUPPORTED_WORKFLOW_FORMATS = [
-    'yml',
-    'json',
+    "yml",
+    "json",
 ]
 
 
