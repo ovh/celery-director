@@ -7,6 +7,7 @@ To test Celery Director in real conditions we decided to use an executing `worke
 $ (venv) git clone https://github.com/ovh/director && cd director
 $ (venv) python setup.py develop
 $ (venv) export DIRECTOR_HOME=`pwd`/tests/workflows/
+$ (venv) docker run -d -p 6379:6379 redis
 $ (venv) director celery worker -P solo -D
 ```
 
