@@ -1,3 +1,4 @@
+
 from director.extensions import DirectorSentry, cel
 
 
@@ -6,9 +7,9 @@ def test_sentry_enrich_data(app, create_builder):
 
     sentry = DirectorSentry()
     sentry.init_app(app)
-    tags = sentry.enrich_tags(
-        {"foo": "bar"}, wf.workflow_id, cel.tasks.get("TASK_EXAMPLE")
-    )
+    example_task = next(t for t in wf.canvas if t.name == "TASK_EXAMPLE")
+    tags = sentry.enrich_tags({"foo": "bar"}, wf.workflow_id, example_task)
+
     assert tags == {
         "foo": "bar",
         "celery_task_name": "TASK_EXAMPLE",

@@ -49,15 +49,17 @@ class CeleryWorkflow:
 
     def import_user_tasks(self):
         self.plugin_base = PluginBase(package="director.foobar")
-
         folder = Path(self.app.config["DIRECTOR_HOME"]).resolve()
+        tasks_folder = Path(folder / "tasks").resolve()
         self.plugin_source = self.plugin_base.make_plugin_source(
             searchpath=[str(folder)]
         )
 
-        tasks = Path(folder / "tasks").glob("**/*.py")
+        if not tasks_folder.exists():
+            return
+
         with self.plugin_source:
-            for task in tasks:
+            for task in tasks_folder.glob("**/*.py"):
                 if task.stem == "__init__":
                     continue
 
@@ -71,7 +73,6 @@ class CeleryWorkflow:
 
     def read_schemas(self):
         folder = Path(self.app.config["DIRECTOR_HOME"]).resolve()
-
         for name, conf in self.workflows.items():
             if "schema" in conf:
                 path = Path(folder / "schemas" / f"{conf['schema']}.json")
@@ -91,7 +92,6 @@ class CeleryWorkflow:
 # Celery Extension
 class FlaskCelery(Celery):
     def __init__(self, *args, **kwargs):
-        kwargs["include"] = ["director.tasks"]
         super(FlaskCelery, self).__init__(*args, **kwargs)
 
         if "app" in kwargs:
@@ -99,7 +99,16 @@ class FlaskCelery(Celery):
 
     def init_app(self, app):
         self.app = app
-        self.conf.update(app.config.get("CELERY_CONF", {}))
+        self.conf.update(self.app.config.get("CELERY_CONF", {}))
+        self.autodiscover_tasks(packages=self.app.config.get('CELERY_AUTO_DISCOVER', []))
+
+    def _autodiscover_tasks_from_fixups(self, related_name):
+        # bugfix: https://github.com/celery/celery/pull/6424
+        return self._autodiscover_tasks_from_names([
+            pkg for fixup in self._fixups
+            if hasattr(fixup, 'autodiscover_tasks')
+            for pkg in fixup.autodiscover_tasks()
+        ], related_name=related_name)
 
 
 # Sentry Extension

@@ -1,4 +1,4 @@
-from celery import chain, group
+from celery import chain, group, subtask
 from celery.utils import uuid
 
 from director.exceptions import WorkflowSyntaxError
@@ -31,7 +31,8 @@ class WorkflowBuilder(object):
         task_id = uuid()
 
         # We create the Celery task specifying its UID
-        signature = cel.tasks.get(task_name).subtask(
+        signature = subtask(
+            task_name,
             kwargs={"workflow_id": self.workflow_id, "payload": self.workflow.payload},
             queue=self.queue,
             task_id=task_id,

@@ -63,7 +63,13 @@ class Config(object):
                 "DIRECTOR_RESULT_BACKEND_URI", "redis://localhost:6379/1"
             ),
             "broker_transport_options": {"master_name": "director"},
+            "imports": ["director.tasks"],
         }
+
+        if any(env.list("DIRECTOR_CELERY_IMPORTS", [])):
+            self.CELERY_CONF['imports'] += env.list("DIRECTOR_CELERY_IMPORTS", [])
+        if any(env.list("DIRECTOR_CELERY_AUTO_DISCOVER", [])):
+            self.CELERY_AUTO_DISCOVER = env.list("DIRECTOR_CELERY_AUTO_DISCOVER", [])
 
         # Sentry configuration
         self.SENTRY_DSN = env.str("DIRECTOR_SENTRY_DSN", "")

@@ -36,6 +36,18 @@ tasks/
 
 The Python files in the `tasks` folder will contain your Celery tasks :
 
+Alternatively you can also use dynamic task loading on the workers by setting the
+`DIRECTOR_CELERY_IMPORTS` or `DIRECTOR_CELERY_AUTO_DISCOVER` environment variables
+to a list of modules. See the below celery documentation links for further details
+
+```shell
+# https://docs.celeryproject.org/en/stable/userguide/configuration.html#std-setting-imports
+$ export DIRECTOR_CELERY_IMPORTS="worker.local.tasks,worker.remote.tasks"
+# https://docs.celeryproject.org/en/stable/reference/celery.html#celery.Celery.autodiscover_tasks
+$ export DIRECTOR_CELERY_AUTO_DISCOVER="worker.local,worker.remote"
+```
+
+
 ```python
 from director import task
 

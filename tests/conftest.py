@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pytest
@@ -43,8 +44,9 @@ class DirectorResponse(Response):
         return _remove_keys(self.get_json(), self._KEYS_TO_REMOVE)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def app_module():
+    os.environ['DIRECTOR_CELERY_IMPORTS'] = 'tests.workflows.tasks'
     app = create_app(str(Path(__file__).parent.resolve() / "workflows"))
 
     with app.app_context():
