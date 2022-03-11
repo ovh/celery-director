@@ -43,7 +43,7 @@ class DirectorResponse(Response):
         return _remove_keys(self.get_json(), self._KEYS_TO_REMOVE)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def app_module():
     app = create_app(str(Path(__file__).parent.resolve() / "workflows"))
 
