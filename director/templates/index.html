@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <title>Celery Director</title>
+    <link rel="icon" type="image/png" href="%% url_for('static', filename='logo.png') %%">
     {% if config.ENABLE_CDN %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.3.8/dist/vuetify.min.css" integrity="sha256-aS2abSwj+AMqtAmTglCnsg9GkAyDUKSCFd4xNdLX/AA=" crossorigin="anonymous">
@@ -27,6 +28,7 @@
     <div id="app" v-cloak>
       <v-app id="inspire">
         <v-app-bar app clipped-right color="director" dark>
+          <img class="app-logo mr-3" src="%% url_for('static', filename='logo.png') %%" height="40"/>
           <v-toolbar-title @click="router.push({name: 'home'}).catch(()=>{})" class="pointer">Celery Director</v-toolbar-title>
           <v-spacer></v-spacer>
           <a :href="repoLink" class="text-decoration-none" target="_blank">
@@ -273,6 +275,7 @@
       const API_URL="%% config.API_URL %%";
       const FLOWER_URL="%% config.FLOWER_URL %%";
       const REFRESH_INTERVAL=%% config.REFRESH_INTERVAL | int %%;
+      const REPO_LINK="%% config.REPO_LINK %%";
     </script>
     {% if config.ENABLE_CDN %}
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js" integrity="sha256-ngFW3UnAN0Tnm76mDuu7uUtYEcG3G5H1+zioJw3t+68=" crossorigin="anonymous"></script>

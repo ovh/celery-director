@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Celery Director logo" src="https://raw.githubusercontent.com/ovh/celery-director/master/logo.png">
+  <img alt="Celery Director logo" src="https://raw.githubusercontent.com/ovh/celery-director/master/director/static/logo.png">
 </p>
 <p align="center">
   <a href="https://github.com/ovh/celery-director/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/ovh/celery-director/workflows/Tests/badge.svg"></a>

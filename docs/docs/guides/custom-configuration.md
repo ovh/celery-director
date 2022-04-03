@@ -40,3 +40,10 @@ def extract(*args, **kwargs):
 
 !!!info
     Note the `DIRECTOR_` prefix has to be removed in your tasks (we define the `DIRECTOR_MY_URL` setting and we access it using `MY_URL`).
+
+
+In addition, the github repository link in the webUI can be customized in `.env` ; 
+
+```
+DIRECTOR_REPO_LINK="https://github.com/ovh/celery-director"
+```

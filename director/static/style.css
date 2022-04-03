@@ -102,3 +102,7 @@
   font-weight: normal;
   font-size: 90%;
 }
+
+.app-logo {
+  filter: drop-shadow(0 0 0.5rem rgb(255, 255, 255));
+}
