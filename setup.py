@@ -19,7 +19,7 @@ except FileNotFoundError:
 
 dev_requirements = [
     "tox==3.5.3",
-    "black==20.8b1",
+    "black==22.3.0",
 ]
 
 doc_requirements = ["mkdocs==1.0.4", "mkdocs-material==4.6.3"]
