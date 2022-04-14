@@ -13,7 +13,7 @@ jobs:
         - name: Check code with Python Black
           run: |
             python -m pip install --upgrade pip
-            pip install black==20.8b1
+            pip install black==22.3.0
             black --check --diff director
   tests:
     runs-on: ubuntu-latest
