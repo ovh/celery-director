@@ -44,6 +44,9 @@ class Config(object):
         self.FLOWER_URL = env.str("DIRECTOR_FLOWER_URL", "http://127.0.0.1:5555")
         self.WORKFLOWS_PER_PAGE = env.int("DIRECTOR_WORKFLOWS_PER_PAGE", 1000)
         self.REFRESH_INTERVAL = env.int("DIRECTOR_REFRESH_INTERVAL", 30000)
+        self.REPO_LINK = env.str(
+            "DIRECTOR_REPO_LINK", "https://github.com/ovh/celery-director"
+        )
 
         # Authentication
         self.AUTH_ENABLED = env.bool("DIRECTOR_AUTH_ENABLED", False)
