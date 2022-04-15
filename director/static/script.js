@@ -21,8 +21,6 @@ const COLORS = {
   }
 };
 
-const REPO_LINK = "https://github.com/ovh/celery-director"
-
 const router = new VueRouter({
   mode: HISTORY_MODE ? 'history' : 'hash',
   routes: [{

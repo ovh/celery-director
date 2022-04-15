@@ -4,6 +4,7 @@ def test_view(client):
     assert not resp.is_json
     assert resp.mimetype == "text/html"
     assert "<title>Celery Director</title>" in str(resp.data)
+    assert 'const REPO_LINK="https://github.com/ovh/celery-director"' in str(resp.data)
 
 
 def test_404_view(client):
