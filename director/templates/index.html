@@ -29,6 +29,7 @@
         <v-app-bar app clipped-right color="director" dark>
           <v-toolbar-title @click="router.push({name: 'home'}).catch(()=>{})" class="pointer">Celery Director</v-toolbar-title>
           <v-spacer></v-spacer>
+          <v-switch v-model="$vuetify.theme.dark" label="Dark Mode" dense hide-details=false class="mr-5"></v-switch>
           <a :href="repoLink" class="text-decoration-none" target="_blank">
             <v-icon large>mdi-github</v-icon>
           </a>
@@ -268,7 +269,6 @@
       </v-app>
     </div>
     <script type="text/javascript">
-      const DARK_THEME=%% config.ENABLE_DARK_THEME | int %%;
       const HISTORY_MODE=%% config.ENABLE_HISTORY_MODE | int %%;
       const API_URL="%% config.API_URL %%";
       const FLOWER_URL="%% config.FLOWER_URL %%";
