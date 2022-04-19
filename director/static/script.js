@@ -224,11 +224,7 @@ new Vue({
   },
   store,
   router,
-  vuetify: new Vuetify({
-    theme: {
-      dark: DARK_THEME,
-    },
-  }),
+  vuetify: new Vuetify(),
   data: () => ({
     interval: null,
     tab: null,
@@ -240,6 +236,25 @@ new Vue({
     status: ['success', 'error', 'progress', 'pending'],
     selectedWorkflowName: "All",
   }),
+  mounted() {
+    const theme = localStorage.getItem("dark_theme");
+    if (theme) {
+        if (theme === "true") {
+            this.$vuetify.theme.dark = true;
+        } else {
+            this.$vuetify.theme.dark = false;
+        }
+    } else if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+        this.$vuetify.theme.dark = true;
+        localStorage.setItem(
+            "dark_theme",
+            this.$vuetify.theme.dark.toString()
+        );
+    }
+  },
   methods: {
     getColor: function(status) {
       var color = {
@@ -273,6 +288,11 @@ new Vue({
         return FLOWER_URL + "/task/" + this.selectedTask.id;
       }
       return '';
+    },
+  },
+  watch: {
+    '$vuetify.theme.dark'(newValue) {
+      localStorage.setItem("dark_theme", newValue);
     }
   },
   created() {
