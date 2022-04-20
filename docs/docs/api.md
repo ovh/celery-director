@@ -170,9 +170,9 @@ HTTP/1.1 201 CREATED
 
 ```
 
-## **GET** `/api/list/workflows`
+## **GET** `/api/definitions`
 
-Get the details of workflow.yml including next schedule run.
+Get the definitions of the workflows.
 
 **Example request:**
 
@@ -188,93 +188,39 @@ Accept: application/json
 HTTP/1.1 200 OK
 
 [
-  {
-    "fullname": "1.RANDOMS",
-    "name": "RANDOMS",
-    "next_run": "Wed, 10 Nov 2021 05:04:59 GMT",
-    "periodic": {
-      "crontab": "5 4 * * *"
+    {
+        "fullname": "example.ETL",
+        "name": "ETL",
+        "periodic": {
+            "interval": 3600,
+            "payload": {
+                "dry_run": false
+            }
+        },
+        "project": "example",
+        "tasks": [
+            "EXTRACT",
+            "TRANSFORM",
+            "LOAD"
+        ]
     },
-    "project": "1",
-    "tasks": [
-      {
-        "GROUP_RANDOMS": {
-          "tasks": [
-            "RANDOM",
-            "RANDOM"
-          ],
-          "type": "group"
-        }
-      },
-      "ADD"
-    ]
-  },
-  {
-    "fullname": "2.ETL",
-    "name": "ETL",
-    "next_run": "Wed, 01 Jun 2022 00:59:59 GMT",
-    "periodic": {
-      "schedule": "* * * * 6"
-    },
-    "project": "2",
-    "tasks": [
-      "EXTRACT",
-      "TRANSFORM",
-      "LOAD"
-    ]
-  },
-  {
-    "fullname": "44.RANDOMS",
-    "name": "RANDOMS",
-    "next_run": "Wed, 10 Nov 2021 09:04:59 GMT",
-    "periodic": {
-      "crontab": "5 8 * * *"
-    },
-    "project": "44",
-    "tasks": [
-      {
-        "GROUP_RANDOMS": {
-          "tasks": [
-            "RANDOM",
-            "RANDOM"
-          ],
-          "type": "group"
-        }
-      },
-      "ADD"
-    ]
-  },
-  {
-    "fullname": "example.ETL",
-    "name": "ETL",
-    "project": "example",
-    "tasks": [
-      "EXTRACT",
-      "TRANSFORM",
-      "LOAD"
-    ]
-  },
-  {
-    "fullname": "example.RANDOMS",
-    "name": "RANDOMS",
-    "next_run": "Tue, 09 Nov 2021 23:15:25 GMT",
-    "periodic": {
-      "interval": 90
-    },
-    "project": "example",
-    "tasks": [
-      {
-        "GROUP_RANDOMS": {
-          "tasks": [
-            "RANDOM",
-            "RANDOM"
-          ],
-          "type": "group"
-        }
-      },
-      "ADD"
-    ]
-  }
+    {
+        "fullname": "example.RANDOMS",
+        "name": "RANDOMS",
+        "project": "example",
+        "tasks": [
+            {
+                "GROUP_RANDOMS": {
+                    "tasks": [
+                        "RANDOM",
+                        "RANDOM"
+                    ],
+                    "type": "group"
+                }
+            },
+            "ADD"
+        ]
+    }
 ]
 ```
 
