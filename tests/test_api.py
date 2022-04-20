@@ -28,8 +28,7 @@ def test_post_workflow_without_payload(client, no_worker):
 
 
 def test_post_workflow_with_payload(client, no_worker):
-    payload = {**DEFAULT_PAYLOAD}
-    payload["payload"] = {"nested": {"foo": "bar"}}
+    payload = {**DEFAULT_PAYLOAD, "payload": {"nested": {"foo": "bar"}}}
     resp = client.post("/api/workflows", json=payload)
     assert resp.status_code == 201
     assert resp.json == {
@@ -80,8 +79,7 @@ def test_relaunch_not_existing_workflow(client):
 
 
 def test_relaunch_workflow(client, no_worker):
-    payload = {**DEFAULT_PAYLOAD}
-    payload["payload"] = {"nested": {"foo": "bar"}}
+    payload = {**DEFAULT_PAYLOAD, "payload": {"nested": {"foo": "bar"}}}
     resp = client.post("/api/workflows", json=payload)
     with patch("tests.conftest.DirectorResponse._KEYS_TO_REMOVE", new=[]):
         workflow_id = resp.json["id"]
@@ -273,8 +271,8 @@ def test_schema(client, no_worker):
     assert resp.status_code == 201
 
 
-def test_get_definition(client, no_worker):
-    resp = client.get("/api/list/workflows")
+def test_list_definitions(client, no_worker):
+    resp = client.get("/api/definitions")
     assert resp.status_code == 200
     assert resp.json == [
         {
