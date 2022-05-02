@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.5.0 - 2022-05-02
+### Changed
+- **Remove Python 3.6 support**
+- Add Python 3.9 support
+- UI doesn't include payload when listing all workflows
+- Bump dependencies (black, celery, click, flask, mkdocs, psycopg2-binary, redis)
+
+### Fixed
+- Upgrade itsdangerous package to avoid unwanted bump
+
+### Added
+- Add `with_payload` query param when listing workflows
+- Add a new API route to list the worflows definitions (`GET /definitions`)
+- Add the `DIRECTOR_REPO_LINK` variable to customize the repository link in UI
+- Add a switch button in the UI to enable/disable the dark theme
+
+
 ## 0.4.0 - 2021-09-13
 ### Changed
 - Update WebUI to display all dates on the local user timezone (the offset is displayed along the side of each date)
