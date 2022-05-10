@@ -235,6 +235,10 @@ new Vue({
     selectedStatus: [],
     status: ['success', 'error', 'progress', 'pending'],
     selectedWorkflowName: "All",
+    sidebar: false,
+    menuItems: [
+      {title: "Docs", link: "https://ovh.github.io/celery-director/"}
+    ]
   }),
   mounted() {
     const theme = localStorage.getItem("dark_theme");

@@ -27,13 +27,44 @@
     <div id="app" v-cloak>
       <v-app id="inspire">
         <v-app-bar app clipped-right color="director" dark>
+          <v-app-bar-nav-icon @click.stop="sidebar = !sidebar" class="hidden-md-and-up"></v-app-bar-nav-icon>
           <v-toolbar-title @click="router.push({name: 'home'}).catch(()=>{})" class="pointer">Celery Director</v-toolbar-title>
           <v-spacer></v-spacer>
+          <v-toolbar-items class="hidden-sm-and-down mr-3">
+            <v-list-item
+              v-for="item in menuItems"
+              :key="item.title"
+              :href="item.link"
+              target="_blank"
+              >
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          </v-toolbar-items>
           <v-switch v-model="$vuetify.theme.dark" label="Dark Mode" dense hide-details=false class="mr-5"></v-switch>
           <a :href="repoLink" class="text-decoration-none" target="_blank">
             <v-icon large>mdi-github</v-icon>
           </a>
         </v-app-bar>
+        <v-navigation-drawer v-model="sidebar"
+          absolute
+          temporary
+          >
+          <v-list>
+            <v-list-item
+              v-for="item in menuItems"
+              :key="item.title"
+              :href="item.link"
+              target="_blank"
+              >
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-navigation-drawer>
         <v-main>
           <v-container v-if="!$route.params.id">
             <v-row>
