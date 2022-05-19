@@ -20,6 +20,8 @@ DIRECTOR_FLOWER_URL="http://127.0.0.1:5555"
 DIRECTOR_ENABLE_HISTORY_MODE=false
 DIRECTOR_REFRESH_INTERVAL=30000
 DIRECTOR_REPO_LINK="https://github.com/ovh/celery-director"
+DIRECTOR_DOCUMENTATION_LINK="https://ovh.github.io/celery-director"
+
 
 # ---------- API ----------
 DIRECTOR_WORKFLOWS_PER_PAGE=1000
