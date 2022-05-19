@@ -30,6 +30,10 @@ const router = new VueRouter({
     {
       name: 'worfklow',
       path: '/:id'
+    },
+    {
+      name: 'definitions',
+      path: '/definitions'
     }
   ]
 });
@@ -226,17 +230,33 @@ new Vue({
   router,
   vuetify: new Vuetify(),
   data: () => ({
+    // navigation
+    isHome: false,
+    drawer : false,
+    group : null,
+    docLink: DOCUMENTATION_LINK,
+    repoLink: REPO_LINK,
+    // definitions
+    dialog: false,
+    workflowsDefinitionsList: [],
+    postWorkflowResponse: "",
+    dialogState: '',
+    isWorkflowRun: false,
+    payloadValue: '',
+    selectedRunningWorkflow: null,
+    postWorkflowErrorJSON: '',
+    // workflow (home)
     interval: null,
     tab: null,
     payloadDialog: false,
     relaunchDialog: false,
-    repoLink: REPO_LINK,
     search: '',
     selectedStatus: [],
     status: ['success', 'error', 'progress', 'pending'],
-    selectedWorkflowName: "All",
+    selectedWorkflowName: "All"
   }),
   mounted() {
+
     const theme = localStorage.getItem("dark_theme");
     if (theme) {
         if (theme === "true") {
@@ -256,6 +276,7 @@ new Vue({
     }
   },
   methods: {
+
     getColor: function(status) {
       var color = {
         'success': 'green',
@@ -289,6 +310,62 @@ new Vue({
       }
       return '';
     },
+    getDefinitions: async function () {
+      urlDefinitions = API_URL + "/definitions";
+      axios.get(urlDefinitions).then((response) => {
+        this.workflowsDefinitionsList = response.data;
+      })
+    },   
+
+    runButton: function(item){
+      this.postWorkflowResponse='',
+      this.postWorkflowErrorJSON = '',
+      this.payloadValue = '',
+      this.dialog=true,
+      this.selectedRunningWorkflow = item
+    },
+
+    runWorkflow: async function () {
+
+      var payloadValueTrim = this.payloadValue.trim();
+      this.dialogState = "pending";
+      this.isWorkflowRun = true;
+
+      try{
+        if(payloadValueTrim.length > 0){
+          var payloadValueParsed = JSON.parse(payloadValueTrim)
+        }else{
+          var payloadValueParsed = payloadValueTrim
+        };
+      } catch (error) {
+          console.error(error)
+          this.postWorkflowErrorJSON = error;
+      };
+
+      var data = {
+        "project": this.selectedRunningWorkflow.project,
+        "name": this.selectedRunningWorkflow.name,
+        "payload": payloadValueTrim ? payloadValueParsed: {}
+      };
+
+      const headers = {'content-type': 'application/json'};
+      const urlWorkflow = API_URL + "/workflows";
+      axios.post(urlWorkflow, data, {headers: headers})
+        .then((response) => {
+          this.postWorkflowResponse = response.data;
+          this.dialogState = "success";
+        })
+        .catch((error) => {
+          console.log(error);
+          this.postWorkflowResponse = error;
+          this.dialogState = "error";
+        })
+        .finally(() => (
+          this.selectedRunningWorkflow = null,
+          this.isWorkflowRun = false
+        ));
+      setTimeout(() => (this.dialogState = ''), 10000);
+    },
   },
   watch: {
     '$vuetify.theme.dark'(newValue) {
@@ -296,6 +373,9 @@ new Vue({
     }
   },
   created() {
+    this.isHome = true;
+    this.getDefinitions();
+
     this.$store.dispatch('listWorkflows');
 
     this.interval = setInterval(

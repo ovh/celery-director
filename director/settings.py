@@ -45,6 +45,9 @@ class Config(object):
         self.REPO_LINK = env.str(
             "DIRECTOR_REPO_LINK", "https://github.com/ovh/celery-director"
         )
+        self.DOCUMENTATION_LINK = env.str(
+            "DIRECTOR_DOCUMENTATION_LINK", "https://ovh.github.io/celery-director"
+        )
 
         # Authentication
         self.AUTH_ENABLED = env.bool("DIRECTOR_AUTH_ENABLED", False)
