@@ -333,7 +333,7 @@
       </v-main>
       <!-- Home Ends -->
 
-      <!-- Definitions Begin -->
+      <!-- Definitions Begins -->
       <v-main v-if="isHome==false">
         <v-container>
           <v-row>
@@ -341,21 +341,70 @@
               <v-card class="pa-4" outlined>
                 <div>Definitions</div>
                 <!-- state sucess -->
-                <v-alert v-if="dialogState == 'success'" dense text type="success">
-                  <router-link
-                  class="nav-link"
-                  :to= "{ path: '/'+ postWorkflowResponse.id }"
-                  style="cursor: pointer"
-                  target="_blank"
-                  >
-                  Open workflow : {{postWorkflowResponse.name}} {{postWorkflowResponse.id}}
-                  </router-link>
-                </v-alert>
+                <v-alert
+                text
+                color="success"
+                v-if="dialogState == 'success'" 
+              >
+                <v-row
+                  align="center"
+                  no-gutters
+                >
+                  <v-col class="grow" cols="9">
+                    <router-link
+                    class="nav-link"
+                    :to= "{ path: '/'+ postWorkflowResponse.id }"
+                    style="cursor: pointer"
+                    target="_blank"
+                    >
+                      Open workflow : {{postWorkflowResponse.name}} {{postWorkflowResponse.id}}
+                    </router-link>
+                  </v-col>
+                  <v-spacer></v-spacer>
+                  <v-col class="shrink">
+                    <v-btn
+                      color="success"
+                      outlined
+                      v-on:click="dialogState=''"
+                      x-small
+                      dark
+                      fab
+                    >
+                      <v-icon dark small>mdi-close</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-alert>
                 <!-- state error -->
-                <v-alert v-if="dialogState == 'error'" dense text type="error">
-                  {{postWorkflowResponse}}
-                  <p v-if="postWorkflowErrorJSON">{{ postWorkflowErrorJSON }} </p>
-                </v-alert>
+              <v-alert
+                text
+                dense
+                type="error"
+                v-if="dialogState == 'error'" 
+              >
+                <v-row
+                  align="center"
+                  no-gutters
+                >
+                  <v-col class="grow">
+                    {{postWorkflowResponse}}
+                    <p v-if="postWorkflowErrorJSON">{{ postWorkflowErrorJSON }} </p>
+                  </v-col>
+                  <v-spacer></v-spacer>
+                  <v-col class="shrink">
+                    <v-btn
+                      color="error"
+                      outlined
+                      v-on:click="dialogState=''"
+                      x-small
+                      dark
+                      fab
+                    >
+                      <v-icon dark small>mdi-close</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-alert>
                 <v-card-text>
                   <v-simple-table>
                     <template v-slot:default>
@@ -435,7 +484,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="dialog = false">
+            <v-btn color="blue darken-1" text @click="dialog = false, dialogState=''">
               Close
             </v-btn>
             <v-btn color="blue darken-1" text @click="dialog = false, runWorkflow()">

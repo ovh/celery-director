@@ -232,15 +232,16 @@ new Vue({
   data: () => ({
     // navigation
     isHome: false,
-    drawer : false,
-    group : null,
+    drawer: false,
+    group: null,
     docLink: DOCUMENTATION_LINK,
     repoLink: REPO_LINK,
     // definitions
     dialog: false,
     workflowsDefinitionsList: [],
-    postWorkflowResponse: "",
+    postWorkflowResponse: '',
     dialogState: '',
+    statusAlert: {success: 'success', error: 'error', pending: 'pending'},
     isWorkflowRun: false,
     payloadValue: '',
     selectedRunningWorkflow: null,
@@ -253,7 +254,7 @@ new Vue({
     search: '',
     selectedStatus: [],
     status: ['success', 'error', 'progress', 'pending'],
-    selectedWorkflowName: "All"
+    selectedWorkflowName: 'All'
   }),
   mounted() {
 
@@ -325,24 +326,25 @@ new Vue({
       this.selectedRunningWorkflow = item
     },
 
-    runWorkflow: async function () {
+    runWorkflow:async function () {
 
-      var payloadValueTrim = this.payloadValue.trim();
-      this.dialogState = "pending";
+      let payloadValueParsed;
+      let payloadValueTrim = this.payloadValue.trim();
+      this.dialogState = this.statusAlert.pending;
       this.isWorkflowRun = true;
 
       try{
         if(payloadValueTrim.length > 0){
-          var payloadValueParsed = JSON.parse(payloadValueTrim)
-        }else{
-          var payloadValueParsed = payloadValueTrim
-        };
+          payloadValueParsed = JSON.parse(payloadValueTrim)
+        }
+        else{
+          payloadValueParsed = payloadValueTrim
+        }
       } catch (error) {
-          console.error(error)
           this.postWorkflowErrorJSON = error;
-      };
+      }
 
-      var data = {
+      let data = {
         "project": this.selectedRunningWorkflow.project,
         "name": this.selectedRunningWorkflow.name,
         "payload": payloadValueTrim ? payloadValueParsed: {}
@@ -353,18 +355,16 @@ new Vue({
       axios.post(urlWorkflow, data, {headers: headers})
         .then((response) => {
           this.postWorkflowResponse = response.data;
-          this.dialogState = "success";
+          this.dialogState = this.statusAlert.success;
         })
         .catch((error) => {
-          console.log(error);
           this.postWorkflowResponse = error;
-          this.dialogState = "error";
+          this.dialogState = this.statusAlert.error;
         })
         .finally(() => (
           this.selectedRunningWorkflow = null,
           this.isWorkflowRun = false
         ));
-      setTimeout(() => (this.dialogState = ''), 10000);
     },
   },
   watch: {
