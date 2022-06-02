@@ -237,6 +237,8 @@ new Vue({
     docLink: DOCUMENTATION_LINK,
     repoLink: REPO_LINK,
     // definitions
+    multiLine: true,
+    snackbar: false,
     dialog: false,
     workflowsDefinitionsList: [],
     postWorkflowResponse: '',
@@ -311,7 +313,7 @@ new Vue({
       }
       return '';
     },
-    getDefinitions: async function () {
+    getDefinitions: function () {
       urlDefinitions = API_URL + "/definitions";
       axios.get(urlDefinitions).then((response) => {
         this.workflowsDefinitionsList = response.data;
@@ -323,11 +325,13 @@ new Vue({
       this.postWorkflowErrorJSON = '',
       this.payloadValue = '',
       this.dialog=true,
+      this.snackbar=false,
       this.selectedRunningWorkflow = item
     },
 
-    runWorkflow:async function () {
+    runWorkflow: function () {
 
+      this.snackbar=true;
       let payloadValueParsed;
       let payloadValueTrim = this.payloadValue.trim();
       this.dialogState = this.statusAlert.pending;
