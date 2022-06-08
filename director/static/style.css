@@ -1,4 +1,4 @@
-[v-cloak]>* {
+[v-cloak] > * {
   display: none;
 }
 
@@ -18,7 +18,7 @@
 #network {
   width: 100%;
   height: 470px;
-  border-right: 1px solid rgba(0, 0, 0, .12);
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .pointer {
@@ -84,7 +84,7 @@
 }
 
 .v-application .overline {
-  font-size: .750rem !important;
+  font-size: 0.75rem !important;
 }
 
 .v-application code::before {
@@ -97,8 +97,12 @@
   padding: 10px;
   display: block !important;
   white-space: pre;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   box-shadow: none;
   font-weight: normal;
   font-size: 90%;
+}
+
+.monospacedPayload textarea {
+  font-family: "Monospace";
 }
