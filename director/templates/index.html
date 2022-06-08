@@ -613,11 +613,13 @@
                 <v-row>
                   <v-col cols="12" sm="12" md="12">
                     <v-textarea
+                      class="monospacedPayload"
                       v-model="payloadValue"
                       label="(optional) Fill the payload here :"
                       type="json"
                       required
                       auto-grow
+                      font-family="Monospace"
                     >
                     </v-textarea>
                   </v-col>
@@ -651,7 +653,7 @@
       const API_URL = "%% config.API_URL %%";
       const FLOWER_URL = "%% config.FLOWER_URL %%";
       const REFRESH_INTERVAL =%% config.REFRESH_INTERVAL | int %%;
-      const REPO_LINK = "%% config.REPO_LINK %%";
+      const REPO_LINK="%% config.REPO_LINK %%";
       const DOCUMENTATION_LINK = "%% config.DOCUMENTATION_LINK %%";
     </script>
     {% if config.ENABLE_CDN %}
