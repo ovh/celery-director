@@ -22,6 +22,7 @@ nav:
     - 'Use Payload': 'guides/use-payload.md'
     - 'Error Tracking': 'guides/error-tracking.md'
     - 'Custom Configuration': 'guides/custom-configuration.md'
+    - 'Use Flower': 'guides/use-flower.md'
   - API: 'api.md'
 
 extra_css:
