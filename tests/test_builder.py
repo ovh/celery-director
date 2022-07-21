@@ -124,3 +124,25 @@ def test_build_grouped_tasks(app, create_builder):
         "result": None,
         "status": "pending",
     }
+
+
+def test_build_tasks_with_routing(create_builder):
+    data, builder = create_builder("example", "TASK_ROUTING", {"foo": "bar"})
+
+    assert len(builder.canvas) == 4
+    assert builder.canvas[0].task == "director.tasks.workflows.start"
+    assert builder.canvas[-1].task == "director.tasks.workflows.end"
+
+    # Checl the task queues in canvas
+    assert builder.canvas[1].task == "TASK_A"
+    assert builder.canvas[1].options["queue"] == "q1"
+
+    assert builder.canvas[2].task == "celery.group"
+    group_tasks = builder.canvas[2].tasks
+    assert len(group_tasks) == 2
+
+    assert group_tasks[0].task == "TASK_B"
+    assert group_tasks[1].task == "TASK_C"
+
+    assert group_tasks[0].options["queue"] == "q2"
+    assert group_tasks[1].options["queue"] == "q1"

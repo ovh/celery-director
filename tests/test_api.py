@@ -336,6 +336,16 @@ def test_list_definitions(client, no_worker):
             ],
         },
         {
+            "fullname": "example.TASK_ROUTING",
+            "name": "TASK_ROUTING",
+            "project": "example",
+            "queue": {"customs": {"TASK_B": "q2"}, "default": "q1"},
+            "tasks": [
+                "TASK_A",
+                {"EXAMPLE_GROUP": {"tasks": ["TASK_B", "TASK_C"], "type": "group"}},
+            ],
+        },
+        {
             "fullname": "example.WORKFLOW",
             "name": "WORKFLOW",
             "project": "example",
