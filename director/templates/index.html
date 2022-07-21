@@ -58,7 +58,7 @@
     <div id="app" v-cloak>
       <v-app id="inspire">
         <v-app-bar app clipped-right color="director" dark>
-          <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+          <v-app-bar-nav-icon @click="drawer = true, moveUp()"></v-app-bar-nav-icon>
           <router-link to="/" tag="span" style="cursor: pointer">
             <v-toolbar-title @click="isHome = true"
               >Celery Director</v-toolbar-title

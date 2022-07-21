@@ -281,6 +281,9 @@ new Vue({
     }
   },
   methods: {
+    moveUp: function () {
+      window.scrollTo(0, 0);
+    },
     getColor: function (status) {
       var color = {
         success: "green",
