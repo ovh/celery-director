@@ -15,6 +15,8 @@ class WorkflowBuilder(object):
         self._workflow = None
 
         self.queue = cel_workflows.get_queue(str(self.workflow))
+        self.custom_queues = {}
+
         self.tasks = cel_workflows.get_tasks(str(self.workflow))
         self.canvas = []
 
@@ -30,10 +32,12 @@ class WorkflowBuilder(object):
     def new_task(self, task_name, single=True):
         task_id = uuid()
 
+        queue = self.custom_queues.get(task_name, self.queue)
+
         # We create the Celery task specifying its UID
         signature = cel.tasks.get(task_name).subtask(
             kwargs={"workflow_id": self.workflow_id, "payload": self.workflow.payload},
-            queue=self.queue,
+            queue=queue,
             task_id=task_id,
         )
 
@@ -51,6 +55,13 @@ class WorkflowBuilder(object):
             self.previous = [signature.id]
 
         return signature
+
+    def parse_queues(self):
+        if type(self.queue) is dict:
+            self.custom_queues = self.queue.get("customs", {})
+            self.queue = self.queue.get("default", "celery")
+        if type(self.queue) is not str or type(self.custom_queues) is not dict:
+            raise WorkflowSyntaxError()
 
     def parse(self, tasks):
         canvas = []
@@ -77,6 +88,7 @@ class WorkflowBuilder(object):
         return canvas
 
     def build(self):
+        self.parse_queues()
         self.canvas = self.parse(self.tasks)
         self.canvas.insert(0, start.si(self.workflow.id).set(queue=self.queue))
         self.canvas.append(end.si(self.workflow.id).set(queue=self.queue))

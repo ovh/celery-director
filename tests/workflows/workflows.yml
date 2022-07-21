@@ -64,3 +64,16 @@ example.RETURN_EXCEPTION:
   tasks:
     - STR
     - TASK_ERROR
+
+example.TASK_ROUTING:
+  tasks:
+    - TASK_A
+    - EXAMPLE_GROUP:
+        type: group
+        tasks:
+          - TASK_B
+          - TASK_C
+  queue:
+    default: q1
+    customs:
+      TASK_B: q2
