@@ -1,41 +1,42 @@
 const COLORS = {
-  'success': {
-    'background': '#4caf50',
-    'border': '#1d7521',
-    'hlborder': '#237d27'
+  success: {
+    background: "#4caf50",
+    border: "#1d7521",
+    hlborder: "#237d27",
   },
-  'error': {
-    'background': '#f44336',
-    'border': '#c7261a',
-    'hlborder': '#b8170b'
+  error: {
+    background: "#f44336",
+    border: "#c7261a",
+    hlborder: "#b8170b",
   },
-  'pending': {
-    'background': '#787777',
-    'border': '#555',
-    'hlborder': '#635f5f'
+  pending: {
+    background: "#787777",
+    border: "#555",
+    hlborder: "#635f5f",
   },
-  'progress': {
-    'background': '#2196f3',
-    'border': '#0b7dda',
-    'hlborder': '#0961aa'
-  }
+  progress: {
+    background: "#2196f3",
+    border: "#0b7dda",
+    hlborder: "#0961aa",
+  },
 };
 
 const router = new VueRouter({
-  mode: HISTORY_MODE ? 'history' : 'hash',
-  routes: [{
-      name: 'home',
-      path: '/'
+  mode: HISTORY_MODE ? "history" : "hash",
+  routes: [
+    {
+      name: "home",
+      path: "/",
     },
     {
-      name: 'worfklow',
-      path: '/:id'
+      name: "worfklow",
+      path: "/:id",
     },
     {
-      name: 'definitions',
-      path: '/definitions'
-    }
-  ]
+      name: "definitions",
+      path: "/definitions",
+    },
+  ],
 });
 
 const store = new Vuex.Store({
@@ -46,53 +47,48 @@ const store = new Vuex.Store({
     selectedWorkflow: null,
     selectedTask: null,
     taskIndex: null,
-    loading: true
+    loading: true,
   },
   actions: {
-    listWorkflows({
-      commit
-    }) {
+    listWorkflows({ commit }) {
       axios.get(API_URL + "/workflows?with_payload=false").then((response) => {
-        commit('updateWorkflows', response.data)
-        commit('changeLoadingState', false)
-      })
-    },
-    getWorkflow({
-      commit
-    }, workflow_id) {
-      axios.get(API_URL + "/workflows/" + workflow_id).then((response) => {
-        commit('updateSelectedWorkflow', response.data)
-        commit('refreshNetwork', response.data.tasks)
-        commit('changeLoadingState', false)
-      })
-    },
-    selectTask({
-      commit
-    }, task) {
-      commit('updateSelectedTask', task)
-    },
-    relaunchWorkflow({
-      commit,
-      dispatch
-    }, workflow_id) {
-      axios.post(API_URL + "/workflows/" + workflow_id + "/relaunch").then((response) => {
-        dispatch("listWorkflows")
-        dispatch("getWorkflow", response.data.id)
+        commit("updateWorkflows", response.data);
+        commit("changeLoadingState", false);
       });
-    }
+    },
+    getWorkflow({ commit }, workflow_id) {
+      axios.get(API_URL + "/workflows/" + workflow_id).then((response) => {
+        commit("updateSelectedWorkflow", response.data);
+        commit("refreshNetwork", response.data.tasks);
+        commit("changeLoadingState", false);
+      });
+    },
+    selectTask({ commit }, task) {
+      commit("updateSelectedTask", task);
+    },
+    relaunchWorkflow({ commit, dispatch }, workflow_id) {
+      axios
+        .post(API_URL + "/workflows/" + workflow_id + "/relaunch")
+        .then((response) => {
+          dispatch("listWorkflows");
+          dispatch("getWorkflow", response.data.id);
+        });
+    },
   },
   mutations: {
     updateWorkflows(state, workflows) {
-      state.workflows = workflows
-      state.workflowNames = ["All"].concat([...new Set(workflows.map(item => item.fullname))])
+      state.workflows = workflows;
+      state.workflowNames = ["All"].concat([
+        ...new Set(workflows.map((item) => item.fullname)),
+      ]);
     },
     updateSelectedWorkflow(state, workflow) {
-      state.taskIndex = null
-      state.selectedTask = null
-      state.selectedWorkflow = workflow
+      state.taskIndex = null;
+      state.selectedTask = null;
+      state.selectedWorkflow = workflow;
     },
     updateSelectedTask(state, task) {
-      state.selectedTask = task
+      state.selectedTask = task;
     },
     refreshNetwork(state, tasks) {
       var g = new dagreD3.graphlib.Graph().setGraph({});
@@ -102,7 +98,7 @@ const store = new Vuex.Store({
         var html = "<div class=pointer>";
         html += "<span class=status></span>";
         html += "<span class=name>" + tasks[i].key + "</span>";
-        html += "<br>"
+        html += "<br>";
         html += "<span class=details>" + tasks[i].status + "</span>";
         html += "</div>";
 
@@ -112,17 +108,16 @@ const store = new Vuex.Store({
           rx: 3,
           ry: 3,
           padding: 0,
-          class: className
+          class: className,
         });
 
         for (let j = 0; j < tasks[i].previous.length; j++) {
           g.setEdge(tasks[i].previous[j], tasks[i].id, {});
         }
-
       }
 
       // Set some general styles
-      g.nodes().forEach(function(v) {
+      g.nodes().forEach(function (v) {
         var node = g.node(v);
         node.rx = node.ry = 5;
       });
@@ -131,7 +126,7 @@ const store = new Vuex.Store({
         inner = svg.select("g");
 
       // Set up zoom support
-      var zoom = d3.zoom().on("zoom", function() {
+      var zoom = d3.zoom().on("zoom", function () {
         inner.attr("transform", d3.event.transform);
       });
       inner.call(zoom.transform, d3.zoomIdentity);
@@ -143,8 +138,8 @@ const store = new Vuex.Store({
 
       // Handle the click
       var nodes = inner.selectAll("g.node");
-      nodes.on('click', function(task_id) {
-        g.nodes().forEach(function(v) {
+      nodes.on("click", function (task_id) {
+        g.nodes().forEach(function (v) {
           if (v == task_id) {
             g.node(v).style = "fill: #f0f0f0; stroke-width: 2px; stroke: #777;";
           } else {
@@ -153,78 +148,89 @@ const store = new Vuex.Store({
         });
 
         render(inner, g);
-        state.selectedTask = tasks.find(c => c.id == task_id);
+        state.selectedTask = tasks.find((c) => c.id == task_id);
       });
     },
     changeLoadingState(state, loading) {
-      state.loading = loading
-    }
-  }
+      state.loading = loading;
+    },
+  },
 });
 
-
-Vue.filter('formatDate', function(value) {
+Vue.filter("formatDate", function (value) {
   if (value) {
-    return moment.utc(value).local().format('YYYY-MM-DD HH:mm:ss Z');
+    return moment.utc(value).local().format("YYYY-MM-DD HH:mm:ss Z");
   }
 });
 
-Vue.filter('statusColor', function(status) {
-  if (status == 'success') {
-    return '#4caf50';
-  } else if (status == 'error') {
-    return '#f44336';
-  } else if (status == 'progress') {
-    return '#2196f3';
+Vue.filter("statusColor", function (status) {
+  if (status == "success") {
+    return "#4caf50";
+  } else if (status == "error") {
+    return "#f44336";
+  } else if (status == "progress") {
+    return "#2196f3";
   } else {
-    return '#787777';
+    return "#787777";
   }
 });
 
-Vue.filter('countTasksByStatus', function(workflows, status) {
-  const tasks = workflows.filter(c => c.status === status);
+Vue.filter("countTasksByStatus", function (workflows, status) {
+  const tasks = workflows.filter((c) => c.status === status);
   return tasks.length;
 });
 
 new Vue({
-  el: '#app',
+  el: "#app",
   computed: {
     headers() {
-      return [{
-          text: 'ID',
-          value: 'id',
-          align: ' d-none'
+      return [
+        {
+          text: "ID",
+          value: "id",
+          align: " d-none",
         },
         {
-          text: 'Status',
-          align: 'left',
-          value: 'status',
-          width: '14%',
-          filter: value => {
-            if (this.selectedStatus.length == 0) return true
-            return this.selectedStatus.includes(value)
+          text: "Status",
+          align: "left",
+          value: "status",
+          width: "14%",
+          filter: (value) => {
+            if (this.selectedStatus.length == 0) return true;
+            return this.selectedStatus.includes(value);
           },
         },
         {
-          text: 'Name',
-          align: 'left',
-          value: 'fullname',
-          width: '56%',
-          filter: value => {
-            if (!this.selectedWorkflowName || this.selectedWorkflowName == 'All') return true
-            return value == this.selectedWorkflowName
+          text: "Name",
+          align: "left",
+          value: "fullname",
+          width: "56%",
+          filter: (value) => {
+            if (
+              !this.selectedWorkflowName ||
+              this.selectedWorkflowName == "All"
+            )
+              return true;
+            return value == this.selectedWorkflowName;
           },
         },
         {
-          text: 'Date',
-          align: 'left',
-          value: 'created',
-          width: '30%',
-
+          text: "Date",
+          align: "left",
+          value: "created",
+          width: "30%",
         },
-      ]
+      ];
     },
-    ...Vuex.mapState(['workflows', 'workflowNames', 'selectedWorkflow', 'selectedTask', 'taskIndex', 'network', 'loading']),
+    ...Vuex.mapState([
+      "workflows",
+      "workflowNames",
+      "selectedWorkflow",
+      "selectedTask",
+      "taskIndex",
+      "network",
+      "loading",
+    ]),
   },
   store,
   router,
@@ -241,122 +247,118 @@ new Vue({
     snackbar: false,
     dialog: false,
     workflowsDefinitionsList: [],
-    postWorkflowResponse: '',
-    dialogState: '',
-    statusAlert: {success: 'success', error: 'error', pending: 'pending'},
+    postWorkflowResponse: "",
+    dialogState: "",
+    statusAlert: { success: "success", error: "error", pending: "pending" },
     isWorkflowRun: false,
-    payloadValue: '',
+    payloadValue: "",
     selectedRunningWorkflow: null,
-    postWorkflowErrorJSON: '',
+    postWorkflowErrorJSON: "",
     // workflow (home)
     interval: null,
     tab: null,
     payloadDialog: false,
     relaunchDialog: false,
-    search: '',
+    search: "",
     selectedStatus: [],
-    status: ['success', 'error', 'progress', 'pending'],
-    selectedWorkflowName: 'All'
+    status: ["success", "error", "progress", "pending"],
+    selectedWorkflowName: "All",
   }),
   mounted() {
-
     const theme = localStorage.getItem("dark_theme");
     if (theme) {
-        if (theme === "true") {
-            this.$vuetify.theme.dark = true;
-        } else {
-            this.$vuetify.theme.dark = false;
-        }
-    } else if (
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
+      if (theme === "true") {
         this.$vuetify.theme.dark = true;
-        localStorage.setItem(
-            "dark_theme",
-            this.$vuetify.theme.dark.toString()
-        );
+      } else {
+        this.$vuetify.theme.dark = false;
+      }
+    } else if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      this.$vuetify.theme.dark = true;
+      localStorage.setItem("dark_theme", this.$vuetify.theme.dark.toString());
     }
   },
   methods: {
-
-    getColor: function(status) {
+    getColor: function (status) {
       var color = {
-        'success': 'green',
-        'error': 'red',
-        'warning': 'orange',
-        'progress': 'blue'
-      } [status];
+        success: "green",
+        error: "red",
+        warning: "orange",
+        progress: "blue",
+      }[status];
       return color;
     },
-    selectRow: function(item) {
+    selectRow: function (item) {
       // Catch to avoid redundant navigation to current location error
-      this.$router.push({
-        name: 'worfklow',
-        params: {
-          id: item.id
-        }
-      }).catch(() => {});
+      this.$router
+        .push({
+          name: "worfklow",
+          params: {
+            id: item.id,
+          },
+        })
+        .catch(() => {});
 
-      this.$store.dispatch('getWorkflow', item.id);
+      this.$store.dispatch("getWorkflow", item.id);
     },
-    displayTask: function(task) {
-      this.$store.dispatch('selectTask', task);
+    displayTask: function (task) {
+      this.$store.dispatch("selectTask", task);
     },
-    relaunchWorkflow: function() {
-      this.$store.dispatch('relaunchWorkflow', this.selectedWorkflow.id);
+    relaunchWorkflow: function () {
+      this.$store.dispatch("relaunchWorkflow", this.selectedWorkflow.id);
       this.relaunchDialog = false;
     },
-    getFlowerTaskUrl: function() {
+    getFlowerTaskUrl: function () {
       if (this.selectedTask) {
         return FLOWER_URL + "/task/" + this.selectedTask.id;
       }
-      return '';
+      return "";
     },
     getDefinitions: function () {
       urlDefinitions = API_URL + "/definitions";
       axios.get(urlDefinitions).then((response) => {
         this.workflowsDefinitionsList = response.data;
-      })
-    },   
+      });
+    },
 
-    runButton: function(item){
-      this.postWorkflowResponse='',
-      this.postWorkflowErrorJSON = '',
-      this.payloadValue = '',
-      this.dialog=true,
-      this.snackbar=false,
-      this.selectedRunningWorkflow = item
+    runButton: function (item) {
+      (this.postWorkflowResponse = ""),
+        (this.postWorkflowErrorJSON = ""),
+        (this.payloadValue = ""),
+        (this.dialog = true),
+        (this.snackbar = false),
+        (this.selectedRunningWorkflow = item);
     },
 
     runWorkflow: function () {
-
-      this.snackbar=true;
+      this.snackbar = true;
       let payloadValueParsed;
       let payloadValueTrim = this.payloadValue.trim();
       this.dialogState = this.statusAlert.pending;
       this.isWorkflowRun = true;
 
-      try{
-        if(payloadValueTrim.length > 0){
-          payloadValueParsed = JSON.parse(payloadValueTrim)
-        }
-        else{
-          payloadValueParsed = payloadValueTrim
+      try {
+        if (payloadValueTrim.length > 0) {
+          payloadValueParsed = JSON.parse(payloadValueTrim);
+        } else {
+          payloadValueParsed = payloadValueTrim;
         }
       } catch (error) {
-          this.postWorkflowErrorJSON = error;
+        this.postWorkflowErrorJSON = error;
       }
 
       let data = {
-        "project": this.selectedRunningWorkflow.project,
-        "name": this.selectedRunningWorkflow.name,
-        "payload": payloadValueTrim ? payloadValueParsed: {}
+        project: this.selectedRunningWorkflow.project,
+        name: this.selectedRunningWorkflow.name,
+        payload: payloadValueTrim ? payloadValueParsed : {},
       };
 
-      const headers = {'content-type': 'application/json'};
+      const headers = { "content-type": "application/json" };
       const urlWorkflow = API_URL + "/workflows";
-      axios.post(urlWorkflow, data, {headers: headers})
+      axios
+        .post(urlWorkflow, data, { headers: headers })
         .then((response) => {
           this.postWorkflowResponse = response.data;
           this.dialogState = this.statusAlert.success;
@@ -365,35 +367,34 @@ new Vue({
           this.postWorkflowResponse = error;
           this.dialogState = this.statusAlert.error;
         })
-        .finally(() => (
-          this.selectedRunningWorkflow = null,
-          this.isWorkflowRun = false
-        ));
+        .finally(
+          () => (
+            (this.selectedRunningWorkflow = null), (this.isWorkflowRun = false)
+          )
+        );
     },
   },
   watch: {
-    '$vuetify.theme.dark'(newValue) {
+    "$vuetify.theme.dark"(newValue) {
       localStorage.setItem("dark_theme", newValue);
-    }
+    },
   },
   created() {
     this.isHome = true;
     this.getDefinitions();
 
-    this.$store.dispatch('listWorkflows');
+    this.$store.dispatch("listWorkflows");
 
-    this.interval = setInterval(
-      () =>{
-        this.$store.dispatch('listWorkflows');
-      },
-      REFRESH_INTERVAL);
+    this.interval = setInterval(() => {
+      this.$store.dispatch("listWorkflows");
+    }, REFRESH_INTERVAL);
 
     let workflowID = this.$route.params.id;
     if (workflowID) {
-      this.$store.dispatch('getWorkflow', workflowID);
+      this.$store.dispatch("getWorkflow", workflowID);
     }
   },
   beforeDestroy() {
     clearInterval(this.interval);
-  }
+  },
 });
