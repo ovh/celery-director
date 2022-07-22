@@ -30,4 +30,6 @@ extra_css:
 
 markdown_extensions:
   - admonition
-  - codehilite
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
