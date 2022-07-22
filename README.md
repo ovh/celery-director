@@ -27,7 +27,7 @@ See how to use Director with the quickstart and guides in the [documentation](ht
 
 ## Installation
 
-Install the latest version of Director with pip (requires `Python 3.7` at least):
+Install the latest version of Director with pip (requires at least `Python 3.7`):
 
 ```bash
 pip install celery-director
