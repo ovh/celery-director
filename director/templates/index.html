@@ -97,7 +97,7 @@
               <router-link to="/definitions">
                 <button
                   style="margin-left: 1em"
-                  @click="isHome = false, getDefinitions()"
+                  @click="isHome = false"
                 >
                   <v-list-item>
                     <v-list-item-icon>
@@ -564,7 +564,7 @@
                         </thead>
                         <tbody>
                           <tr
-                            v-for="item in workflowsDefinitionsList"
+                            v-for="item in definitions"
                             :key="item.name"
                           >
                             <td>{{ item.project }}</td>

@@ -29,18 +29,19 @@ const router = new VueRouter({
       path: "/",
     },
     {
-      name: "worfklow",
-      path: "/:id",
+      name: 'definitions',
+      path: '/definitions'
     },
     {
-      name: "definitions",
-      path: "/definitions",
-    },
-  ],
+      name: 'worfklow',
+      path: '/:id'
+    }
+  ]
 });
 
 const store = new Vuex.Store({
   state: {
+    definitions: [],
     workflows: [],
     workflowNames: [],
     network: null,
@@ -55,6 +56,14 @@ const store = new Vuex.Store({
         commit("updateWorkflows", response.data);
         commit("changeLoadingState", false);
       });
+    },
+    listDefinitions({
+      commit
+    }) {
+      axios.get(API_URL + "/definitions").then((response) => {
+        commit('updateDefinitions', response.data)
+        commit('changeLoadingState', false)
+      })
     },
     getWorkflow({ commit }, workflow_id) {
       axios.get(API_URL + "/workflows/" + workflow_id).then((response) => {
@@ -81,6 +90,9 @@ const store = new Vuex.Store({
       state.workflowNames = ["All"].concat([
         ...new Set(workflows.map((item) => item.fullname)),
       ]);
+    },
+    updateDefinitions(state, definitions) {
+      state.definitions = definitions
     },
     updateSelectedWorkflow(state, workflow) {
       state.taskIndex = null;
@@ -223,6 +235,7 @@ new Vue({
       ];
     },
     ...Vuex.mapState([
+      "definitions",
       "workflows",
       "workflowNames",
       "selectedWorkflow",
@@ -246,7 +259,6 @@ new Vue({
     multiLine: true,
     snackbar: false,
     dialog: false,
-    workflowsDefinitionsList: [],
     postWorkflowResponse: "",
     dialogState: "",
     statusAlert: { success: "success", error: "error", pending: "pending" },
@@ -319,12 +331,6 @@ new Vue({
       }
       return "";
     },
-    getDefinitions: function () {
-      urlDefinitions = API_URL + "/definitions";
-      axios.get(urlDefinitions).then((response) => {
-        this.workflowsDefinitionsList = response.data;
-      });
-    },
 
     runButton: function (item) {
       (this.postWorkflowResponse = ""),
@@ -384,13 +390,16 @@ new Vue({
   },
   created() {
     this.isHome = true;
-    this.getDefinitions();
-
-    this.$store.dispatch("listWorkflows");
+    this.$store.dispatch('listDefinitions');
+    this.$store.dispatch('listWorkflows');
 
     this.interval = setInterval(() => {
       this.$store.dispatch("listWorkflows");
     }, REFRESH_INTERVAL);
+
+    if (this.$route.name == "definitions") {
+        this.isHome = false;
+    }
 
     let workflowID = this.$route.params.id;
     if (workflowID) {
