@@ -105,6 +105,9 @@ $ director workflow list
 $ director workflow run example.ETL
 ```
 
+!!! tip
+    You can also use the WebUI or the API to [execute your workflows](guides/run-workflows.md).
+
 ## Execute the tasks
 
 A Celery worker instance needs to be started to consume the broker and execute the tasks :

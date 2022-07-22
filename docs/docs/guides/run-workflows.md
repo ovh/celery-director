@@ -3,6 +3,13 @@
 The next step after building your workflows is of course to execute them, and
 Director provides several methods for that.
 
+## Using the WebUI
+
+Celery Director exposes the definitions of your workflows in a dedicated page. You
+can use it to execute a workflow:
+
+![List Definitions](../img/definitions.png)
+
 ## Using the CLI
 
 This method can be useful if you want to test your tasks and workflows when you

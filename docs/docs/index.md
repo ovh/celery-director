@@ -8,8 +8,8 @@ Director is a simple and rapid framework used to manage tasks and build workflow
 
 The objective is to make Celery easier to use by providing :
 
+- a WebUI, an API and a CLI to manage and execute the workflows,
 - a WebUI to track the tasks states,
-- an API and a CLI to manage and execute the workflows,
 - a YAML syntax used to combine tasks into workflows,
 - the ability to periodically launch a whole workflow,
 - and many others.
@@ -85,6 +85,10 @@ $ curl --header "Content-Type: application/json" \
   --data '{"project": "product", "name": "ORDER", "payload": {"user": 1234, "product": 1000}}' \
   http://localhost:8000/api/workflows
 ```
+
+You can also use the WebUI to execute your workflows:
+
+![Execute Workflow](../img/execute_workflow.png)
 
 ## Project layout
 

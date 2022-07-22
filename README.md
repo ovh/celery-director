@@ -17,8 +17,8 @@ Director is a simple and rapid framework used to manage tasks and build workflow
 
 The objective is to make Celery easier to use by providing :
 
+- a WebUI, an API and a CLI to manage and execute the workflows,
 - a WebUI to track the tasks states,
-- an API and a CLI to manage and execute the workflows,
 - a YAML syntax used to combine tasks into workflows,
 - the ability to periodically launch a whole workflow,
 - and many others.
