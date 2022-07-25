@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.0 - 2022-07-25
+### Changed
+- Bump Flower dependency
+
+### Added
+- Add the definitions page used to list and execute workflows
+- Add a sidebar to display the menu
+- Add documentation about Flower usage
+- Add per-task queue routing
+
+
 ## 0.5.0 - 2022-05-02
 ### Changed
 - **Remove Python 3.6 support**
