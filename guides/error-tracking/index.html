@@ -382,6 +382,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../use-flower/" class="md-nav__link">
+        Use Flower
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -438,31 +452,28 @@
 <h1 id="error-tracking">Error Tracking</h1>
 <p>Director can send errors to <a href="https://docs.sentry.io/">Sentry</a>.</p>
 <p>You can enable this feature by adding your <code>SENTRY_DSN</code> value in the <code>DIRECTOR_SENTRY_DSN</code> variable of the <code>.env</code> file :</p>
-<div class="codehilite"><pre><span></span><code><span class="nv">DIRECTOR_SENTRY_DSN</span><span class="o">=</span><span class="s2">&quot;https://xyz@sentry.example.com/0&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">DIRECTOR_SENTRY_DSN</span><span class="o">=</span><span class="s2">&quot;https://xyz@sentry.example.com/0&quot;</span>
 </code></pre></div>
-
 <p>Let's imagine the following workflow :</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># workflows.yml</span><span class="w"></span>
-<span class="nn">---</span><span class="w"></span>
-<span class="nt">demo.SENTRY_ALERT</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WORKING_TASK</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ERROR_TASK</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># workflows.yml</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nn">---</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">demo.SENTRY_ALERT</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">tasks</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WORKING_TASK</span><span class="w"></span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ERROR_TASK</span><span class="w"></span>
 </code></pre></div>
-
 <p>With the associated tasks :</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># tasks/example.py</span>
-<span class="kn">from</span> <span class="nn">director</span> <span class="kn">import</span> <span class="n">task</span>
-
-<span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;WORKING_TASK&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">working_task</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;hello&quot;</span><span class="p">:</span> <span class="s2">&quot;world&quot;</span><span class="p">}</span>
-
-<span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ERROR_TASK&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">error_task</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># tasks/example.py</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span> <span class="nn">director</span> <span class="kn">import</span> <span class="n">task</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;WORKING_TASK&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">def</span> <span class="nf">working_task</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;hello&quot;</span><span class="p">:</span> <span class="s2">&quot;world&quot;</span><span class="p">}</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ERROR_TASK&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="k">def</span> <span class="nf">error_task</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">)</span>
 </code></pre></div>
-
 <p>When a Celery worker will execute this code, an issue will be created in Sentry with the <code>ZeroDivisionError</code> :</p>
 <p><img alt="Sentry issue" src="../../img/sentry_issue.png" /></p>
 <p>In order to group the issues by workflow's name or by project, Director associated some tags to the event :</p>
