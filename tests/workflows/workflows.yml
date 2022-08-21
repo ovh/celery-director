@@ -77,3 +77,14 @@ example.TASK_ROUTING:
     default: q1
     customs:
       TASK_B: q2
+
+example.CRAWL:
+  tasks:
+    - CRAWL
+    - FIND_URL
+    - SAVE_FILE
+  queue:
+    default: q1
+    customs:
+      CRAWL: q2
+      SAVE_FILE: q2
