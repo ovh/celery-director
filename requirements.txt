@@ -1,6 +1,6 @@
 # Celery Packages
 celery==5.2.6
-flower==1.1.0
+flower==1.2.0
 kombu==5.2.4
 
 # Databases
