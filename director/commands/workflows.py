@@ -133,6 +133,28 @@ def run_workflow(ctx, fullname, payload):
 
     click.echo(f"Workflow {obj.id} launched")
 
+
+@workflow.command(name="cancel")
+@click.argument("id")
+@pass_ctx
+def cancel_workflow(ctx, id):
+    """Cancel a workflow"""
+    try:
+        uuid.UUID(id)
+    except ValueError:
+        click.echo(f"Invalid UUID")
+        raise click.Abort()
+    obj = Workflow.query.filter_by(id=id).first()
+    if not obj:
+        click.echo(f"Workflow {id} does not exist")
+        raise click.Abort()
+
+    workflow = WorkflowBuilder(obj.id)
+    workflow.cancel()
+
+    click.echo(f"Workflow {id} canceled")
+
+
 @workflow.command(name="relaunch")
 @click.argument("id")
 @pass_ctx
