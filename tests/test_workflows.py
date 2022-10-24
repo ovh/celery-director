@@ -320,55 +320,167 @@ def test_return_exception(app, create_builder):
 
 def test_build_celery_schedule_float_with_payload():
     float_schedule = {"payload": {}, "schedule": 30.0}
-    assert ("30.0", 30.0) == build_celery_schedule("workflow_schedule_float", float_schedule)
+    assert ("30.0", 30.0) == build_celery_schedule(
+        "workflow_schedule_float", float_schedule
+    )
 
 
 def test_build_celery_schedule_float():
     float_schedule = {"schedule": 30.0}
-    assert ("30.0", 30.0) == build_celery_schedule("workflow_schedule_float", float_schedule)
+    assert ("30.0", 30.0) == build_celery_schedule(
+        "workflow_schedule_float", float_schedule
+    )
 
 
 @pytest.mark.parametrize(
     "test_input, expected",
     [
-        ("1 * * * *", crontab(minute="1", hour="*", day_of_week="*", day_of_month="*", month_of_year="*")),
-        ("* 1 * * *", crontab(minute="*", hour="1", day_of_week="*", day_of_month="*", month_of_year="*")),
-        ("* * 1 * *", crontab(minute="*", hour="*", day_of_week="1", day_of_month="*", month_of_year="*")),
-        ("* * * 1 *", crontab(minute="*", hour="*", day_of_week="*", day_of_month="1", month_of_year="*")),
-        ("* * * * 1", crontab(minute="*", hour="*", day_of_week="*", day_of_month="*", month_of_year="1")),
+        (
+            "1 * * * *",
+            crontab(
+                minute="1",
+                hour="*",
+                day_of_week="*",
+                day_of_month="*",
+                month_of_year="*",
+            ),
+        ),
+        (
+            "* 1 * * *",
+            crontab(
+                minute="*",
+                hour="1",
+                day_of_week="*",
+                day_of_month="*",
+                month_of_year="*",
+            ),
+        ),
+        (
+            "* * 1 * *",
+            crontab(
+                minute="*",
+                hour="*",
+                day_of_week="1",
+                day_of_month="*",
+                month_of_year="*",
+            ),
+        ),
+        (
+            "* * * 1 *",
+            crontab(
+                minute="*",
+                hour="*",
+                day_of_week="*",
+                day_of_month="1",
+                month_of_year="*",
+            ),
+        ),
+        (
+            "* * * * 1",
+            crontab(
+                minute="*",
+                hour="*",
+                day_of_week="*",
+                day_of_month="*",
+                month_of_year="1",
+            ),
+        ),
         (
             "*/10 */11 */12 */13 */14",
-            crontab(minute="*/10", hour="*/11", day_of_week="*/12", day_of_month="*/13", month_of_year="*/14")
-        )
-    ]
+            crontab(
+                minute="*/10",
+                hour="*/11",
+                day_of_week="*/12",
+                day_of_month="*/13",
+                month_of_year="*/14",
+            ),
+        ),
+    ],
 )
 def test_build_celery_schedule_crontab(test_input, expected):
     cron_schedule = {"schedule": test_input}
-    assert (test_input, expected) == build_celery_schedule("workflow_crontab", cron_schedule)
+    assert (test_input, expected) == build_celery_schedule(
+        "workflow_crontab", cron_schedule
+    )
 
 
 def test_build_celery_interval():
     float_schedule = {"interval": 30.0}
-    assert ("30.0", 30.0) == build_celery_schedule("workflow_schedule_float", float_schedule)
+    assert ("30.0", 30.0) == build_celery_schedule(
+        "workflow_schedule_float", float_schedule
+    )
 
 
 @pytest.mark.parametrize(
     "test_input, expected",
     [
-        ("1 * * * *", crontab(minute="1", hour="*", day_of_month="*", month_of_year="*", day_of_week="*")),
-        ("* 1 * * *", crontab(minute="*", hour="1", day_of_month="*", month_of_year="*", day_of_week="*")),
-        ("* * 1 * *", crontab(minute="*", hour="*", day_of_month="1", month_of_year="*", day_of_week="*")),
-        ("* * * 1 *", crontab(minute="*", hour="*", day_of_month="*", month_of_year="1", day_of_week="*")),
-        ("* * * * 1", crontab(minute="*", hour="*", day_of_month="*", month_of_year="*", day_of_week="1")),
+        (
+            "1 * * * *",
+            crontab(
+                minute="1",
+                hour="*",
+                day_of_month="*",
+                month_of_year="*",
+                day_of_week="*",
+            ),
+        ),
+        (
+            "* 1 * * *",
+            crontab(
+                minute="*",
+                hour="1",
+                day_of_month="*",
+                month_of_year="*",
+                day_of_week="*",
+            ),
+        ),
+        (
+            "* * 1 * *",
+            crontab(
+                minute="*",
+                hour="*",
+                day_of_month="1",
+                month_of_year="*",
+                day_of_week="*",
+            ),
+        ),
+        (
+            "* * * 1 *",
+            crontab(
+                minute="*",
+                hour="*",
+                day_of_month="*",
+                month_of_year="1",
+                day_of_week="*",
+            ),
+        ),
+        (
+            "* * * * 1",
+            crontab(
+                minute="*",
+                hour="*",
+                day_of_month="*",
+                month_of_year="*",
+                day_of_week="1",
+            ),
+        ),
         (
             "*/10 */11 */12 */13 */14",
-            crontab(minute="*/10", hour="*/11", day_of_month="*/12", month_of_year="*/13", day_of_week="*/14")
-        )
-    ]
+            crontab(
+                minute="*/10",
+                hour="*/11",
+                day_of_month="*/12",
+                month_of_year="*/13",
+                day_of_week="*/14",
+            ),
+        ),
+    ],
 )
 def test_build_celery_crontab(test_input, expected):
     cron_schedule = {"crontab": test_input}
-    assert (test_input, expected) == build_celery_schedule("workflow_crontab", cron_schedule)
+    assert (test_input, expected) == build_celery_schedule(
+        "workflow_crontab", cron_schedule
+    )
 
 
 def test_build_celery_invalid_crontab():
