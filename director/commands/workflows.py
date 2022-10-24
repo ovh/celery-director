@@ -2,6 +2,7 @@ import click
 import json
 from json.decoder import JSONDecodeError
 from terminaltables import AsciiTable
+import uuid
 
 from flask_json_schema import JsonValidationError
 
@@ -129,3 +130,29 @@ def run_workflow(ctx, fullname, payload):
     # Build the canvas and execute it
     _workflow = WorkflowBuilder(obj.id)
     _workflow.run()
+
+
+@workflow.command(name="relaunch")
+@click.argument("id")
+@pass_ctx
+def relaunch_workflow(ctx, id):
+    """Relaunch a workflow"""
+    try:
+        uuid.UUID(id)
+    except ValueError:
+        click.echo(f"Invalid UUID")
+        raise click.Abort()
+    obj = Workflow.query.filter_by(id=id).first()
+    if not obj:
+        click.echo(f"Workflow {id} does not exist")
+        raise click.Abort()
+
+    # Create the workflow in DB
+    obj = Workflow(project=obj.project, name=obj.name, payload=obj.payload)
+    obj.save()
+
+    # Build the workflow and execute it
+    workflow = WorkflowBuilder(obj.id)
+    workflow.run()
+
+    click.echo(f"Workflow {obj.id} relaunched")
