@@ -21,6 +21,7 @@ DIRECTOR_ENABLE_HISTORY_MODE=false
 DIRECTOR_REFRESH_INTERVAL=30000
 DIRECTOR_REPO_LINK="https://github.com/ovh/celery-director"
 DIRECTOR_DOCUMENTATION_LINK="https://ovh.github.io/celery-director"
+DIRECTOR_VUE_DEBUG=false
 
 
 # ---------- API ----------

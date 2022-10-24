@@ -75,6 +75,9 @@ class Config(object):
         # Default retention value (number of workflows to keep in the database)
         self.DEFAULT_RETENTION_OFFSET = env.int("DIRECTOR_DEFAULT_RETENTION_OFFSET", -1)
 
+        # Enable Vue debug loading vue.js instead of vue.min.js
+        self.VUE_DEBUG = env.bool("DIRECTOR_VUE_DEBUG", False)
+
 
 class UserConfig(dict):
     """Handle the user configuration"""
