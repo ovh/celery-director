@@ -131,6 +131,7 @@ def run_workflow(ctx, fullname, payload):
     _workflow = WorkflowBuilder(obj.id)
     _workflow.run()
 
+    click.echo(f"Workflow {obj.id} launched")
 
 @workflow.command(name="relaunch")
 @click.argument("id")
