@@ -657,11 +657,17 @@
       const DOCUMENTATION_LINK = "%% config.DOCUMENTATION_LINK %%";
     </script>
     {% if config.ENABLE_CDN %}
+    {% if config.VUE_DEBUG %}
+    <script
+      src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"
+    ></script>
+    {% else %}
     <script
       src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"
       integrity="sha256-ngFW3UnAN0Tnm76mDuu7uUtYEcG3G5H1+zioJw3t+68="
       crossorigin="anonymous"
     ></script>
+    {% endif %}
     <script
       src="https://cdn.jsdelivr.net/npm/vue-router@3.3.4/dist/vue-router.min.js"
       integrity="sha256-87g98o5+aw7/ExJ9tBjvH8zz46FJ7hiylPtNFcPvsSw="
@@ -698,7 +704,11 @@
       crossorigin="anonymous"
     ></script>
     {% else %}
+    {% if config.VUE_DEBUG %}
+    <script src="%% url_for('user.static', filename='vue.js') %%"></script>
+    {% else %}
     <script src="%% url_for('user.static', filename='vue.min.js') %%"></script>
+    {% endif %}
     <script src="%% url_for('user.static', filename='vue-router.min.js') %%"></script>
     <script src="%% url_for('user.static', filename='vuex.min.js') %%"></script>
     <script src="%% url_for('user.static', filename='vuetify.min.js') %%"></script>
