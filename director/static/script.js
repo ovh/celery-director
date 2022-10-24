@@ -1,26 +1,3 @@
-const COLORS = {
-  success: {
-    background: "#4caf50",
-    border: "#1d7521",
-    hlborder: "#237d27",
-  },
-  error: {
-    background: "#f44336",
-    border: "#c7261a",
-    hlborder: "#b8170b",
-  },
-  pending: {
-    background: "#787777",
-    border: "#555",
-    hlborder: "#635f5f",
-  },
-  progress: {
-    background: "#2196f3",
-    border: "#0b7dda",
-    hlborder: "#0961aa",
-  },
-};
-
 const router = new VueRouter({
   mode: HISTORY_MODE ? "history" : "hash",
   routes: [
