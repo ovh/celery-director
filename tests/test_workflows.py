@@ -9,6 +9,7 @@ from director import build_celery_schedule
 from director.exceptions import WorkflowSyntaxError
 from director.models.tasks import Task
 from director.models.workflows import Workflow
+from director.builder import WorkflowBuilder
 
 KEYS = ["id", "created", "updated", "task"]
 
@@ -276,6 +277,39 @@ def test_execute_celery_error_multiple_tasks(app, create_builder):
     assert task_a.status.value == "success"
     assert task_celery_error.status.value == "error"
     assert workflow.status.value == "error"
+
+
+@pytest.mark.skip_no_worker()
+def test_cancel_workflow(app):
+
+    with app.app_context():
+        workflow = Workflow(
+            project="example", name="DELAY_TASK", payload={}, periodic=False
+        )
+        workflow.save()
+        builder = WorkflowBuilder(workflow.id)
+        builder.build()
+        assert workflow.status.value == "pending"
+
+        # Tasks executed in Celery
+        builder.run()
+
+        # DB rows status updated
+        time.sleep(0.5)
+
+        workflow = Workflow.query.filter_by(id=workflow.id).first()
+
+        assert workflow.tasks[0].status.value == "progress"
+
+        builder.cancel()
+
+        # DB rows status updated
+        time.sleep(0.5)
+
+        workflow = Workflow.query.filter_by(id=workflow.id).first()
+
+        assert workflow.status.value == "canceled"
+        assert workflow.tasks[0].status.value == "canceled"
 
 
 def test_return_values(app, create_builder):

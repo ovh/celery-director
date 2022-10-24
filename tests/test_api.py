@@ -117,6 +117,33 @@ def test_relaunch_workflow(client, no_worker):
     assert tasks1 == tasks2
 
 
+def test_cancel_not_existing_workflow(client, no_worker):
+    resp = client.post(
+        "/api/workflows/280d0c4065d04063a800a3b674562711/cancel", json={}
+    )
+    assert resp.status_code == 404
+
+
+def test_cancel_workflow(client, no_worker):
+    resp = client.post(
+        "/api/workflows",
+        json={"project": "example", "name": "DELAY_TASK", "payload": {}},
+    )
+    with patch("tests.conftest.DirectorResponse._KEYS_TO_REMOVE", new=[]):
+        workflow_id = resp.json["id"]
+    assert resp.status_code == 201
+
+    resp = client.post(f"/api/workflows/{workflow_id}/cancel", json={})
+    assert resp.status_code == 201
+    assert resp.json["status"] == "canceled"
+
+    tasks = [
+        t["status"]
+        for t in client.get(f"/api/workflows/{workflow_id}").json.get("tasks")
+    ]
+    assert tasks[0] == "canceled"
+
+
 def test_not_found_workflows(client, no_worker):
     resp = client.post("/api/workflows", json=DEFAULT_PAYLOAD)
     assert resp.status_code == 201
@@ -286,6 +313,12 @@ def test_list_definitions(client, no_worker):
             "name": "CELERY_ERROR_ONE_TASK",
             "project": "example",
             "tasks": ["TASK_CELERY_ERROR"],
+        },
+        {
+            "fullname": "example.DELAY_TASK",
+            "name": "DELAY_TASK",
+            "project": "example",
+            "tasks": ["DELAY"],
         },
         {
             "fullname": "example.ERROR",
