@@ -282,7 +282,6 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
-                        class="ma-2"
                         tile
                         outlined
                         color="director"
@@ -294,6 +293,22 @@
                       </v-btn>
                     </template>
                     <span>Relaunch</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        class="ma-2"
+                        tile
+                        outlined
+                        color="director"
+                        v-on="on"
+                        v-bind="attrs"
+                        @click.stop="cancelDialog = true"
+                      >
+                        <v-icon>mdi-cancel</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Cancel</span>
                   </v-tooltip>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -434,6 +449,43 @@
               </template>
             </v-navigation-drawer>
           </v-container>
+          <v-dialog v-model="cancelDialog" max-width="650">
+            <v-card v-if="selectedWorkflow">
+              <v-card-title>
+                Cancel the workflow
+                <v-spacer></v-spacer>
+              </v-card-title>
+              <v-divider></v-divider>
+              <v-card-text class="mt-5">
+                <v-alert
+                  color="director"
+                  dark
+                  icon="mdi-alert-circle-outline"
+                  dense
+                >
+                  The workflow
+                  <strong>{{ selectedWorkflow.fullname }}</strong> will be
+                  canceled.
+                </v-alert>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <div class="my-2 ma-2">
+                  <v-btn depressed @click.stop="cancelDialog = false"
+                    >Cancel</v-btn
+                  >
+                </div>
+                <div class="my-2">
+                  <v-btn
+                    depressed
+                    color="primary"
+                    @click.stop="cancelWorkflow()"
+                    >Confirm</v-btn
+                  >
+                </div>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
           <v-dialog v-model="relaunchDialog" max-width="650">
             <v-card v-if="selectedWorkflow">
               <v-card-title>

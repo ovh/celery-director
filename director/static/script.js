@@ -60,6 +60,14 @@ const store = new Vuex.Store({
           dispatch("getWorkflow", response.data.id);
         });
     },
+    cancelWorkflow({ commit, dispatch }, workflow_id) {
+      axios
+        .post(API_URL + "/workflows/" + workflow_id + "/cancel")
+        .then((response) => {
+          dispatch("listWorkflows");
+          dispatch("getWorkflow", response.data.id);
+        });
+    },
   },
   mutations: {
     updateWorkflows(state, workflows) {
@@ -157,6 +165,8 @@ Vue.filter("statusColor", function (status) {
     return "#4caf50";
   } else if (status == "error") {
     return "#f44336";
+  } else if (status == "canceled") {
+    return "#b71c1c";
   } else if (status == "progress") {
     return "#2196f3";
   } else {
@@ -238,7 +248,7 @@ new Vue({
     dialog: false,
     postWorkflowResponse: "",
     dialogState: "",
-    statusAlert: { success: "success", error: "error", pending: "pending" },
+    statusAlert: { success: "success", error: "error", pending: "pending", canceled: "canceled" },
     isWorkflowRun: false,
     payloadValue: "",
     selectedRunningWorkflow: null,
@@ -248,9 +258,10 @@ new Vue({
     tab: null,
     payloadDialog: false,
     relaunchDialog: false,
+    cancelDialog: false,
     search: "",
     selectedStatus: [],
-    status: ["success", "error", "progress", "pending"],
+    status: ["success", "error", "progress", "pending", "canceled"],
     selectedWorkflowName: "All",
   }),
   mounted() {
@@ -277,6 +288,7 @@ new Vue({
       var color = {
         success: "green",
         error: "red",
+        canceled: "red darken-4",
         warning: "orange",
         progress: "blue",
       }[status];
@@ -301,6 +313,10 @@ new Vue({
     relaunchWorkflow: function () {
       this.$store.dispatch("relaunchWorkflow", this.selectedWorkflow.id);
       this.relaunchDialog = false;
+    },
+    cancelWorkflow: function () {
+      this.$store.dispatch("cancelWorkflow", this.selectedWorkflow.id);
+      this.cancelDialog = false;
     },
     getFlowerTaskUrl: function () {
       if (this.selectedTask) {

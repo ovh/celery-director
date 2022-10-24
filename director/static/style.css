@@ -54,6 +54,10 @@
   background-color: #f44336;
 }
 
+.graph .canceled .status {
+  background-color: #b71c1c;
+}
+
 .graph .pending .status {
   background-color: #787777;
 }

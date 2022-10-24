@@ -45,6 +45,14 @@ def _execute_workflow(project, name, payload={}):
     return obj.to_dict(), workflow
 
 
+def _cancel_workflow(obj):
+    workflow = WorkflowBuilder(obj.id)
+    workflow.cancel()
+
+    app.logger.info(f"Workflow {obj.id} canceled")
+    return obj.to_dict(), workflow
+
+
 @api_bp.route("/workflows", methods=["POST"])
 @auth.login_required
 @schema.validate(
@@ -73,6 +81,14 @@ def create_workflow():
 def relaunch_workflow(workflow_id):
     obj = _get_workflow(workflow_id)
     data, _ = _execute_workflow(obj.project, obj.name, obj.payload)
+    return jsonify(data), 201
+
+
+@api_bp.route("/workflows/<workflow_id>/cancel", methods=["POST"])
+@auth.login_required
+def cancel_workflow(workflow_id):
+    obj = _get_workflow(workflow_id)
+    data, _ = _cancel_workflow(obj)
     return jsonify(data), 201
 
 
