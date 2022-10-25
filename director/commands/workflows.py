@@ -14,7 +14,7 @@ from director.models.workflows import Workflow
 from director.utils import validate, format_schema_errors, build_celery_schedule
 
 
-def tasks_to_ascii(tasks):
+def tasks_to_ascii(tasks, hooks):
     tasks_str = ""
     # Wrap the tasks list
     for task in tasks:
@@ -25,6 +25,11 @@ def tasks_to_ascii(tasks):
                 tasks_str += f" └ {task_name}\n"
         else:
             tasks_str += f"{task}\n"
+
+    if "failure" in hooks:
+        tasks_str += f"Failure hook: {hooks['failure']}\n"
+    if "success" in hooks:
+        tasks_str += f"Success hook: {hooks['success']}\n"
 
     # Just remove the last newline
     if tasks_str:
@@ -54,7 +59,9 @@ def list_workflow(ctx):
         periodic = "--"
         if conf.get("periodic"):
             periodic, _ = build_celery_schedule(name, conf["periodic"])
-        tasks_str = tasks_to_ascii(conf["tasks"])
+        tasks_str = tasks_to_ascii(
+            conf["tasks"], conf["hooks"] if "hooks" in conf else {}
+        )
         data.append([name, periodic, tasks_str])
 
     table = AsciiTable(data)
@@ -74,7 +81,9 @@ def show_workflow(ctx, name):
         click.echo(f"Error: {e}")
         raise click.Abort()
 
-    tasks_str = tasks_to_ascii(_workflow["tasks"])
+    tasks_str = tasks_to_ascii(
+        _workflow["tasks"], _workflow["hooks"] if "hooks" in _workflow else {}
+    )
     periodic = "--"
     if _workflow.get("periodic"):
         periodic, _ = build_celery_schedule(name, _workflow["periodic"])

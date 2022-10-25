@@ -26,6 +26,7 @@ const store = new Vuex.Store({
     selectedTask: null,
     taskIndex: null,
     loading: true,
+    hideHooks: false
   },
   actions: {
     listWorkflows({ commit }) {
@@ -88,9 +89,24 @@ const store = new Vuex.Store({
       state.selectedTask = task;
     },
     refreshNetwork(state, tasks) {
-      var g = new dagreD3.graphlib.Graph().setGraph({});
+      var graphMain = new dagreD3.graphlib.Graph().setGraph({});
+      var graphHook = new dagreD3.graphlib.Graph().setGraph({});
+
+      var terminatedStatus = ["success", "cancel", "error"];
+
+      var haveHook = false;
 
       for (let i = 0; i < tasks.length; i++) {
+	if(tasks[i].is_hook && !terminatedStatus.includes(tasks[i].status)) {
+	  continue;
+	}
+
+	var graph = graphMain;
+	if(tasks[i].is_hook) {
+	  graph = graphHook;
+	  haveHook = true;
+	}
+	
         var className = tasks[i].status;
         var html = "<div class=pointer>";
         html += "<span class=status></span>";
@@ -99,7 +115,7 @@ const store = new Vuex.Store({
         html += "<span class=details>" + tasks[i].status + "</span>";
         html += "</div>";
 
-        g.setNode(tasks[i].id, {
+        graph.setNode(tasks[i].id, {
           labelType: "html",
           label: html,
           rx: 3,
@@ -109,43 +125,52 @@ const store = new Vuex.Store({
         });
 
         for (let j = 0; j < tasks[i].previous.length; j++) {
-          g.setEdge(tasks[i].previous[j], tasks[i].id, {});
+          graph.setEdge(tasks[i].previous[j], tasks[i].id, {});
         }
       }
 
-      // Set some general styles
-      g.nodes().forEach(function (v) {
-        var node = g.node(v);
-        node.rx = node.ry = 5;
-      });
+      function initGraph(graph, svgClass) {
+	// Set some general styles
+	graph.nodes().forEach(function (v) {
+          var node = graph.node(v);
+          node.rx = node.ry = 5;
+	});
 
-      var svg = d3.select("svg"),
-        inner = svg.select("g");
+	var svg = d3.select("svg."+svgClass),
+            inner = svg.select('g');
 
-      // Set up zoom support
-      var zoom = d3.zoom().on("zoom", function () {
-        inner.attr("transform", d3.event.transform);
-      });
-      inner.call(zoom.transform, d3.zoomIdentity);
-      svg.call(zoom);
+	// Set up zoom support
+	var zoom = d3.zoom().on("zoom", function () {
+          inner.attr("transform", d3.event.transform);
+	});
+	inner.call(zoom.transform, d3.zoomIdentity);
+	svg.call(zoom);
 
-      // Create the renderer
-      var render = new dagreD3.render();
-      render(inner, g);
+	// Create the renderer
+	var render = new dagreD3.render();
+	render(inner, graph);
 
-      // Handle the click
-      var nodes = inner.selectAll("g.node");
-      nodes.on("click", function (task_id) {
-        g.nodes().forEach(function (v) {
-          if (v == task_id) {
-            g.node(v).style = "fill: #f0f0f0; stroke-width: 2px; stroke: #777;";
-          } else {
-            g.node(v).style = "fill: white";
-          }
-        });
+	// Handle the click
+	var nodes = inner.selectAll("g.node");
+	nodes.on("click", function (task_id) {
+          graph.nodes().forEach(function (v) {
+            if (v == task_id) {
+              graph.node(v).style = "fill: #f0f0f0; stroke-width: 2px; stroke: #777;";
+            } else {
+              graph.node(v).style = "fill: white";
+            }
+          });
 
-        render(inner, g);
-        state.selectedTask = tasks.find((c) => c.id == task_id);
+          render(inner, graph);
+          state.selectedTask = tasks.find((c) => c.id == task_id);
+	});
+      }
+
+      state.hideHooks = !haveHook;
+
+      Vue.nextTick(function () {
+	initGraph(graphMain, "svg-main");
+	initGraph(graphHook, "svg-hooks");
       });
     },
     changeLoadingState(state, loading) {
@@ -230,6 +255,7 @@ new Vue({
       "taskIndex",
       "network",
       "loading",
+      "hideHooks"
     ]),
   },
   store,

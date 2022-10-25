@@ -41,6 +41,20 @@ class CeleryWorkflow:
     def get_tasks(self, name):
         return self.get_by_name(name)["tasks"]
 
+    def get_hook_task(self, name, hook_name):
+        if (
+            "hooks" in self.get_by_name(name)
+            and hook_name in self.get_by_name(name)["hooks"]
+        ):
+            return self.get_by_name(name)["hooks"][hook_name]
+        return None
+
+    def get_failure_hook_task(self, name):
+        return self.get_hook_task(name, "failure")
+
+    def get_success_hook_task(self, name):
+        return self.get_hook_task(name, "success")
+
     def get_queue(self, name):
         try:
             return self.get_by_name(name)["queue"]

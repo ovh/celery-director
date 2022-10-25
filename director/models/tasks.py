@@ -15,6 +15,7 @@ class Task(BaseModel):
     status = db.Column(db.Enum(StatusType), default=StatusType.pending, nullable=False)
     previous = db.Column(JSONBType, default=[])
     result = db.Column(PickleType)
+    is_hook = db.Column(db.Boolean, default=False)
 
     # Relationship
     workflow_id = db.Column(
@@ -39,6 +40,7 @@ class Task(BaseModel):
                 "task": self.id,
                 "previous": self.previous,
                 "result": self.result,
+                "is_hook": self.is_hook,
             }
         )
         return d
