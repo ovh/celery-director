@@ -1,7 +1,8 @@
+import time
+
 from celery.utils.log import get_task_logger
 
 from director.extensions import cel
-from director.tasks.base import BaseTask
 from director.models import StatusType
 from director.models.workflows import Workflow
 
@@ -20,12 +21,16 @@ def ping():
 def start(workflow_id):
     logger.info(f"Opening the workflow {workflow_id}")
     workflow = Workflow.query.filter_by(id=workflow_id).first()
+
     workflow.status = StatusType.progress
     workflow.save()
 
 
 @cel.task()
 def end(workflow_id):
+    # Waiting for the workflow status to be marked in error if a task failed
+    time.sleep(0.5)
+
     logger.info(f"Closing the workflow {workflow_id}")
     workflow = Workflow.query.filter_by(id=workflow_id).first()
 

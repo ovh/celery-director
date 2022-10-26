@@ -279,7 +279,6 @@ def test_execute_celery_error_multiple_tasks(app, create_builder):
     assert workflow.status.value == "error"
 
 
-@pytest.mark.skip_no_worker()
 def test_cancel_workflow(app):
 
     with app.app_context():
@@ -295,7 +294,7 @@ def test_cancel_workflow(app):
         builder.run()
 
         # DB rows status updated
-        time.sleep(0.5)
+        time.sleep(1)
 
         workflow = Workflow.query.filter_by(id=workflow.id).first()
 
@@ -311,12 +310,15 @@ def test_cancel_workflow(app):
         assert workflow.status.value == "canceled"
         assert workflow.tasks[0].status.value == "canceled"
 
+        # Wait for the restart of the only prefork
+        time.sleep(1)
+
 
 def test_return_values(app, create_builder):
     workflow, builder = create_builder("example", "RETURN_VALUES", {})
     result = builder.run()
 
-    time.sleep(0.5)
+    time.sleep(1.5)
     with app.app_context():
         tasks = {t.key: t.result for t in Task.query.all()}
 
