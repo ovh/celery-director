@@ -77,3 +77,7 @@ example.TASK_ROUTING:
     default: q1
     customs:
       TASK_B: q2
+
+example.DELAY_TASK:
+  tasks:
+    - DELAY

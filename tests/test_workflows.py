@@ -9,6 +9,7 @@ from director import build_celery_schedule
 from director.exceptions import WorkflowSyntaxError
 from director.models.tasks import Task
 from director.models.workflows import Workflow
+from director.builder import WorkflowBuilder
 
 KEYS = ["id", "created", "updated", "task"]
 
@@ -278,11 +279,48 @@ def test_execute_celery_error_multiple_tasks(app, create_builder):
     assert workflow.status.value == "error"
 
 
+@pytest.mark.skip_no_worker()
+def test_cancel_workflow(app):
+
+    with app.app_context():
+        workflow = Workflow(
+            project="example", name="DELAY_TASK", payload={}, periodic=False
+        )
+        workflow.save()
+        builder = WorkflowBuilder(workflow.id)
+        builder.build()
+        assert workflow.status.value == "pending"
+
+        # Tasks executed in Celery
+        builder.run()
+
+        # DB rows status updated
+        time.sleep(1)
+
+        workflow = Workflow.query.filter_by(id=workflow.id).first()
+
+        assert workflow.tasks[0].status.value == "progress"
+
+        builder.cancel()
+
+        # DB rows status updated
+        time.sleep(0.5)
+
+        workflow = Workflow.query.filter_by(id=workflow.id).first()
+
+        assert workflow.status.value == "canceled"
+        assert workflow.tasks[0].status.value == "canceled"
+
+        # Wait for the restart of the only prefork
+        time.sleep(1)
+
+
 def test_return_values(app, create_builder):
     workflow, builder = create_builder("example", "RETURN_VALUES", {})
-    result = builder.run()
+    builder.run()
 
     time.sleep(0.5)
+
     with app.app_context():
         tasks = {t.key: t.result for t in Task.query.all()}
 
@@ -303,7 +341,7 @@ def test_return_values(app, create_builder):
 
 def test_return_exception(app, create_builder):
     workflow, builder = create_builder("example", "RETURN_EXCEPTION", {})
-    result = builder.run()
+    builder.run()
 
     time.sleep(0.5)
     with app.app_context():
