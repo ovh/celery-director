@@ -6,7 +6,6 @@ Create Date: 2021-07-16 11:54:27.946028
 
 """
 from alembic import op
-from director.extensions import db
 
 
 # revision identifiers, used by Alembic.
@@ -15,8 +14,6 @@ down_revision = "2ac615d6850b"
 branch_labels = None
 depends_on = None
 
-tables = db.metadata.tables
-
 
 def upgrade():
     bind = op.get_bind()
@@ -24,7 +21,7 @@ def upgrade():
         # SQLite does not support to alter constraints on existing tables.
         # Batch mode is used to copy data to a temporary table meanwhile creating a brand new
         # table with the required constraint.
-        with op.batch_alter_table("tasks", copy_from=tables["tasks"]) as batch_op:
+        with op.batch_alter_table("tasks") as batch_op:
             batch_op.drop_constraint(
                 op.f("fk_tasks_workflow_id_workflows"), type_="foreignkey"
             )
@@ -53,7 +50,7 @@ def upgrade():
 def downgrade():
     bind = op.get_bind()
     if bind.engine.name == "sqlite":
-        with op.batch_alter_table("tasks", copy_from=tables["tasks"]) as batch_op:
+        with op.batch_alter_table("tasks") as batch_op:
             batch_op.drop_constraint(
                 op.f("fk_tasks_workflow_id_workflows"), type_="foreignkey"
             )
