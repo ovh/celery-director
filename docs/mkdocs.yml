@@ -23,6 +23,7 @@ nav:
     - 'Error Tracking': 'guides/error-tracking.md'
     - 'Custom Configuration': 'guides/custom-configuration.md'
     - 'Use Flower': 'guides/use-flower.md'
+    - 'Trigger Hooks': 'guides/trigger-hooks.md'
   - API: 'api.md'
 
 extra_css:
