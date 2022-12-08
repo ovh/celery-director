@@ -36,8 +36,9 @@ example.RANDOMS:
           - RANDOM
     - ADD
 ```
-- For *example.ETL*, Director will read the retention in the .yaml configuration. Only two records will be kept. Everything else will be deleted.
-- For *example.RANDOMS*, Director will get the retention from `DIRECTOR_DEFAULT_RETENTION_OFFSET` in *.env*. As the value is **-1**, nothing will happen.
+
+- For the workflow named **example.ETL**, Director will read the retention in the .yaml configuration. Only two records will be kept, everything else will be deleted.
+- For the workflow **example.RANDOMS**, Director will get the retention from `DIRECTOR_DEFAULT_RETENTION_OFFSET` in *.env*. As the value is **-1**, nothing will happen.
 
 ## Define a custom retention value
 To define your own default retention, you simply have to modify the value of `DIRECTOR_DEFAULT_RETENTION_OFFSET` in *.env*.
