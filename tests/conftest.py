@@ -88,7 +88,7 @@ def enable_auth(app):
 
 @pytest.fixture(scope="function")
 def no_worker(monkeypatch):
-    monkeypatch.setattr(_chain, "apply_async", lambda x: None)
+    monkeypatch.setattr(_chain, "apply_async", lambda *args, **kwargs: None)
 
 
 @pytest.fixture(scope="function")
@@ -102,6 +102,7 @@ def create_builder(app):
             data = obj.to_dict()
             wf = WorkflowBuilder(obj.id)
             wf.build()
+            wf.build_hooks()
         return _remove_keys(data), wf
 
     return _create_builder

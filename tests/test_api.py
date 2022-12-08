@@ -256,6 +256,7 @@ def test_get_workflow(client, no_worker):
                 "previous": [],
                 "result": None,
                 "status": "pending",
+                "is_hook": False,
             }
         ],
     }
@@ -327,6 +328,13 @@ def test_list_definitions(client, no_worker):
             "tasks": ["TASK_ERROR"],
         },
         {
+            "fullname": "example.FAILURE_HOOK",
+            "hooks": {"failure": "TASK_B"},
+            "name": "FAILURE_HOOK",
+            "project": "example",
+            "tasks": ["TASK_A", "TASK_ERROR"],
+        },
+        {
             "fullname": "example.RETURN_EXCEPTION",
             "name": "RETURN_EXCEPTION",
             "project": "example",
@@ -367,6 +375,13 @@ def test_list_definitions(client, no_worker):
                 "TASK_A",
                 {"EXAMPLE_GROUP": {"tasks": ["TASK_ERROR", "TASK_C"], "type": "group"}},
             ],
+        },
+        {
+            "fullname": "example.SUCCESSANDFAILURE_HOOK",
+            "hooks": {"failure": "TASK_C", "success": "TASK_B"},
+            "name": "SUCCESSANDFAILURE_HOOK",
+            "project": "example",
+            "tasks": ["TASK_A"],
         },
         {
             "fullname": "example.TASK_ROUTING",

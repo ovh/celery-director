@@ -33,7 +33,7 @@ def test_build_one_task(create_builder):
 
 
 def test_build_chained_tasks(app, create_builder):
-    keys = ["id", "created", "updated", "task"]
+    keys = ["id", "created", "updated", "task", "is_hook"]
     data, builder = create_builder("example", "SIMPLE_CHAIN", {"foo": "bar"})
     assert data == {
         "name": "SIMPLE_CHAIN",
@@ -78,7 +78,7 @@ def test_build_chained_tasks(app, create_builder):
 
 
 def test_build_grouped_tasks(app, create_builder):
-    keys = ["id", "created", "updated", "task"]
+    keys = ["id", "created", "updated", "task", "is_hook"]
     data, builder = create_builder("example", "SIMPLE_GROUP", {"foo": "bar"})
     assert data == {
         "name": "SIMPLE_GROUP",
@@ -146,3 +146,31 @@ def test_build_tasks_with_routing(create_builder):
 
     assert group_tasks[0].options["queue"] == "q2"
     assert group_tasks[1].options["queue"] == "q1"
+
+
+def test_build_tasks_with_successandfailure_hooks(app, create_builder):
+    keys = ["id", "created", "updated", "task"]
+    data, builder = create_builder("example", "SUCCESSANDFAILURE_HOOK", {})
+
+    assert len(builder.canvas) == 3
+    assert len(builder.failure_hook_canvas) == 1
+    assert len(builder.success_hook_canvas) == 1
+
+    # Check the tasks in database (including previouses ID)
+    with app.app_context():
+        tasks = Task.query.order_by(Task.created_at.asc()).all()
+    assert len(tasks) == 2  # Only success hook is registered when not triggerred
+    assert _remove_keys(tasks[0].to_dict(), keys) == {
+        "key": "TASK_A",
+        "previous": [],
+        "result": None,
+        "status": "pending",
+        "is_hook": False,
+    }
+    assert _remove_keys(tasks[1].to_dict(), keys) == {
+        "key": "TASK_B",
+        "previous": [],
+        "result": None,
+        "status": "pending",
+        "is_hook": True,
+    }

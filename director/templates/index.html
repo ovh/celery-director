@@ -229,7 +229,18 @@
             <v-row no-gutters>
               <v-col cols="12" md="12">
                 <div class="graph">
-                  <svg width="100%" height="800">
+                  <svg width="100%" height="600" class="svg-main">
+                    <g />
+                  </svg>
+                </div>
+              </v-col>
+            </v-row>
+	    <v-row no-gutters>
+              <v-col cols="12" md="12">
+                <div v-bind:class="{'graph': true, 'd-none': hideHooks}">
+		  <v-divider class="mt-2 mb-2"></v-divider>
+		  <v-subheader class="mb-2">Hooks triggered</v-subheader>
+		  <svg width="100%" height="200" class="svg-hooks">
                     <g />
                   </svg>
                 </div>
@@ -433,7 +444,9 @@
                   </v-tabs-items>
                 </div>
               </div>
-              <template v-slot:append v-if="selectedTask">
+              <template v-slot:append v-if="selectedTask 
+					    && (selectedWorkflow.status == 'success' 
+					    || selectedTask.is_hook == false)">
                 <div class="pa-6">
                   <v-btn
                     block

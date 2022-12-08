@@ -81,3 +81,17 @@ example.TASK_ROUTING:
 example.DELAY_TASK:
   tasks:
     - DELAY
+
+example.SUCCESSANDFAILURE_HOOK:
+  tasks:
+    - TASK_A
+  hooks:
+    success: TASK_B
+    failure: TASK_C
+
+example.FAILURE_HOOK:
+  tasks:
+    - TASK_A
+    - TASK_ERROR
+  hooks:
+    failure: TASK_B

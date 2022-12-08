@@ -11,6 +11,7 @@ from director.models.tasks import Task
 from director.models.workflows import Workflow
 from director.builder import WorkflowBuilder
 
+
 KEYS = ["id", "created", "updated", "task"]
 
 
@@ -337,6 +338,64 @@ def test_return_values(app, create_builder):
         "none": None,
         "list": ["jack", "sape", "guido"],
     }
+
+
+@pytest.mark.skip_no_worker()
+def test_execute_workflow_withfailurehook(app):
+
+    with app.app_context():
+        workflow = Workflow(
+            project="example", name="FAILURE_HOOK", payload={}, periodic=False
+        )
+        workflow.save()
+        workflow_id = workflow.id
+        builder = WorkflowBuilder(workflow.id)
+        builder.build()
+        assert workflow.status.value == "pending"
+
+        # Tasks executed in Celery
+        result = builder.run()
+        with pytest.raises(ZeroDivisionError):
+            assert result.get()
+
+    # DB rows status updated
+    time.sleep(0.5)
+
+    with app.app_context():
+        workflow = Workflow.query.filter_by(id=workflow_id).first()
+
+        assert workflow.status.value == "error"
+        assert workflow.tasks[0].status.value == "success"
+        assert workflow.tasks[1].status.value == "error"
+        assert workflow.tasks[2].status.value == "success"
+
+
+@pytest.mark.skip_no_worker()
+def test_execute_workflow_withsuccesshook(app):
+
+    with app.app_context():
+        workflow = Workflow(
+            project="example", name="SUCCESSANDFAILURE_HOOK", payload={}, periodic=False
+        )
+        workflow.save()
+        workflow_id = workflow.id
+        builder = WorkflowBuilder(workflow.id)
+        builder.build()
+        assert workflow.status.value == "pending"
+
+        # Tasks executed in Celery
+        result = builder.run()
+        assert result.get() == None
+
+    # DB rows status updated
+    time.sleep(0.5)
+
+    with app.app_context():
+        workflow = Workflow.query.filter_by(id=workflow_id).first()
+
+        assert workflow.status.value == "success"
+        assert workflow.tasks[0].status.value == "success"
+        assert workflow.tasks[1].status.value == "success"
 
 
 def test_return_exception(app, create_builder):
