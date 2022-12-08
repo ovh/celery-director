@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.7.0 - 2022-12-08
+### Changed
+- Bump Flower dependency
+
+### Fixed
+- Fix importlib-metadata in specific version to avoid Py3.7
+- Updrade sql requirements to support the online mode
+
+### Added
+- Add workflow hooks (success and failure) feature
+- Add possibility to relaunch workflow with the CLI
+- Add possibility to cancel a workflow
+
+
 ## 0.6.0 - 2022-07-25
 ### Changed
 - Bump Flower dependency
