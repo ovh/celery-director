@@ -228,7 +228,6 @@ new Vue({
           text: "Name",
           align: "left",
           value: "fullname",
-          width: "56%",
           filter: (value) => {
             if (
               !this.selectedWorkflowName ||
@@ -239,10 +238,18 @@ new Vue({
           },
         },
         {
+          text: "Comment",
+          align: "left",
+          value: "comment",
+          align: store.state.workflows.filter(
+            workflow => workflow.comment != null).length === 0 
+            && " d-none"
+        },
+        {
           text: "Date",
           align: "left",
           value: "created",
-          width: "30%",
+          width: "25%",
         },
       ];
     },
@@ -277,6 +284,7 @@ new Vue({
     statusAlert: { success: "success", error: "error", pending: "pending", canceled: "canceled" },
     isWorkflowRun: false,
     payloadValue: "",
+    commentValue: "",
     selectedRunningWorkflow: null,
     postWorkflowErrorJSON: "",
     // workflow (home)
@@ -320,6 +328,12 @@ new Vue({
       }[status];
       return color;
     },
+
+    isCommentFieldActive: function () {
+      return this.$store.state.workflows.filter(
+        workflow => workflow.comment != null).length > 0 
+    },
+
     selectRow: function (item) {
       // Catch to avoid redundant navigation to current location error
       this.$router
@@ -355,6 +369,7 @@ new Vue({
       (this.postWorkflowResponse = ""),
         (this.postWorkflowErrorJSON = ""),
         (this.payloadValue = ""),
+        (this.commentValue = ""),
         (this.dialog = true),
         (this.snackbar = false),
         (this.selectedRunningWorkflow = item);
@@ -382,6 +397,8 @@ new Vue({
         name: this.selectedRunningWorkflow.name,
         payload: payloadValueTrim ? payloadValueParsed : {},
       };
+
+      if (this.commentValue.length > 0) data.comment = this.commentValue
 
       const headers = { "content-type": "application/json" };
       const urlWorkflow = API_URL + "/workflows";

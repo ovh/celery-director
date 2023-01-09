@@ -166,6 +166,7 @@
                             ></v-avatar>
                           </td>
                           <td>{{ item.fullname }}</td>
+                          <td v-if="isCommentFieldActive()" >{{ item.comment }}</td>
                           <td>
                             <v-ship>{{ item.created | formatDate }}</v-ship>
                           </td>
@@ -275,6 +276,9 @@
                         >{{ selectedWorkflow.status }}</v-chip
                       >
                     </v-list-item-title>
+                    <v-list-item-subtitle v-if="isCommentFieldActive()" class="mt-2">
+                      {{ selectedWorkflow.comment }}
+                    </v-list-item-subtitle>
                     <v-list-item-subtitle class="mt-2">
                       <u>Tasks :</u> Total
                       <strong>{{ selectedWorkflow.tasks.length }}</strong> /
@@ -666,7 +670,7 @@
         <v-dialog v-model="dialog" persistent max-width="600px">
           <v-card>
             <v-card-title>
-              <span class="text-h5">Payload Information</span>
+              <span class="text-h5">Workflow data</span>
             </v-card-title>
             <v-card-text>
               <v-container>
@@ -677,13 +681,28 @@
                 </p>
                 <v-row>
                   <v-col cols="12" sm="12" md="12">
+                    <v-text-field
+                    v-model="commentValue"
+                    label="Workflow comment"
+                    filled
+                    hint="optional"
+                    persistent-hint
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" sm="12" md="12">
                     <v-textarea
                       class="monospacedPayload"
                       v-model="payloadValue"
-                      label="(optional) Fill the payload here :"
+                      label="Fill the payload here :"
+                      hint="optional"
+                      persistent-hint
+                      placeholder='{&#10;&#9;"key": "value",&#10;&#9;...&#10;}'
                       type="json"
                       required
                       auto-grow
+                      filled
                       font-family="Monospace"
                     >
                     </v-textarea>
