@@ -11,6 +11,7 @@ class Workflow(BaseModel):
     status = db.Column(db.Enum(StatusType), default=StatusType.pending, nullable=False)
     payload = db.Column(JSONBType, default={})
     periodic = db.Column(db.Boolean, default=False)
+    comment = db.Column(db.String(255))
 
     def __str__(self):
         return f"{self.project}.{self.name}"
@@ -29,6 +30,8 @@ class Workflow(BaseModel):
                 "periodic": self.periodic,
             }
         )
+        if self.comment is not None:
+            d["comment"] = self.comment
         if with_payload:
             d["payload"] = self.payload
         return d

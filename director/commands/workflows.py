@@ -106,8 +106,9 @@ def show_workflow(ctx, name):
 @workflow.command(name="run")
 @click.argument("fullname")
 @click.argument("payload", required=False, default="{}")
+@click.option("--comment", help="A comment for the workflow instance.")
 @pass_ctx
-def run_workflow(ctx, fullname, payload):
+def run_workflow(ctx, fullname, payload, comment):
     """Execute a workflow"""
     try:
         wf = cel_workflows.get_by_name(fullname)
@@ -133,7 +134,7 @@ def run_workflow(ctx, fullname, payload):
 
     # Create the workflow object
     project, name = fullname.split(".")
-    obj = Workflow(project=project, name=name, payload=payload)
+    obj = Workflow(project=project, name=name, payload=payload, comment=comment)
     obj.save()
 
     # Build the canvas and execute it

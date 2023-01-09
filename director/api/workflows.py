@@ -21,7 +21,7 @@ def _get_workflow(workflow_id):
     return workflow
 
 
-def _execute_workflow(project, name, payload={}):
+def _execute_workflow(project, name, payload={}, comment=None):
     fullname = f"{project}.{name}"
 
     # Check if the workflow exists
@@ -33,7 +33,7 @@ def _execute_workflow(project, name, payload={}):
         abort(404, f"Workflow {fullname} not found")
 
     # Create the workflow in DB
-    obj = Workflow(project=project, name=name, payload=payload)
+    obj = Workflow(project=project, name=name, payload=payload, comment=comment)
     obj.save()
 
     # Build the workflow and execute it
@@ -63,16 +63,18 @@ def _cancel_workflow(obj):
             "project": {"type": "string"},
             "name": {"type": "string"},
             "payload": {"type": "object"},
+            "comment": {"type": "string"},
         },
     }
 )
 def create_workflow():
-    project, name, payload = (
+    project, name, payload, comment = (
         request.get_json()["project"],
         request.get_json()["name"],
         request.get_json()["payload"],
+        request.get_json().get("comment"),
     )
-    data, _ = _execute_workflow(project, name, payload)
+    data, _ = _execute_workflow(project, name, payload, comment)
     return jsonify(data), 201
 
 
@@ -80,7 +82,9 @@ def create_workflow():
 @auth.login_required
 def relaunch_workflow(workflow_id):
     obj = _get_workflow(workflow_id)
-    data, _ = _execute_workflow(obj.project, obj.name, obj.payload)
+    if hasattr(obj, "comment"):
+        comment = obj.comment
+    data, _ = _execute_workflow(obj.project, obj.name, obj.payload, comment)
     return jsonify(data), 201
 
 

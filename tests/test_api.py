@@ -41,6 +41,21 @@ def test_post_workflow_with_payload(client, no_worker):
     }
 
 
+def test_post_workflow_with_comment(client, no_worker):
+    payload = {**DEFAULT_PAYLOAD, "comment": "This is an example workflow."}
+    resp = client.post("/api/workflows", json=payload)
+    assert resp.status_code == 201
+    assert resp.json == {
+        "fullname": "example.WORKFLOW",
+        "name": "WORKFLOW",
+        "payload": {},
+        "comment": "This is an example workflow.",
+        "periodic": False,
+        "project": "example",
+        "status": "pending",
+    }
+
+
 def test_post_workflow_required_props(client):
     resp = client.post("/api/workflows", json={})
     assert resp.status_code == 400
@@ -79,7 +94,11 @@ def test_relaunch_not_existing_workflow(client):
 
 
 def test_relaunch_workflow(client, no_worker):
-    payload = {**DEFAULT_PAYLOAD, "payload": {"nested": {"foo": "bar"}}}
+    payload = {
+        **DEFAULT_PAYLOAD,
+        "payload": {"nested": {"foo": "bar"}},
+        "comment": "This is an example workflow.",
+    }
     resp = client.post("/api/workflows", json=payload)
     with patch("tests.conftest.DirectorResponse._KEYS_TO_REMOVE", new=[]):
         workflow_id = resp.json["id"]
@@ -91,6 +110,7 @@ def test_relaunch_workflow(client, no_worker):
         "fullname": "example.WORKFLOW",
         "name": "WORKFLOW",
         "payload": {"nested": {"foo": "bar"}},
+        "comment": "This is an example workflow.",
         "periodic": False,
         "project": "example",
         "status": "pending",
