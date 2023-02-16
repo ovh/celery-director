@@ -17,7 +17,7 @@ Flask-SQLAlchemy==2.5.1
 Flask-json-schema==0.0.5
 Flask-Migrate==3.1.0
 Flask-HTTPAuth==4.5.0
-Werkzeug==2.1.1
+Werkzeug==2.2.3
 
 # Misc
 gunicorn==20.0.4
