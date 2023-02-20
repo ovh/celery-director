@@ -5,9 +5,9 @@ To test Celery Director in real conditions we decided to use an executing `worke
 
 ```
 $ (venv) git clone https://github.com/ovh/celery-director && cd celery-director
-$ (venv) python setup.py develop
+$ (venv) pip install -e "."
 $ (venv) export DIRECTOR_HOME=`pwd`/tests/workflows/
-$ (venv) director celery worker -P solo -D
+$ (venv) director celery worker --concurrency=1
 ```
 
 Configuration (database, redis...) can be customized in the `$DIRECTOR_HOME/.env` file.
@@ -15,6 +15,6 @@ Configuration (database, redis...) can be customized in the `$DIRECTOR_HOME/.env
 You can then launch the tests in another terminal :
 
 ```
-$ pip install pytest==5.3.5
+$ pip install ".[ci]"
 $ pytest tests/ -v
 ```
