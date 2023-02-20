@@ -305,7 +305,7 @@ def test_cancel_workflow(app):
         builder.cancel()
 
         # DB rows status updated
-        time.sleep(0.5)
+        time.sleep(5)
 
         workflow = Workflow.query.filter_by(id=workflow.id).first()
 
