@@ -21,7 +21,9 @@ class Config(object):
     def __init__(self, home_path=None, config_path=None):
         if not home_path or not Path(home_path).resolve().exists():
             raise ValueError("environment variable DIRECTOR_HOME is not set correctly")
-        self.DIRECTOR_HOME = env_path = str(home_path)
+
+        env_path = Path(home_path) / ".env"
+        self.DIRECTOR_HOME = str(home_path)
 
         if config_path:
             if not Path(config_path).resolve().exists():
