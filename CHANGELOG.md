@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.8.0 - 2023-02-21
+### Changed
+- Bump environs and werkzeug packages
+- Add Python 3.10 and 3.11 in supported versions
+
+### Fixed
+- Increment the cancel wait between 2 tests
+
+### Added
+- Add an optional comment when executing a workflow
+
+
 ## 0.7.0 - 2022-12-08
 ### Changed
 - Bump Flower dependency
