@@ -18,7 +18,7 @@ HIDDEN_CONFIG = [
 
 
 class Config(object):
-    def __init__(self, home_path=None, config_path=None):
+    def __init__(self, home_path=None, config_path=None, version=None):
         if not home_path or not Path(home_path).resolve().exists():
             raise ValueError("environment variable DIRECTOR_HOME is not set correctly")
 
@@ -35,6 +35,7 @@ class Config(object):
         env = Env()
         env.read_env(env_path)
 
+        self.VERSION = env.str("DIRECTOR_VERSION", version)
         self.ENABLE_HISTORY_MODE = env.bool("DIRECTOR_ENABLE_HISTORY_MODE", False)
         self.ENABLE_CDN = env.bool("DIRECTOR_ENABLE_CDN", True)
         self.STATIC_FOLDER = env.str(
