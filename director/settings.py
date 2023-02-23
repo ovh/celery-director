@@ -7,7 +7,6 @@ from environs import Env
 HIDDEN_CONFIG = [
     "DIRECTOR_ENABLE_HISTORY_MODE",
     "DIRECTOR_REFRESH_INTERVAL",
-    "DIRECTOR_API_URL",
     "DIRECTOR_FLOWER_URL",
     "DIRECTOR_DATABASE_URI",
     "DIRECTOR_DATABASE_POOL_RECYCLE",
@@ -41,7 +40,6 @@ class Config(object):
         self.STATIC_FOLDER = env.str(
             "DIRECTOR_STATIC_FOLDER", str(Path(self.DIRECTOR_HOME).resolve() / "static")
         )
-        self.API_URL = env.str("DIRECTOR_API_URL", "http://127.0.0.1:8000/api")
         self.FLOWER_URL = env.str("DIRECTOR_FLOWER_URL", "http://127.0.0.1:5555")
         self.WORKFLOWS_PER_PAGE = env.int("DIRECTOR_WORKFLOWS_PER_PAGE", 1000)
         self.REFRESH_INTERVAL = env.int("DIRECTOR_REFRESH_INTERVAL", 30000)

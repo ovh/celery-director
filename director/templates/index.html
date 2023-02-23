@@ -742,7 +742,7 @@
     </div>
     <script type="text/javascript">
       const HISTORY_MODE =%% config.ENABLE_HISTORY_MODE | int %%;
-      const API_URL = "%% config.API_URL %%";
+      const API_URL = "%% request.url_root + 'api' %%";
       const FLOWER_URL = "%% config.FLOWER_URL %%";
       const REFRESH_INTERVAL =%% config.REFRESH_INTERVAL | int %%;
       const REPO_LINK="%% config.REPO_LINK %%";
