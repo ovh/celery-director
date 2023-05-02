@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.0 - 2023-05-02
+### Changed
+- **Remove Python 3.7 support**
+
+### Fixed
+- Upgrade redis and sentry requirements to fix security issues
+
 ## 0.8.0 - 2023-02-21
 ### Changed
 - Bump environs and werkzeug packages
