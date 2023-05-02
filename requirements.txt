@@ -12,7 +12,7 @@ redis==4.4.4
 alembic==1.8.1
 
 # Flask
-Flask==2.1.1
+Flask==2.3.2
 Flask-SQLAlchemy==2.5.1
 Flask-json-schema==0.0.5
 Flask-Migrate==3.1.0
