@@ -88,7 +88,7 @@ $ curl --header "Content-Type: application/json" \
 
 You can also use the WebUI to execute your workflows:
 
-![Execute Workflow](../img/execute_workflow.png)
+![Execute Workflow](img/execute_workflow.png)
 
 ## Project layout
 
