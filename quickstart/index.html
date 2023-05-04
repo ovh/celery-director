@@ -598,20 +598,20 @@ set your <code>DIRECTOR_HOME</code> environment variable :</p>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Extracting data&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>While the <code>workflows.yml</code> file will be used to combine them into workflows :</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">example.ETL</span><span class="p">:</span><span class="w"></span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">tasks</span><span class="p">:</span><span class="w"></span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXTRACT</span><span class="w"></span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TRANSFORM</span><span class="w"></span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LOAD</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">example.ETL</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXTRACT</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TRANSFORM</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LOAD</span>
 </code></pre></div>
 <h2 id="configure-the-database">Configure the database</h2>
 <p>Director needs a connection to a relational database to store the dependencies
 between your tasks.</p>
 <p>Adjust the <code>DIRECTOR_DATABASE_URI</code> variable in the <code>.env</code> file and generate the database :</p>
 <p>Possible values for the <code>DIRECTOR_DATABASE_URI</code> variable:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;postgresql://user:password@hostname:port/database&quot;</span>           <span class="c1"># Using PostgreSQL</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;mysql+mysqlconnector://user:password@hostname:port/database&quot;</span> <span class="c1"># Using MySQL</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;sqlite:////path/to/your/database.db&quot;</span>                         <span class="c1"># Using SQLite</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;postgresql://user:password@hostname:port/database&quot;</span><span class="w">           </span><span class="c1"># Using PostgreSQL</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;mysql+mysqlconnector://user:password@hostname:port/database&quot;</span><span class="w"> </span><span class="c1"># Using MySQL</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nv">DIRECTOR_DATABASE_URI</span><span class="o">=</span><span class="s2">&quot;sqlite:////path/to/your/database.db&quot;</span><span class="w">                         </span><span class="c1"># Using SQLite</span>
 </code></pre></div></p>
 <p>Generate the database:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ director db upgrade

@@ -639,8 +639,8 @@ documentation of the tasks and all the features powered by Celery like the <stro
 the <strong>task exception retrying</strong> or even the <strong>queue routing</strong> stay the same.</p>
 </div>
 <h2 id="installation">Installation</h2>
-<p>Install the latest version of Director with pip (requires at least <code>Python 3.7</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip install celery-director
+<p>Install the latest version of Director with pip (requires at least <code>Python 3.8</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>celery-director
 </code></pre></div>
 <h2 id="usage">Usage</h2>
 <h3 id="write-your-code-in-python">Write your code in Python</h3>
@@ -666,24 +666,24 @@ the <strong>task exception retrying</strong> or even the <strong>queue routing</
 <a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    <span class="n">mail</span><span class="o">.</span><span class="n">send</span><span class="p">()</span>
 </code></pre></div>
 <h3 id="build-your-workflows-in-yaml">Build your workflows in YAML</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># workflows.yml</span><span class="w"></span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">product.ORDER</span><span class="p">:</span><span class="w"></span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">tasks</span><span class="p">:</span><span class="w"></span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ORDER_PRODUCT</span><span class="w"></span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SEND_MAIL</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># workflows.yml</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">product.ORDER</span><span class="p">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ORDER_PRODUCT</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SEND_MAIL</span>
 </code></pre></div>
 <h3 id="run-it">Run it</h3>
 <p>You can simply test your workflow in local :</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$ director workflow run product.ORDER <span class="s1">&#39;{&quot;user&quot;: 1234, &quot;product&quot;: 1000}&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span>director<span class="w"> </span>workflow<span class="w"> </span>run<span class="w"> </span>product.ORDER<span class="w"> </span><span class="s1">&#39;{&quot;user&quot;: 1234, &quot;product&quot;: 1000}&#39;</span>
 </code></pre></div>
 <p>And run it in production using the director API :</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ curl --header <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  --request POST <span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>  --data <span class="s1">&#39;{&quot;project&quot;: &quot;product&quot;, &quot;name&quot;: &quot;ORDER&quot;, &quot;payload&quot;: {&quot;user&quot;: 1234, &quot;product&quot;: 1000}}&#39;</span> <span class="se">\</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  http://localhost:8000/api/workflows
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">&#39;{&quot;project&quot;: &quot;product&quot;, &quot;name&quot;: &quot;ORDER&quot;, &quot;payload&quot;: {&quot;user&quot;: 1234, &quot;product&quot;: 1000}}&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>http://localhost:8000/api/workflows
 </code></pre></div>
 <p>You can also use the WebUI to execute your workflows:</p>
-<p><img alt="Execute Workflow" src="../img/execute_workflow.png" /></p>
+<p><img alt="Execute Workflow" src="img/execute_workflow.png" /></p>
 <h2 id="project-layout">Project layout</h2>
 <div class="highlight"><pre><span></span><code>.env                # The configuration file.
 workflows.yml       # The workflows definition.
