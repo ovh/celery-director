@@ -3,6 +3,11 @@
 Director separates the tasks logic from the workflows definition by providing a
 simple YAML syntax.
 
+!!! note
+    A workflow declaration in Celery Director is always composed of 2 parts (the project name and the workflow name) separated by a dot, for instance: `project.workflow`.
+
+    In the following examples the name of the workflows has been capitalized, but this is just a convention we use at OVHcloud and it's not mandatory.
+
 Let's imagine the following tasks :
 
 ```python
