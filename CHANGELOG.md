@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.0 - 2025-04-22
+### Changed
+- **Upgrade Celery to 5.5.1**
+- **Remove Python 3.8 support**
+
 ## 0.9.0 - 2023-05-02
 ### Changed
 - **Remove Python 3.7 support**
