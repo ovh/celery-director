@@ -42,8 +42,13 @@ def extract(*args, **kwargs):
     Note the `DIRECTOR_` prefix has to be removed in your tasks (we define the `DIRECTOR_MY_URL` setting and we access it using `MY_URL`).
 
 
-In addition, the github repository link in the webUI can be customized in `.env`:
+## Customize UI
+
+In addition, `.env` allows to customize the UI with the following variables:
 
 ```
-DIRECTOR_REPO_LINK="https://github.com/ovh/celery-director"
+DIRECTOR_REPO_LINK="https://github.com/ovh/celery-director" # optional: overwrite default repository link
+DIRECTOR_DOCUMENTATION_LINK="https://my-own-docs" # optional: overwrite default documentation link
+DIRECTOR_VERSION # optional: overwrite celery director version displayed in the footer
+DIRECTOR_WORKFLOWS_PER_PAGE=15 # optional: numbers of rows to show
 ```

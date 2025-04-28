@@ -45,7 +45,7 @@ def create_app(
     home_path=os.getenv("DIRECTOR_HOME"), config_path=os.getenv("DIRECTOR_CONFIG")
 ):
     app = DirectorFlask(__name__)
-    c = Config(home_path, config_path)
+    c = Config(home_path, config_path, __version__)
     app.config.from_object(c)
 
     # Init User's config
